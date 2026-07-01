@@ -1,0 +1,50 @@
+# Render deployment configuration
+services:
+  - type: web
+    name: ai-brain-os-backend
+    env: python
+    plan: free
+    buildCommand: pip install -r requirements.txt
+    startCommand: uvicorn app.main:app --host 0.0.0.0 --port $PORT
+    envVars:
+      - key: POSTGRES_USER
+        sync: false
+      - key: POSTGRES_PASSWORD
+        sync: false
+      - key: POSTGRES_SERVER
+        fromDatabase:
+          name: ai-brain-db
+          property: host
+      - key: POSTGRES_PORT
+        fromDatabase:
+          name: ai-brain-db
+          property: port
+      - key: POSTGRES_DB
+        fromDatabase:
+          name: ai-brain-db
+          property: database
+      - key: REDIS_HOST
+        fromService:
+          type: redis
+          name: ai-brain-redis
+          property: host
+      - key: REDIS_PORT
+        fromService:
+          type: redis
+          name: ai-brain-redis
+          property: port
+      - key: SECRET_KEY
+        generateValue: true
+      - key: OPENAI_API_KEY
+        sync: false
+      - key: FRONTEND_URL
+        sync: false
+
+databases:
+  - name: ai-brain-db
+    databaseName: aibrain
+    user: admin
+
+redis:
+  - name: ai-brain-redis
+    maxmemoryPolicy: allkeys-lru

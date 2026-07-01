@@ -4,21 +4,6 @@ __pycache__/
 *$py.class
 *.so
 .Python
-build/
-develop-eggs/
-dist/
-downloads/
-eggs/
-.eggs/
-lib/
-lib64/
-parts/
-sdist/
-var/
-wheels/
-*.egg-info/
-.installed.cfg
-*.egg
 
 # Virtual environments
 .venv/
@@ -29,14 +14,12 @@ env/
 # Environment variables
 .env
 .env.local
-.env.*.local
 
 # IDE
 .vscode/
 .idea/
 *.swp
 *.swo
-*~
 
 # OS
 .DS_Store
@@ -62,14 +45,10 @@ uploads/
 temp/
 tmp/
 
-# Node / Frontend
-node_modules/
-.next/
-out/
-build/
-.vercel/
-*.tsbuildinfo
+# Git
+.git/
+.gitignore
 
-# Misc
-.cache/
-coverage/
+# Docker
+Dockerfile
+.dockerignore
