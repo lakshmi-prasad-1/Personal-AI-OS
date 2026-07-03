@@ -1,9 +1,20 @@
 import uuid
 from datetime import datetime
-from sqlalchemy import Column, String, DateTime, func, Float, ForeignKey, Boolean, Integer, Text
-from sqlalchemy.dialects.postgresql import UUID, TEXT, JSONB
+from sqlalchemy import Column, String, DateTime, func, Float, ForeignKey, Boolean, Integer, Text, JSON
 from sqlalchemy.orm import relationship
 from app.models.base import Base
+from app.core.database import is_sqlite
+
+try:
+    from sqlalchemy.dialects.postgresql import UUID, TEXT, JSONB
+    use_postgres_types = True
+except Exception:
+    from sqlalchemy import Uuid as UUID, Text as TEXT
+    use_postgres_types = False
+
+# Use JSON instead of JSONB for SQLite compatibility
+if is_sqlite or not use_postgres_types:
+    JSONB = JSON  # type: ignore
 
 
 # ---------------------------------------------------------------------------

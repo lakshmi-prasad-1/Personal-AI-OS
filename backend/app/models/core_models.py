@@ -1,18 +1,30 @@
 import uuid
 from datetime import datetime
-from sqlalchemy import Column, String, DateTime, func, Float, ForeignKey, Boolean, Integer, Text
+from sqlalchemy import Column, String, DateTime, func, Float, ForeignKey, Boolean, Integer, Text, JSON
 from sqlalchemy.orm import relationship
 from app.models.base import Base
+from app.core.database import is_sqlite
 
 try:
     from sqlalchemy.dialects.postgresql import UUID, TEXT, JSONB
+    use_postgres_types = True
 except Exception:  # pragma: no cover - fallback if psycopg is unavailable
-    from sqlalchemy import Uuid as UUID, Text as TEXT, JSON as JSONB  # type: ignore
+    from sqlalchemy import Uuid as UUID, Text as TEXT
+    use_postgres_types = False
 
 try:
     from pgvector.sqlalchemy import Vector
+    use_vector = True
 except Exception:  # pragma: no cover - fallback if pgvector is unavailable
-    from sqlalchemy import JSON as Vector  # type: ignore
+    use_vector = False
+
+# Use JSON instead of JSONB for SQLite compatibility
+if is_sqlite or not use_postgres_types:
+    JSONB = JSON  # type: ignore
+
+# Use JSON instead of Vector for SQLite compatibility (pgvector not available)
+if is_sqlite or not use_vector:
+    Vector = JSON  # type: ignore
 
 
 # ---------------------------------------------------------------------------

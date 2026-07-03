@@ -20,8 +20,10 @@ from app.api.middleware.telemetry import TelemetryMiddleware
 async def lifespan(app: FastAPI):
     if engine is not None:
         async with engine.begin() as conn:
-            await conn.execute(text("CREATE EXTENSION IF NOT EXISTS vector"))
-            await conn.execute(text("CREATE EXTENSION IF NOT EXISTS pgcrypto"))
+            # Only run PostgreSQL extensions if using PostgreSQL
+            if "postgresql" in str(engine.url):
+                await conn.execute(text("CREATE EXTENSION IF NOT EXISTS vector"))
+                await conn.execute(text("CREATE EXTENSION IF NOT EXISTS pgcrypto"))
             await conn.run_sync(Base.metadata.create_all)
     yield
 

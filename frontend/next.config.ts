@@ -16,6 +16,11 @@ const nextConfig: NextConfig = {
   images: {
     domains: [],
   },
+  
+  // Turbopack configuration
+  turbopack: {
+    root: __dirname,
+  },
 };
 
 export default nextConfig;
