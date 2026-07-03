@@ -20,9 +20,17 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const [, setLocation] = useLocation();
   const queryClient = useQueryClient();
 
+  // Registered synchronously during render (not in an effect) so that any
+  // child component mounting in the same commit — e.g. the sidebar's
+  // current-user fetch right after login/register — always sees the
+  // up-to-date token instead of racing a stale effect.
+  setAuthTokenGetter(() => token);
+
   useEffect(() => {
-    setAuthTokenGetter(() => token);
-  }, [token]);
+    return () => {
+      setAuthTokenGetter(null);
+    };
+  }, []);
 
   const setToken = (newToken: string | null) => {
     if (newToken) {
@@ -30,6 +38,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     } else {
       localStorage.removeItem("ai_brain_os_token");
     }
+    setAuthTokenGetter(() => newToken);
     setTokenState(newToken);
   };
 

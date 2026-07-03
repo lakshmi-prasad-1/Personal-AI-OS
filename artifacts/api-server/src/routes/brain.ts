@@ -1,7 +1,7 @@
 import { Router, type IRouter } from "express";
 import { desc, eq } from "drizzle-orm";
 import { db, notesTable, ideasTable, memoriesTable, resourcesTable } from "@workspace/db";
-import { BrainDecideResponse, SearchInput, BrainSearchResponse } from "@workspace/api-zod";
+import { BrainDecideResponse, BrainSearchBody, BrainSearchResponse } from "@workspace/api-zod";
 import { requireAuth } from "../lib/auth";
 
 const router: IRouter = Router();
@@ -86,7 +86,7 @@ router.post("/brain/decide", async (req, res): Promise<void> => {
 });
 
 router.post("/brain/search", async (req, res): Promise<void> => {
-  const parsed = SearchInput.safeParse(req.body);
+  const parsed = BrainSearchBody.safeParse(req.body);
   if (!parsed.success) {
     res.status(400).json({ error: parsed.error.message });
     return;

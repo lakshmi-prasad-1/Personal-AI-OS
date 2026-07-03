@@ -1,0 +1,777 @@
+You are now the Lead Software Architect, Senior Full Stack Engineer, AI Engineer, Product Architect, and Code Reviewer for this project.
+
+IMPORTANT:
+
+DO NOT rewrite the project.
+
+DO NOT replace working code.
+
+DO NOT duplicate components.
+
+DO NOT create alternative implementations.
+
+Analyze the existing codebase first, then continue extending it professionally.
+
+Everything already implemented must continue working.
+
+==================================================================
+
+PROJECT NAME
+
+AI Brain OS
+
+==================================================================
+
+CURRENT PROJECT STATUS
+
+Frontend
+
+* Next.js
+* TypeScript
+* TailwindCSS
+
+Already Exists
+
+Authentication
+
+Dashboard
+
+Chat UI
+
+Sidebar
+
+Memories
+
+Resources
+
+Smart Notes
+
+Idea Vault
+
+Knowledge Graph
+
+Universal Search
+
+Dark Theme
+
+Authentication Context
+
+API Client
+
+Protected Routes
+
+Backend
+
+FastAPI
+
+JWT Authentication
+
+bcrypt
+
+SQLite/PostgreSQL
+
+Database Models
+
+User
+
+UserProfile
+
+Chat
+
+Message
+
+Memory
+
+Resource
+
+Note
+
+Idea
+
+Knowledge Graph
+
+Task
+
+Goal
+
+Habit
+
+Reminder
+
+Focus Session
+
+Daily Review
+
+Weekly Review
+
+Resume
+
+Application
+
+Skill Gap
+
+Career Plan
+
+Interview
+
+Notification
+
+Workflow
+
+Event
+
+Webhook
+
+Already Implemented During Previous Tasks
+
+IntentClassifier
+
+ActionExecutor
+
+MemoryActions
+
+TaskActions
+
+ResourceActions
+
+IdeaActions
+
+StudyActions
+
+CareerActions
+
+ProductivityActions
+
+ContextManager
+
+DecisionEngine
+
+ChatService
+
+IntegrationManager
+
+VoiceInterface
+
+Future Integrations
+
+Telegram
+
+Email
+
+Google Calendar
+
+n8n
+
+Job Integration
+
+Do NOT recreate these.
+
+Reuse them.
+
+==================================================================
+
+FIRST TASK
+
+Perform a complete architecture analysis.
+
+Search every file.
+
+Search every folder.
+
+Understand every dependency.
+
+Understand every service.
+
+Understand every API.
+
+Understand every model.
+
+Understand every frontend page.
+
+Find duplicated code.
+
+Find dead code.
+
+Find TODOs.
+
+Find placeholders.
+
+Find unfinished implementations.
+
+Find APIs not connected to frontend.
+
+Find frontend pages using dummy data.
+
+Find services not used.
+
+Find broken imports.
+
+Find routing issues.
+
+Find database relationship issues.
+
+Find validation issues.
+
+Find security issues.
+
+Find performance issues.
+
+Fix them while preserving architecture.
+
+==================================================================
+
+CHAT INTEGRATION
+
+DO NOT create a new chat.py.
+
+chat.py already exists.
+
+Modify the existing implementation.
+
+Connect
+
+Chat
+
+↓
+
+IntentClassifier
+
+↓
+
+ContextManager
+
+↓
+
+DecisionEngine
+
+↓
+
+ActionExecutor
+
+↓
+
+ChatService
+
+↓
+
+LLM
+
+↓
+
+Database
+
+↓
+
+Response
+
+For every message
+
+Classify intent.
+
+Retrieve context.
+
+Retrieve memories.
+
+Retrieve notes.
+
+Retrieve resources.
+
+Retrieve ideas.
+
+Retrieve recent conversations.
+
+Execute actions automatically.
+
+Generate response.
+
+Save conversation.
+
+Extract long-term memories.
+
+Update dashboard statistics.
+
+Generate proactive recommendations.
+
+==================================================================
+
+SUPPORTED NATURAL LANGUAGE COMMANDS
+
+The AI should understand messages like
+
+Remember I like coding at night.
+
+Remember I stopped React because of exams.
+
+Tomorrow remind me to finish DSA.
+
+Every Wednesday update resume.
+
+Add task Complete DBMS assignment.
+
+Create goal Crack Microsoft Internship.
+
+Save this YouTube video.
+
+Save this GitHub repository.
+
+Save this Roadmap.
+
+Store this PDF.
+
+Create note.
+
+What should I study today?
+
+Plan tomorrow.
+
+Plan next week.
+
+Plan this month.
+
+What did I decide about my resume?
+
+Show React resources.
+
+Show pending tasks.
+
+What are my goals?
+
+Analyze my resume.
+
+Analyze this Job Description.
+
+Create flashcards.
+
+Create quiz.
+
+Summarize this PDF.
+
+==================================================================
+
+AI BRAIN
+
+Complete
+
+Memory Engine
+
+Auto Memory Extraction
+
+Memory Importance
+
+Memory Categories
+
+Memory Search
+
+Memory Editing
+
+Memory Linking
+
+Resource Vault
+
+Smart Notes
+
+Idea Vault
+
+Knowledge Graph
+
+Universal Search
+
+Semantic Search
+
+Knowledge Relationships
+
+Context Injection
+
+==================================================================
+
+PRODUCTIVITY
+
+Complete
+
+Task Manager
+
+Planner
+
+Daily Planner
+
+Weekly Planner
+
+Monthly Planner
+
+Goals
+
+Goal Progress
+
+Habits
+
+Habit Analytics
+
+Reminder System
+
+Recurring Tasks
+
+Recurring Reminders
+
+Focus Mode
+
+Pomodoro
+
+Study Sessions
+
+Productivity Dashboard
+
+Calendar Layer
+
+Natural Language Planner
+
+Examples
+
+Tomorrow after class solve LeetCode.
+
+Study React for two hours.
+
+Every Saturday update resume.
+
+After dinner revise DBMS.
+
+==================================================================
+
+STUDY ASSISTANT
+
+Complete
+
+PDF Upload
+
+Notes Upload
+
+PPT Upload
+
+Video Link Storage
+
+Summary
+
+Flashcards
+
+Quiz Generator
+
+Weak Topic Detection
+
+Study Progress
+
+Revision Suggestions
+
+Study Dashboard
+
+==================================================================
+
+CAREER OS
+
+Complete
+
+Resume Upload
+
+Resume Versioning
+
+Resume Analysis
+
+Resume Comparison
+
+ATS Analysis
+
+Job Description Analysis
+
+Skill Gap Analysis
+
+Career Roadmap
+
+Application Tracker
+
+Internship Tracker
+
+Interview Tracker
+
+Company Tracker
+
+Resume Recommendations
+
+DO NOT implement scraping.
+
+DO NOT implement browser automation.
+
+DO NOT implement auto apply.
+
+Only prepare architecture.
+
+==================================================================
+
+PERSONAL AI ASSISTANT
+
+The AI should become my second brain.
+
+It should know
+
+Goals
+
+Current Semester
+
+Skills
+
+Resume
+
+Projects
+
+Career Interests
+
+Interview Preparation
+
+Companies
+
+Learning Progress
+
+Coding Progress
+
+LeetCode Progress
+
+Books
+
+Resources
+
+Roadmaps
+
+Ideas
+
+Notes
+
+Tasks
+
+Habits
+
+Study Sessions
+
+Planner
+
+Whenever I ask
+
+"What should I do now?"
+
+The AI should consider
+
+Deadlines
+
+Goals
+
+Planner
+
+Habits
+
+Study Progress
+
+Career Progress
+
+Resources
+
+Weak Topics
+
+Pending Tasks
+
+and generate an intelligent recommendation.
+
+==================================================================
+
+DECISION ENGINE
+
+Expand DecisionEngine.
+
+Examples
+
+Missing Docker
+
+↓
+
+Recommend Docker Course already stored.
+
+Exam Tomorrow
+
+↓
+
+Reorder Planner.
+
+Resume outdated
+
+↓
+
+Suggest update.
+
+Project inactive
+
+↓
+
+Recommend continuing.
+
+Habit streak broken
+
+↓
+
+Suggest recovery plan.
+
+==================================================================
+
+VOICE READY
+
+Every feature must be callable through natural language.
+
+Do not implement speech recognition.
+
+Only ensure business logic supports future voice input.
+
+==================================================================
+
+FUTURE INTEGRATIONS
+
+Prepare clean interfaces only.
+
+n8n
+
+Telegram
+
+Google Calendar
+
+Email
+
+Job Monitoring
+
+LinkedIn
+
+Indeed
+
+Internshala
+
+Wellfound
+
+Microsoft Careers
+
+Google Careers
+
+Amazon Careers
+
+Browser Automation
+
+Push Notifications
+
+Do NOT implement these.
+
+Only create extensible service interfaces.
+
+==================================================================
+
+FRONTEND
+
+Every page should become fully functional.
+
+No placeholder UI.
+
+No dummy data.
+
+Everything connected to backend.
+
+Loading states.
+
+Error handling.
+
+Pagination.
+
+Filtering.
+
+Search.
+
+Optimistic updates where appropriate.
+
+Professional UI.
+
+==================================================================
+
+BACKEND
+
+Follow Clean Architecture.
+
+Separate
+
+Routes
+
+Services
+
+Repositories
+
+Schemas
+
+Models
+
+Utilities
+
+Avoid duplicated business logic.
+
+==================================================================
+
+FINAL PRODUCT GOAL
+
+By the end I should only need to open Chat.
+
+Examples
+
+"I remembered something."
+
+"I have an idea."
+
+"Plan tomorrow."
+
+"What should I study now?"
+
+"Save this."
+
+"Add this task."
+
+"Remind me tomorrow."
+
+"I finished studying."
+
+"I have an interview next week."
+
+The AI should automatically determine the user's intent, execute the required actions, update the database, retrieve relevant context, and respond naturally without requiring manual navigation.
+
+The application should feel like a personal AI operating system rather than a CRUD application.
+
+==================================================================
+
+AFTER ALL IMPLEMENTATION
+
+Run one final audit.
+
+Fix every remaining issue.
+
+Remove duplicate code.
+
+Remove dead code.
+
+Connect all APIs.
+
+Connect all frontend pages.
+
+Ensure every implemented feature works.
+
+Generate a final report including
+
+Completed Features
+
+Files Modified
+
+Files Added
+
+Database Changes
+
+API Endpoints
+
+Architecture Improvements
+
+Remaining Future Work (only advanced features like n8n automation, browser automation, job monitoring, auto-apply, voice recognition, and mobile app).
+
+Do not stop until the project reaches a polished, fully usable MVP.
