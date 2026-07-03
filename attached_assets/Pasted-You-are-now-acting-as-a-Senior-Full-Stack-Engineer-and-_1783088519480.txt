@@ -1,0 +1,102 @@
+You are now acting as a Senior Full Stack Engineer and Replit Deployment Engineer.
+
+Do not assume the implementation is complete.
+
+The application does not load in Replit Preview even though the workflow reports success.
+
+Your task is to investigate the project, identify the root cause, fix it, and verify the solution.
+
+Investigation Checklist
+
+Perform a complete diagnosis before making any changes.
+
+Check:
+
+Replit Preview configuration
+.replit file
+Workflows
+Run commands
+Frontend dev server
+Backend server
+Port exposure
+Proxy configuration
+Environment variables
+Routing configuration
+Build configuration
+Package scripts
+Vite configuration
+Express server configuration
+API proxy settings
+Static file serving
+CORS
+Any runtime errors
+Browser console errors
+Network requests
+Server logs
+Requirements
+
+Determine:
+
+Which process Replit Preview is trying to open.
+Which port the frontend is actually running on.
+Which port the backend is running on.
+Whether the frontend is reachable.
+Whether the backend is reachable.
+Whether Replit is exposing the correct port.
+Whether Preview is targeting the wrong service.
+Whether any workflow starts the wrong application.
+Whether the frontend can communicate with the backend.
+Fix Requirements
+
+Fix the root cause instead of applying workarounds.
+
+If necessary:
+
+update .replit
+update workflows
+fix run commands
+expose the correct port
+fix Vite configuration
+fix Express configuration
+fix proxy configuration
+fix routing
+fix environment variables
+
+Preserve all existing functionality.
+
+Do not rewrite working code.
+
+Verification
+
+After applying fixes:
+
+Restart all services.
+Open Replit Preview yourself.
+Verify the Login page renders.
+Verify Register/Login.
+Verify Dashboard.
+Verify Notes.
+Verify Ideas.
+Verify Memories.
+Verify Resources.
+Verify Graph.
+Verify Chat.
+Verify page refresh works.
+Verify there are no Preview errors.
+Verify there are no port errors.
+Verify there are no routing errors.
+
+Only mark the task complete after the application loads successfully in Replit Preview and all core functionality has been verified.
+
+Final Report
+
+Provide:
+
+Root cause of the Preview issue.
+Files modified.
+Configuration changes made.
+Ports being used.
+Why the issue occurred.
+Evidence that the Preview now loads correctly.
+
+Do not stop until the application is fully accessible through Replit Preview and verified end-to-end.
