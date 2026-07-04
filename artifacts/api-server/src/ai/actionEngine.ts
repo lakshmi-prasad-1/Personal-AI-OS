@@ -20,6 +20,13 @@ import { quizService } from "../services/quizService";
 import { revisionService } from "../services/revisionService";
 import { teacherService } from "../services/teacherService";
 import { studyAnalyticsService } from "../services/studyAnalyticsService";
+import { careerProfileService } from "../services/careerProfileService";
+import { skillService } from "../services/skillService";
+import { projectService } from "../services/projectService";
+import { careerGoalService } from "../services/careerGoalService";
+import { resumeService } from "../services/resumeService";
+import { interviewService } from "../services/interviewService";
+import { careerAnalyticsService } from "../services/careerAnalyticsService";
 import { logger } from "../lib/logger";
 
 // ─── Phase 1 arg schemas ────────────────────────────────────────────────────
@@ -112,6 +119,51 @@ const generateFlashcardsArgs = z.object({ topic: z.string().min(1), count: z.num
 const generateQuizArgs = z.object({ topic: z.string().min(1), count: z.number().int().min(1).max(20).optional().default(5), difficulty: z.enum(["easy", "medium", "hard", "adaptive"]).optional().default("medium") });
 const logStudySessionArgs = z.object({ subjectName: z.string().optional(), durationMinutes: z.number().int().min(1), type: z.enum(["study", "revision", "practice", "coding"]).optional().default("study"), notes: z.string().optional().default("") });
 const explainTopicArgs = z.object({ topic: z.string().min(1), mode: z.enum(["simple", "deep", "examples", "interview", "coding", "exam", "step_by_step", "compare", "analogy", "default"]).optional().default("default") });
+
+// ─── Phase 3A: Career OS arg schemas ─────────────────────────────────────────
+const updateCareerProfileArgs = z.object({
+  degree: z.string().optional(),
+  university: z.string().optional(),
+  currentSemester: z.string().optional(),
+  graduationYear: z.string().optional(),
+  preferredRoles: z.array(z.string()).optional(),
+  preferredCompanies: z.array(z.string()).optional(),
+  preferredLocations: z.array(z.string()).optional(),
+  expectedSalary: z.string().optional(),
+  preferredWorkTypes: z.array(z.string()).optional(),
+  softSkills: z.array(z.string()).optional(),
+  certificates: z.array(z.string()).optional(),
+  achievements: z.array(z.string()).optional(),
+  githubUrl: z.string().optional(),
+  linkedinUrl: z.string().optional(),
+  leetcodeUrl: z.string().optional(),
+});
+const addSkillArgs = z.object({
+  name: z.string().min(1),
+  category: z.enum(["programming_language", "framework", "library", "database", "cloud", "devops", "ai_ml", "dsa", "system_design", "soft_skill", "other"]).optional().default("other"),
+  level: z.enum(["beginner", "intermediate", "advanced", "expert"]).optional().default("beginner"),
+  confidence: z.number().int().min(0).max(100).optional().default(50),
+});
+const addProjectArgs = z.object({
+  title: z.string().min(1),
+  description: z.string().optional().default(""),
+  techStack: z.array(z.string()).optional().default([]),
+  githubUrl: z.string().optional(),
+  demoUrl: z.string().optional(),
+  status: z.enum(["planning", "in_progress", "completed", "archived"]).optional().default("in_progress"),
+  role: z.string().optional().default(""),
+});
+const addCareerGoalArgs = z.object({
+  title: z.string().min(1),
+  description: z.string().optional().default(""),
+  type: z.enum(["short_term", "long_term"]).optional().default("short_term"),
+  targetCompanies: z.array(z.string()).optional().default([]),
+  targetRoles: z.array(z.string()).optional().default([]),
+  targetTechnologies: z.array(z.string()).optional().default([]),
+  targetDate: z.string().optional(),
+});
+const analyzeResumeArgs = z.object({ resumeTitle: z.string().min(1) });
+const startMockInterviewArgs = z.object({ type: z.enum(["technical", "behavioral", "hr", "coding", "project_discussion", "resume_discussion"]) });
 
 export interface ActionResult {
   toolCallId: string;
@@ -449,6 +501,58 @@ export const actionEngine = {
           const decisions = await decisionEngine.decide(userId);
           const studyDecisions = decisions.filter((d) => d.actionType.startsWith("study_") || d.actionType.includes("revis") || d.actionType.includes("weak") || d.actionType.includes("subject") || d.actionType.includes("flashcard") || d.actionType.includes("quiz"));
           return { toolCallId, toolName, ok: true, result: studyDecisions.length ? studyDecisions : decisions };
+        }
+
+        // ─── Career Profile (Phase 3A) ────────────────────────────────────────
+        case "update_career_profile": {
+          const args = updateCareerProfileArgs.parse(parsedArgs);
+          const profile = await careerProfileService.upsert(userId, args);
+          const logged = await agentActionsService.log({ userId, chatId, actionType: "update_career_profile", summary: "Updated career profile", payload: profile });
+          return { toolCallId, toolName, ok: true, result: profile, actionLogged: { actionType: logged.actionType, summary: logged.summary } };
+        }
+        case "add_skill": {
+          const args = addSkillArgs.parse(parsedArgs);
+          const existing = await skillService.findByName(userId, args.name);
+          const skill = existing ? await skillService.update(userId, existing.id, args) : await skillService.create(userId, args);
+          if (!skill) return { toolCallId, toolName, ok: false, result: { error: "Failed to save skill" } };
+          const logged = await agentActionsService.log({ userId, chatId, actionType: "add_skill", entityType: "skill", entityId: skill.id, summary: `${existing ? "Updated" : "Added"} skill "${skill.name}"`, payload: skill });
+          return { toolCallId, toolName, ok: true, result: skill, actionLogged: { actionType: logged.actionType, summary: logged.summary } };
+        }
+        case "add_project": {
+          const args = addProjectArgs.parse(parsedArgs);
+          const project = await projectService.create(userId, args);
+          const logged = await agentActionsService.log({ userId, chatId, actionType: "add_project", entityType: "project", entityId: project.id, summary: `Added project "${project.title}"`, payload: project });
+          return { toolCallId, toolName, ok: true, result: project, actionLogged: { actionType: logged.actionType, summary: logged.summary } };
+        }
+        case "add_career_goal": {
+          const args = addCareerGoalArgs.parse(parsedArgs);
+          const goal = await careerGoalService.create(userId, args);
+          const logged = await agentActionsService.log({ userId, chatId, actionType: "add_career_goal", entityType: "career_goal", entityId: goal.id, summary: `Added career goal "${goal.title}"`, payload: goal });
+          return { toolCallId, toolName, ok: true, result: goal, actionLogged: { actionType: logged.actionType, summary: logged.summary } };
+        }
+        case "analyze_resume": {
+          const args = analyzeResumeArgs.parse(parsedArgs);
+          const resumes = await resumeService.list(userId);
+          const found = resumes.find((r) => r.title.toLowerCase().includes(args.resumeTitle.toLowerCase()));
+          if (!found) return { toolCallId, toolName, ok: false, result: { error: `Resume "${args.resumeTitle}" not found.` } };
+          const analyzed = await resumeService.analyze(userId, found.id);
+          const logged = await agentActionsService.log({ userId, chatId, actionType: "analyze_resume", entityType: "resume", entityId: found.id, summary: `Analyzed resume "${found.title}"`, payload: analyzed });
+          return { toolCallId, toolName, ok: true, result: analyzed, actionLogged: { actionType: logged.actionType, summary: logged.summary } };
+        }
+        case "get_career_recommendation": {
+          const tips = await careerAnalyticsService.recommendation(userId);
+          await agentActionsService.log({ userId, chatId, actionType: "get_career_recommendation", summary: `Generated ${tips.length} career recommendation(s)`, payload: tips });
+          return { toolCallId, toolName, ok: true, result: tips };
+        }
+        case "show_career_progress": {
+          const overview = await careerAnalyticsService.overview(userId);
+          return { toolCallId, toolName, ok: true, result: overview };
+        }
+        case "start_mock_interview": {
+          const args = startMockInterviewArgs.parse(parsedArgs);
+          const question = await interviewService.generateQuestion(args.type);
+          const logged = await agentActionsService.log({ userId, chatId, actionType: "start_mock_interview", summary: `Started a ${args.type} mock interview`, payload: { type: args.type, question } });
+          return { toolCallId, toolName, ok: true, result: { type: args.type, question }, actionLogged: { actionType: logged.actionType, summary: logged.summary } };
         }
 
         default:

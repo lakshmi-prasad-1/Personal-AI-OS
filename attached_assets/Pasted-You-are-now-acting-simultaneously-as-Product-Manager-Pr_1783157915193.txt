@@ -1,0 +1,811 @@
+You are now acting simultaneously as:
+
+• Product Manager
+• Principal Software Architect
+• Principal AI Systems Architect
+• Principal Backend Engineer
+• Principal Frontend Engineer
+• Principal Database Architect
+• Principal AI Engineer
+• Principal DevOps Engineer
+• Principal QA Engineer
+
+============================================================
+
+MISSION
+
+Phase 1 (AI Core), Phase 2A (Productivity OS), and Phase 2B (Study OS) are complete.
+
+DO NOT redesign the project.
+
+DO NOT replace frameworks.
+
+DO NOT rewrite working architecture.
+
+DO NOT break
+
+• Authentication
+• AI Chat
+• Voice Assistant
+• Memory Engine
+• Knowledge Graph
+• Productivity OS
+• Study OS
+• Dashboard
+• Existing APIs
+
+Instead, extend the current project into
+
+AI Brain OS
+
+Phase 3A
+
+Career Operating System.
+
+============================================================
+
+FIRST TASK
+
+Before writing ANY code
+
+inspect the ENTIRE repository.
+
+Understand
+
+Current folder structure
+
+Authentication
+
+Database
+
+Repositories
+
+Services
+
+Shared Libraries
+
+AI Pipeline
+
+Intent Engine
+
+Context Engine
+
+Decision Engine
+
+Action Engine
+
+Memory Engine
+
+Voice Pipeline
+
+Knowledge Graph
+
+Dashboard
+
+Study OS
+
+Productivity OS
+
+Reuse existing architecture.
+
+Never duplicate business logic.
+
+============================================================
+
+GOAL
+
+Transform AI Brain OS into an AI Career Assistant.
+
+The AI should understand my complete professional profile.
+
+It should remember
+
+Skills
+
+Projects
+
+Resume
+
+Career goals
+
+Preferred companies
+
+Technology interests
+
+Internship preferences
+
+Interview history
+
+Learning progress
+
+Without implementing automatic job scraping or auto-apply yet.
+
+============================================================
+
+CAREER PIPELINE
+
+Every interaction must follow
+
+User
+
+↓
+
+Text or Voice
+
+↓
+
+Speech Recognition
+
+↓
+
+Intent Engine
+
+↓
+
+Context Retrieval
+
+↓
+
+Decision Engine
+
+↓
+
+Career Action Engine
+
+↓
+
+Shared Services
+
+↓
+
+Repositories
+
+↓
+
+Database
+
+↓
+
+Knowledge Graph
+
+↓
+
+Dashboard
+
+↓
+
+AI Response
+
+Never bypass this pipeline.
+
+============================================================
+
+MODULE 1
+
+CAREER PROFILE
+
+Create a persistent career profile.
+
+Store
+
+Name
+
+Education
+
+Degree
+
+University
+
+Current Semester
+
+Graduation Year
+
+Skills
+
+Programming Languages
+
+Frameworks
+
+Tools
+
+Databases
+
+Cloud Platforms
+
+AI Skills
+
+Soft Skills
+
+Certificates
+
+Achievements
+
+Career Interests
+
+Preferred Roles
+
+Preferred Companies
+
+Preferred Locations
+
+Expected Salary
+
+Resume Links
+
+Portfolio
+
+GitHub
+
+LinkedIn
+
+LeetCode
+
+Codeforces
+
+HackerRank
+
+Coding Profiles
+
+Preferred Work Type
+
+Internship
+
+Full Time
+
+Remote
+
+Hybrid
+
+The AI should continuously improve this profile.
+
+============================================================
+
+MODULE 2
+
+RESUME MANAGER
+
+Implement professional resume management.
+
+Support
+
+Multiple resumes
+
+Resume versions
+
+Resume categories
+
+General Resume
+
+Frontend Resume
+
+Backend Resume
+
+AI Resume
+
+Full Stack Resume
+
+Resume history
+
+Resume metadata
+
+Resume notes
+
+Resume tagging
+
+Resume preview
+
+Resume storage
+
+Resume comparison
+
+Resume recommendations
+
+============================================================
+
+MODULE 3
+
+RESUME AI
+
+AI should
+
+Analyze resume
+
+Detect weaknesses
+
+Find missing skills
+
+Find missing keywords
+
+Improve summaries
+
+Improve projects
+
+Improve experience section
+
+Improve skills section
+
+Improve formatting recommendations
+
+Improve ATS friendliness
+
+Generate improvement suggestions
+
+Do NOT automatically overwrite resumes.
+
+============================================================
+
+MODULE 4
+
+SKILL INVENTORY
+
+Maintain a structured inventory of
+
+Programming languages
+
+Frameworks
+
+Libraries
+
+Databases
+
+Cloud
+
+DevOps
+
+AI
+
+ML
+
+Web Development
+
+DSA
+
+System Design
+
+Soft Skills
+
+Each skill should have
+
+Level
+
+Confidence
+
+Experience
+
+Projects Used
+
+Learning Progress
+
+Last Updated
+
+Related Resources
+
+Related Study Progress
+
+============================================================
+
+MODULE 5
+
+PROJECT PORTFOLIO
+
+Track projects.
+
+Store
+
+Title
+
+Description
+
+Tech Stack
+
+GitHub
+
+Demo
+
+Status
+
+Difficulty
+
+Role
+
+Screenshots
+
+Achievements
+
+Challenges
+
+Lessons Learned
+
+Skills Used
+
+Resume Usage
+
+Knowledge Graph Links
+
+============================================================
+
+MODULE 6
+
+CAREER GOALS
+
+Support
+
+Short-term goals
+
+Long-term goals
+
+Target companies
+
+Target roles
+
+Target technologies
+
+Roadmap
+
+Milestones
+
+Progress
+
+AI recommendations
+
+============================================================
+
+MODULE 7
+
+INTERVIEW PREPARATION
+
+Implement
+
+Interview Topics
+
+Question Bank
+
+Coding Questions
+
+Behavioral Questions
+
+HR Questions
+
+System Design Questions
+
+Revision Status
+
+Confidence Score
+
+Interview Notes
+
+Interview Feedback
+
+Preparation Progress
+
+============================================================
+
+MODULE 8
+
+MOCK INTERVIEW
+
+Support
+
+Technical interview
+
+Behavioral interview
+
+HR interview
+
+Coding interview
+
+Project discussion
+
+Resume discussion
+
+AI should
+
+Ask questions
+
+Evaluate answers
+
+Provide feedback
+
+Store history
+
+============================================================
+
+MODULE 9
+
+CAREER DASHBOARD
+
+Extend dashboard with
+
+Career Progress
+
+Resume Status
+
+Top Skills
+
+Skill Gaps
+
+Projects
+
+Interview Readiness
+
+Career Goals
+
+Certificates
+
+Recent Improvements
+
+AI Suggestions
+
+============================================================
+
+MODULE 10
+
+VOICE CAREER ASSISTANT
+
+Support voice commands such as
+
+"Update my resume."
+
+"Add a project."
+
+"I learned Docker."
+
+"Analyze my resume."
+
+"Start a mock interview."
+
+"Show my career progress."
+
+Voice must use the exact same AI pipeline.
+
+============================================================
+
+MODULE 11
+
+KNOWLEDGE GRAPH
+
+Automatically connect
+
+Skills
+
+Projects
+
+Resumes
+
+Companies
+
+Roles
+
+Technologies
+
+Certificates
+
+Interview Topics
+
+Career Goals
+
+============================================================
+
+MODULE 12
+
+MEMORY ENGINE
+
+Remember
+
+Favorite companies
+
+Career preferences
+
+Technologies I enjoy
+
+Companies I dislike
+
+Interview weaknesses
+
+Strong skills
+
+Frequently discussed topics
+
+Learning trends
+
+Future recommendations must use these memories.
+
+============================================================
+
+MODULE 13
+
+AI CAREER COACH
+
+The AI should answer
+
+What should I learn next?
+
+Which skill is missing?
+
+How can I improve my resume?
+
+Am I interview ready?
+
+Which project should I build?
+
+How close am I to my career goal?
+
+============================================================
+
+MODULE 14
+
+SERVICES
+
+Create reusable services
+
+CareerProfileService
+
+ResumeService
+
+ResumeAIService
+
+SkillService
+
+ProjectService
+
+InterviewService
+
+CareerGoalService
+
+CareerAnalyticsService
+
+CareerRecommendationService
+
+Every AI action must use shared services.
+
+============================================================
+
+MODULE 15
+
+DATABASE
+
+Create only required schemas.
+
+Career Profile
+
+Resume
+
+Resume Version
+
+Resume Analysis
+
+Skill
+
+Project
+
+Interview
+
+Interview Session
+
+Career Goal
+
+Certificate
+
+Portfolio
+
+Career Analytics
+
+Keep schema future-ready.
+
+============================================================
+
+MODULE 16
+
+API
+
+Create clean REST APIs.
+
+Maintain compatibility.
+
+Support
+
+Web
+
+Future Mobile
+
+Telegram
+
+n8n
+
+Automation Engine
+
+============================================================
+
+MODULE 17
+
+TESTING
+
+Before completion verify
+
+✓ Authentication works
+
+✓ AI Chat works
+
+✓ Voice works
+
+✓ Productivity OS works
+
+✓ Study OS works
+
+✓ Career profile works
+
+✓ Resume manager works
+
+✓ Resume AI works
+
+✓ Skill inventory works
+
+✓ Project portfolio works
+
+✓ Mock interview works
+
+✓ Dashboard updates
+
+✓ Knowledge Graph updates
+
+✓ Memory updates
+
+✓ APIs remain compatible
+
+✓ Shared services reusable
+
+✓ No duplicated business logic
+
+============================================================
+
+DO NOT IMPLEMENT
+
+Job scraping
+
+LinkedIn scraping
+
+Indeed scraping
+
+Internshala scraping
+
+Auto Apply
+
+Browser Automation
+
+Email Automation
+
+n8n workflows
+
+Calendar Sync
+
+Telegram Bot
+
+WhatsApp Bot
+
+Those belong to Phase 4.
+
+============================================================
+
+SUCCESS CRITERIA
+
+By the end of Phase 3A,
+
+AI Brain OS should function as a complete AI Career Operating System.
+
+The AI should understand my professional profile, help me improve my resume, track my skills and projects, prepare me for interviews, remember my career preferences, provide personalized recommendations, update the knowledge graph, and integrate seamlessly with the existing AI architecture.
+
+Do not stop after implementing one module.
+
+Continue until every module has been implemented, integrated, tested, and verified.
+
+Finally provide
+
+1. Completed modules
+2. Files created
+3. Files modified
+4. Database changes
+5. API changes
+6. Architecture decisions
+7. Technical debt
+8. Deferred work for Phase 3B and Phase 4
+9. Complete verification checklist

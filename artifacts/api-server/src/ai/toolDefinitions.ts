@@ -552,4 +552,130 @@ export const chatTools: OpenAI.Chat.Completions.ChatCompletionTool[] = [
       parameters: { type: "object", properties: {} },
     },
   },
+
+  // ─── Career Profile (Phase 3A: Career OS) ──────────────────────────────
+  {
+    type: "function",
+    function: {
+      name: "update_career_profile",
+      description: "Update the user's career profile: education, preferred roles/companies/locations, expected salary, work type, soft skills, certificates, achievements, or profile links (GitHub, LinkedIn, LeetCode etc).",
+      parameters: {
+        type: "object",
+        properties: {
+          degree: { type: "string" },
+          university: { type: "string" },
+          currentSemester: { type: "string" },
+          graduationYear: { type: "string" },
+          preferredRoles: { type: "array", items: { type: "string" } },
+          preferredCompanies: { type: "array", items: { type: "string" } },
+          preferredLocations: { type: "array", items: { type: "string" } },
+          expectedSalary: { type: "string" },
+          preferredWorkTypes: { type: "array", items: { type: "string" }, description: "internship, full_time, remote, hybrid" },
+          softSkills: { type: "array", items: { type: "string" } },
+          certificates: { type: "array", items: { type: "string" } },
+          achievements: { type: "array", items: { type: "string" } },
+          githubUrl: { type: "string" },
+          linkedinUrl: { type: "string" },
+          leetcodeUrl: { type: "string" },
+        },
+      },
+    },
+  },
+  {
+    type: "function",
+    function: {
+      name: "add_skill",
+      description: "Add or update a skill in the user's skill inventory, e.g. when they say 'I learned Docker' or 'I'm good at React'.",
+      parameters: {
+        type: "object",
+        properties: {
+          name: { type: "string" },
+          category: { type: "string", enum: ["programming_language", "framework", "library", "database", "cloud", "devops", "ai_ml", "dsa", "system_design", "soft_skill", "other"] },
+          level: { type: "string", enum: ["beginner", "intermediate", "advanced", "expert"] },
+          confidence: { type: "integer", description: "0-100" },
+        },
+        required: ["name"],
+      },
+    },
+  },
+  {
+    type: "function",
+    function: {
+      name: "add_project",
+      description: "Add a project to the user's project portfolio when they describe something they built.",
+      parameters: {
+        type: "object",
+        properties: {
+          title: { type: "string" },
+          description: { type: "string" },
+          techStack: { type: "array", items: { type: "string" } },
+          githubUrl: { type: "string" },
+          demoUrl: { type: "string" },
+          status: { type: "string", enum: ["planning", "in_progress", "completed", "archived"] },
+          role: { type: "string" },
+        },
+        required: ["title"],
+      },
+    },
+  },
+  {
+    type: "function",
+    function: {
+      name: "add_career_goal",
+      description: "Add a career goal (short or long term), e.g. target company/role, or a roadmap milestone.",
+      parameters: {
+        type: "object",
+        properties: {
+          title: { type: "string" },
+          description: { type: "string" },
+          type: { type: "string", enum: ["short_term", "long_term"] },
+          targetCompanies: { type: "array", items: { type: "string" } },
+          targetRoles: { type: "array", items: { type: "string" } },
+          targetTechnologies: { type: "array", items: { type: "string" } },
+          targetDate: { type: "string", description: "YYYY-MM-DD" },
+        },
+        required: ["title"],
+      },
+    },
+  },
+  {
+    type: "function",
+    function: {
+      name: "analyze_resume",
+      description: "Run AI resume analysis (Resume AI) on one of the user's saved resumes — detects weaknesses, missing skills/keywords, and ATS friendliness. Never overwrites the resume.",
+      parameters: {
+        type: "object",
+        properties: { resumeTitle: { type: "string", description: "Title of the resume to analyze" } },
+        required: ["resumeTitle"],
+      },
+    },
+  },
+  {
+    type: "function",
+    function: {
+      name: "get_career_recommendation",
+      description: "Get AI Career Coach recommendations: what to learn next, resume improvements, interview readiness, project suggestions, progress toward career goals.",
+      parameters: { type: "object", properties: {} },
+    },
+  },
+  {
+    type: "function",
+    function: {
+      name: "show_career_progress",
+      description: "Show the user's overall career dashboard: resume status, top skills, skill gaps, projects, interview readiness, and career goals.",
+      parameters: { type: "object", properties: {} },
+    },
+  },
+  {
+    type: "function",
+    function: {
+      name: "start_mock_interview",
+      description: "Start a mock interview by generating the first question of a given type (technical, behavioral, hr, coding, project_discussion, resume_discussion).",
+      parameters: {
+        type: "object",
+        properties: { type: { type: "string", enum: ["technical", "behavioral", "hr", "coding", "project_discussion", "resume_discussion"] } },
+        required: ["type"],
+      },
+    },
+  },
 ];

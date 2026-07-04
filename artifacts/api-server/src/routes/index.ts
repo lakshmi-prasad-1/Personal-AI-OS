@@ -21,6 +21,12 @@ import subjectsRouter from "./subjects";
 import flashcardsRouter from "./flashcards";
 import quizzesRouter from "./quizzes";
 import revisionRouter from "./revision";
+import careerProfileRouter from "./careerProfile";
+import resumesRouter from "./resumes";
+import skillsRouter from "./skills";
+import projectsRouter from "./projects";
+import careerGoalsRouter from "./careerGoals";
+import interviewRouter from "./interview";
 
 const router: IRouter = Router();
 
@@ -46,5 +52,11 @@ router.use(subjectsRouter);
 router.use(flashcardsRouter);
 router.use(quizzesRouter);
 router.use(revisionRouter);
+router.use(careerProfileRouter);
+router.use(resumesRouter);
+router.use(skillsRouter);
+router.use(projectsRouter);
+router.use(careerGoalsRouter);
+router.use(interviewRouter);
 
 export default router;

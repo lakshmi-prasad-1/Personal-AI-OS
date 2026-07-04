@@ -18,3 +18,4 @@ export * from "./subjects";
 export * from "./flashcards";
 export * from "./quizzes";
 export * from "./studyTracking";
+export * from "./career";

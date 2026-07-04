@@ -6,6 +6,11 @@ import { agentActionsService } from "../services/agentActionsService";
 import { subjectService } from "../services/subjectService";
 import { flashcardService } from "../services/flashcardService";
 import { revisionService } from "../services/revisionService";
+import { careerGoalService } from "../services/careerGoalService";
+import { skillService } from "../services/skillService";
+import { resumeService } from "../services/resumeService";
+import { interviewService } from "../services/interviewService";
+import { projectService } from "../services/projectService";
 
 export type DecisionPriority = "low" | "medium" | "high";
 
@@ -30,7 +35,7 @@ export interface Decision {
  */
 export const decisionEngine = {
   async decide(userId: string): Promise<Decision[]> {
-    const [notes, ideas, memories, resources, recentActivity, subjects, dueFlashcards, weakTopics, topics] = await Promise.all([
+    const [notes, ideas, memories, resources, recentActivity, subjects, dueFlashcards, weakTopics, topics, careerGoals, skills, resumes, interviewStats, projects] = await Promise.all([
       notesService.list(userId),
       ideasService.list(userId),
       memoriesService.list(userId),
@@ -40,6 +45,11 @@ export const decisionEngine = {
       flashcardService.due(userId, 100),
       revisionService.listWeakTopics(userId),
       subjectService.listTopics(userId),
+      careerGoalService.list(userId),
+      skillService.list(userId),
+      resumeService.list(userId),
+      interviewService.stats(userId),
+      projectService.list(userId),
     ]);
 
     const pinnedNotes = notes.slice(0, 3);
@@ -160,6 +170,65 @@ export const decisionEngine = {
         actionType: "exam_prep",
         reason: `${nearingExams.map((s) => `${s.name} (${s.examDate})`).join(", ")} is within a week.`,
         priority: "high",
+      });
+    }
+
+    // ─── Career OS (Phase 3A) ───────────────────────────────────────────────
+    const activeCareerGoals = careerGoals.filter((g) => g.status === "active");
+    if (skills.length === 0) {
+      decisions.push({
+        title: "Build your skill inventory",
+        description: "Add your programming languages, frameworks, and tools so the AI can track your growth and suggest what to learn next.",
+        actionType: "career_add_skills",
+        reason: "No skills are recorded in your Skill Inventory yet.",
+        priority: "medium",
+      });
+    }
+    if (resumes.length === 0) {
+      decisions.push({
+        title: "Upload your first resume",
+        description: "Add a resume so Resume AI can analyze it for ATS friendliness and missing keywords.",
+        actionType: "career_add_resume",
+        reason: "No resumes are on file yet.",
+        priority: "medium",
+      });
+    } else {
+      const unanalyzed = resumes.filter((r) => !r.analyzedAt);
+      if (unanalyzed.length > 0) {
+        decisions.push({
+          title: `Analyze ${unanalyzed.length} resume${unanalyzed.length > 1 ? "s" : ""}`,
+          description: "Run Resume AI to get ATS score, strengths, and improvement suggestions.",
+          actionType: "career_analyze_resume",
+          reason: `${unanalyzed.length} resume(s) haven't been analyzed yet.`,
+          priority: "low",
+        });
+      }
+    }
+    if (projects.length < 3) {
+      decisions.push({
+        title: "Grow your project portfolio",
+        description: "Aim for at least 3 strong projects to showcase to recruiters.",
+        actionType: "career_add_project",
+        reason: `Only ${projects.length} project(s) recorded.`,
+        priority: "low",
+      });
+    }
+    if (interviewStats.totalTopics > 0 && interviewStats.readinessPercent < 50) {
+      decisions.push({
+        title: "Boost interview readiness",
+        description: `Only ${interviewStats.readinessPercent}% of your interview topics are mastered — revise a few or try a mock interview.`,
+        actionType: "career_interview_prep",
+        reason: `Interview readiness is at ${interviewStats.readinessPercent}%.`,
+        priority: "high",
+      });
+    }
+    if (activeCareerGoals.length === 0) {
+      decisions.push({
+        title: "Set a career goal",
+        description: "Add a target role or company so the AI can tailor recommendations toward it.",
+        actionType: "career_set_goal",
+        reason: "No active career goals found.",
+        priority: "low",
       });
     }
 
