@@ -13,3 +13,8 @@ export * from "./habits";
 export * from "./focusSessions";
 export * from "./reminders";
 export * from "./reviews";
+export * from "./studyProfile";
+export * from "./subjects";
+export * from "./flashcards";
+export * from "./quizzes";
+export * from "./studyTracking";

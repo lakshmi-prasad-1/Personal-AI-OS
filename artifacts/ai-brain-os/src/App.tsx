@@ -22,6 +22,11 @@ import Focus from "@/pages/focus";
 import Reminders from "@/pages/reminders";
 import Planner from "@/pages/planner";
 import Reviews from "@/pages/reviews";
+import StudyProfile from "@/pages/study-profile";
+import Subjects from "@/pages/subjects";
+import Flashcards from "@/pages/flashcards";
+import Quizzes from "@/pages/quizzes";
+import Revision from "@/pages/revision";
 
 const queryClient = new QueryClient();
 
@@ -59,6 +64,11 @@ function Router() {
         <ProtectedRoute path="/reminders" component={Reminders} />
         <ProtectedRoute path="/planner" component={Planner} />
         <ProtectedRoute path="/reviews" component={Reviews} />
+        <ProtectedRoute path="/study-profile" component={StudyProfile} />
+        <ProtectedRoute path="/subjects" component={Subjects} />
+        <ProtectedRoute path="/flashcards" component={Flashcards} />
+        <ProtectedRoute path="/quizzes" component={Quizzes} />
+        <ProtectedRoute path="/revision" component={Revision} />
         <Route component={NotFound} />
       </Switch>
     </AppLayout>

@@ -1,7 +1,7 @@
 import { eq } from "drizzle-orm";
 import { db, graphNodesTable, graphEdgesTable, type GraphNode, type GraphEdge } from "@workspace/db";
 
-export type LinkableEntityType = "note" | "idea" | "memory" | "resource";
+export type LinkableEntityType = "note" | "idea" | "memory" | "resource" | "subject" | "topic" | "flashcard" | "quiz";
 
 function tokenize(text: string): Set<string> {
   return new Set(

@@ -7,6 +7,9 @@ import { goalService } from "../services/goalService";
 import { habitService } from "../services/habitService";
 import { focusService } from "../services/focusService";
 import { reminderService } from "../services/reminderService";
+import { subjectService } from "../services/subjectService";
+import { flashcardService } from "../services/flashcardService";
+import { revisionService } from "../services/revisionService";
 
 export interface AssembledContext {
   pinnedNotes: { title: string; content: string }[];
@@ -19,6 +22,10 @@ export interface AssembledContext {
   habits: { name: string; completedToday: boolean; streak: number }[];
   upcomingReminders: { title: string; remindAt: string }[];
   activeFocusSession: { title: string; type: string; plannedMinutes: number } | null;
+  // Phase 2B additions
+  subjects: { name: string; progressPercent: number; priority: string; examDate: string | null }[];
+  dueFlashcardsCount: number;
+  weakTopics: { reason: string; weaknessScore: number }[];
   summary: string;
 }
 
@@ -44,6 +51,7 @@ export const contextEngine = {
     const [
       allNotes, allIdeas, allMemories, allResources,
       todayTasks, activeGoals, habitStatus, upcomingReminders, activeFocus,
+      subjects, dueFlashcards, weakTopics,
     ] = await Promise.all([
       notesService.list(userId),
       ideasService.list(userId),
@@ -54,6 +62,9 @@ export const contextEngine = {
       habitService.getTodayStatus(userId),
       reminderService.upcoming(userId, 3),
       focusService.getActive(userId),
+      subjectService.list(userId),
+      flashcardService.due(userId, 100),
+      revisionService.listWeakTopics(userId),
     ]);
 
     const pinnedNotes = allNotes.slice(0, 5);
@@ -72,6 +83,9 @@ export const contextEngine = {
       habits: habitStatus.map((h) => ({ name: h.habit.name, completedToday: h.completedToday, streak: h.habit.currentStreak })),
       upcomingReminders: upcomingReminders.map((r) => ({ title: r.title, remindAt: r.remindAt.toString() })),
       activeFocusSession: activeFocus ? { title: activeFocus.title, type: activeFocus.type, plannedMinutes: activeFocus.plannedMinutes } : null,
+      subjects: subjects.slice(0, 8).map((s) => ({ name: s.name, progressPercent: s.progressPercent, priority: s.priority, examDate: s.examDate ?? null })),
+      dueFlashcardsCount: dueFlashcards.length,
+      weakTopics: weakTopics.slice(0, 5).map((w) => ({ reason: w.reason, weaknessScore: w.weaknessScore })),
       summary: "",
     };
 
@@ -106,6 +120,15 @@ export const contextEngine = {
     }
     if (recentIdeas.length) {
       parts.push(`Recent ideas: ${recentIdeas.map((i) => `${i.title} [${i.status}]`).join(", ")}.`);
+    }
+    if (context.subjects.length) {
+      parts.push(`Subjects being studied: ${context.subjects.map((s) => `${s.name} (${s.progressPercent}% done${s.examDate ? `, exam ${s.examDate}` : ""})`).join(", ")}.`);
+    }
+    if (context.dueFlashcardsCount > 0) {
+      parts.push(`${context.dueFlashcardsCount} flashcard(s) are due for revision today.`);
+    }
+    if (context.weakTopics.length) {
+      parts.push(`Weak topics flagged: ${context.weakTopics.map((w) => w.reason).filter(Boolean).join(", ") || `${context.weakTopics.length} topic(s) need extra attention`}.`);
     }
 
     context.summary = parts.length

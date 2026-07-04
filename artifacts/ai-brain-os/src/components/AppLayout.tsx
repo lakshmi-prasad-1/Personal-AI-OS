@@ -17,6 +17,11 @@ import {
   BarChart3,
   ChevronDown,
   ChevronRight,
+  GraduationCap,
+  BookOpen,
+  Layers,
+  HelpCircle,
+  RefreshCcw,
 } from "lucide-react";
 import { useAuth } from "@/lib/auth";
 import { useGetCurrentUser, getGetCurrentUserQueryKey } from "@workspace/api-client-react";
@@ -47,6 +52,17 @@ const NAV_STRUCTURE: NavGroup[] = [
       { href: "/reminders", label: "Reminders", icon: Bell },
       { href: "/planner", label: "Planner", icon: CalendarDays },
       { href: "/reviews", label: "Reviews", icon: BarChart3 },
+    ],
+  },
+  {
+    label: "Study OS",
+    defaultOpen: true,
+    items: [
+      { href: "/study-profile", label: "Study Profile", icon: GraduationCap },
+      { href: "/subjects", label: "Subjects", icon: BookOpen },
+      { href: "/flashcards", label: "Flashcards", icon: Layers },
+      { href: "/quizzes", label: "Quizzes", icon: HelpCircle },
+      { href: "/revision", label: "Revision", icon: RefreshCcw },
     ],
   },
   {

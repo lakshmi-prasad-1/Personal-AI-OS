@@ -3,6 +3,9 @@ import { ideasService } from "../services/ideasService";
 import { memoriesService } from "../services/memoriesService";
 import { resourcesService } from "../services/resourcesService";
 import { agentActionsService } from "../services/agentActionsService";
+import { subjectService } from "../services/subjectService";
+import { flashcardService } from "../services/flashcardService";
+import { revisionService } from "../services/revisionService";
 
 export type DecisionPriority = "low" | "medium" | "high";
 
@@ -27,12 +30,16 @@ export interface Decision {
  */
 export const decisionEngine = {
   async decide(userId: string): Promise<Decision[]> {
-    const [notes, ideas, memories, resources, recentActivity] = await Promise.all([
+    const [notes, ideas, memories, resources, recentActivity, subjects, dueFlashcards, weakTopics, topics] = await Promise.all([
       notesService.list(userId),
       ideasService.list(userId),
       memoriesService.list(userId),
       resourcesService.list(userId),
       agentActionsService.recent(userId, 15),
+      subjectService.list(userId),
+      flashcardService.due(userId, 100),
+      revisionService.listWeakTopics(userId),
+      subjectService.listTopics(userId),
     ]);
 
     const pinnedNotes = notes.slice(0, 3);
@@ -106,6 +113,53 @@ export const decisionEngine = {
         actionType: "search_recent_captures",
         reason: `You logged ${recentSaves} recent captures without a single search, so related items may already exist and be worth linking together.`,
         priority: "low",
+      });
+    }
+
+    // ─── Study OS (Phase 2B) ────────────────────────────────────────────────
+    if (dueFlashcards.length > 0) {
+      decisions.push({
+        title: `Review ${dueFlashcards.length} flashcard${dueFlashcards.length > 1 ? "s" : ""}`,
+        description: "Flashcards due for spaced-repetition review are ready — a few minutes now keeps retention high.",
+        actionType: "review_flashcards",
+        reason: `${dueFlashcards.length} flashcard(s) hit their scheduled review date.`,
+        priority: dueFlashcards.length >= 10 ? "high" : "medium",
+      });
+    }
+
+    if (weakTopics.length > 0) {
+      decisions.push({
+        title: `Strengthen ${weakTopics.length} weak topic${weakTopics.length > 1 ? "s" : ""}`,
+        description: "Some topics are flagged as weak based on quiz performance or your own flags.",
+        actionType: "study_weak_topics",
+        reason: weakTopics.slice(0, 2).map((w) => w.reason).filter(Boolean).join("; ") || "Weak topics were flagged and haven't been resolved yet.",
+        priority: "high",
+      });
+    }
+
+    const revisionNeeded = topics.filter((t) => t.status === "revision_needed");
+    if (revisionNeeded.length > 0) {
+      decisions.push({
+        title: `Revise ${revisionNeeded.length} topic${revisionNeeded.length > 1 ? "s" : ""}`,
+        description: "Topics you flagged as needing revision are waiting.",
+        actionType: "revise_topics",
+        reason: `${revisionNeeded.length} topic(s) are marked "revision needed".`,
+        priority: "medium",
+      });
+    }
+
+    const nearingExams = subjects.filter((s) => {
+      if (!s.examDate) return false;
+      const days = Math.round((new Date(s.examDate).getTime() - Date.now()) / 86_400_000);
+      return days >= 0 && days <= 7;
+    });
+    if (nearingExams.length > 0) {
+      decisions.push({
+        title: `Exam coming up: ${nearingExams.map((s) => s.name).join(", ")}`,
+        description: "One or more subjects have an exam within the next 7 days.",
+        actionType: "exam_prep",
+        reason: `${nearingExams.map((s) => `${s.name} (${s.examDate})`).join(", ")} is within a week.`,
+        priority: "high",
       });
     }
 

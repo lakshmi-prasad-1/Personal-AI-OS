@@ -1,0 +1,995 @@
+You are now acting simultaneously as:
+
+• Product Manager
+• Principal Software Architect
+• Principal AI Systems Architect
+• Principal Backend Engineer
+• Principal Frontend Engineer
+• Principal Database Architect
+• Principal AI Engineer
+• Principal DevOps Engineer
+• Principal QA Engineer
+
+============================================================
+
+MISSION
+
+Phase 1 and Phase 2A are complete.
+
+DO NOT redesign the architecture.
+
+DO NOT replace frameworks.
+
+DO NOT rewrite working code.
+
+DO NOT break:
+
+• Authentication
+• AI Chat
+• Voice Assistant
+• Productivity OS
+• Memory Engine
+• Knowledge Graph
+• Search
+• Dashboard
+• Planner
+• Tasks
+• Goals
+• Habits
+• Focus Mode
+
+Instead, extend the current project into
+
+AI Brain OS
+
+Phase 2B
+
+Study Operating System.
+
+============================================================
+
+FIRST TASK
+
+Before writing ANY code
+
+inspect the entire repository.
+
+Understand
+
+Current folder structure
+
+Authentication
+
+Shared Services
+
+Repositories
+
+Database
+
+AI Pipeline
+
+Intent Engine
+
+Action Engine
+
+Context Engine
+
+Memory Engine
+
+Knowledge Graph
+
+Voice Pipeline
+
+Dashboard
+
+Productivity Modules
+
+Current APIs
+
+Existing Resource module
+
+Existing Notes module
+
+Existing Search
+
+Existing Chat
+
+Reuse all existing architecture.
+
+Never duplicate logic.
+
+============================================================
+
+GOAL
+
+Transform AI Brain OS into an intelligent personal study companion.
+
+The AI should help me learn.
+
+Plan.
+
+Revise.
+
+Teach.
+
+Quiz.
+
+Track.
+
+Remember.
+
+Recommend.
+
+Everything should work through
+
+Chat
+
+and
+
+Voice.
+
+============================================================
+
+OVERALL STUDY PIPELINE
+
+Every study interaction must follow
+
+User
+
+↓
+
+Text
+
+or
+
+Voice
+
+↓
+
+Speech Recognition
+
+↓
+
+Intent Engine
+
+↓
+
+Context Retrieval
+
+↓
+
+Decision Engine
+
+↓
+
+Study Action Engine
+
+↓
+
+Shared Services
+
+↓
+
+Repositories
+
+↓
+
+Database
+
+↓
+
+Knowledge Graph
+
+↓
+
+Dashboard
+
+↓
+
+AI Response
+
+Never bypass this architecture.
+
+============================================================
+
+MODULE 1
+
+STUDY PROFILE
+
+Create a persistent study profile.
+
+Store
+
+Current Semester
+
+Branch
+
+Subjects
+
+Credits
+
+Preferred Study Time
+
+Weak Subjects
+
+Strong Subjects
+
+Target CGPA
+
+Daily Study Goal
+
+Weekly Goal
+
+Preferred Revision Style
+
+Preferred Learning Style
+
+Exam Pattern
+
+Programming Languages
+
+Current Skills
+
+Target Skills
+
+The AI should continuously update this profile.
+
+============================================================
+
+MODULE 2
+
+STUDY PLANNER
+
+Implement AI-powered study planning.
+
+Support
+
+Today's Study Plan
+
+Tomorrow's Plan
+
+Weekly Plan
+
+Monthly Plan
+
+Semester Plan
+
+Exam Plan
+
+Revision Plan
+
+Backlog Plan
+
+Project Study Plan
+
+LeetCode Plan
+
+Coding Plan
+
+The planner should consider
+
+Existing Tasks
+
+College Schedule
+
+Goals
+
+Habits
+
+Focus Sessions
+
+Reminders
+
+Deadlines
+
+Available Time
+
+The AI should automatically optimize plans.
+
+============================================================
+
+MODULE 3
+
+RESOURCE LIBRARY
+
+Upgrade the existing Resource module.
+
+Support
+
+PDF
+
+PPT
+
+DOCX
+
+TXT
+
+Markdown
+
+YouTube Links
+
+Web Articles
+
+Documentation
+
+GitHub Repositories
+
+Books
+
+Roadmaps
+
+Images
+
+Code Snippets
+
+Research Papers
+
+Each resource should contain
+
+Category
+
+Subject
+
+Tags
+
+Difficulty
+
+Source
+
+AI Summary
+
+Keywords
+
+Related Topics
+
+Knowledge Graph Links
+
+Search Metadata
+
+Study Status
+
+Priority
+
+Notes
+
+Revision Count
+
+Bookmarks
+
+Favorites
+
+============================================================
+
+MODULE 4
+
+DOCUMENT AI
+
+Whenever a document is uploaded
+
+Automatically
+
+Extract Text
+
+Generate Summary
+
+Extract Important Concepts
+
+Generate Key Points
+
+Generate Flashcards
+
+Generate Quiz Questions
+
+Generate Revision Notes
+
+Extract Definitions
+
+Extract Formulae
+
+Extract Algorithms
+
+Extract Important Dates
+
+Store everything.
+
+============================================================
+
+MODULE 5
+
+LECTURE AI
+
+Support
+
+YouTube Links
+
+Recorded Lectures
+
+Lecture Notes
+
+The AI should
+
+Summarize
+
+Generate Timeline
+
+Important Topics
+
+Assignments
+
+Flashcards
+
+Questions
+
+Revision Notes
+
+Store lecture history.
+
+============================================================
+
+MODULE 6
+
+AI TEACHER
+
+The AI should answer
+
+Explain this topic.
+
+Explain simply.
+
+Explain deeply.
+
+Give examples.
+
+Give interview perspective.
+
+Give coding perspective.
+
+Give exam perspective.
+
+Teach step by step.
+
+Compare concepts.
+
+Generate diagrams.
+
+Generate analogies.
+
+Recommend videos.
+
+Recommend documentation.
+
+============================================================
+
+MODULE 7
+
+FLASHCARD ENGINE
+
+Automatically generate
+
+Flashcards
+
+Definitions
+
+Concept Cards
+
+Formula Cards
+
+Programming Cards
+
+Revision Cards
+
+Support
+
+Difficulty
+
+Review Count
+
+Mastery Score
+
+Spaced Repetition
+
+Next Review Date
+
+============================================================
+
+MODULE 8
+
+QUIZ ENGINE
+
+Generate
+
+MCQs
+
+True/False
+
+Fill in the blanks
+
+Short Answer
+
+Long Answer
+
+Coding Questions
+
+Scenario Questions
+
+Previous Exam Style
+
+Difficulty
+
+Easy
+
+Medium
+
+Hard
+
+Adaptive Difficulty
+
+Instant Evaluation
+
+Hints
+
+Solutions
+
+============================================================
+
+MODULE 9
+
+REVISION ENGINE
+
+Support
+
+Daily Revision
+
+Weekly Revision
+
+Monthly Revision
+
+Exam Revision
+
+Forgotten Topics
+
+Weak Topics
+
+Random Revision
+
+Priority Revision
+
+AI should recommend
+
+What should I revise today?
+
+============================================================
+
+MODULE 10
+
+WEAK TOPIC ENGINE
+
+Analyze
+
+Quiz Scores
+
+Flashcards
+
+Study Sessions
+
+Revision
+
+Mistakes
+
+Skipped Topics
+
+Study Time
+
+Generate
+
+Weak Topics
+
+Strong Topics
+
+Recommended Revision
+
+Difficulty Trend
+
+============================================================
+
+MODULE 11
+
+STUDY PROGRESS
+
+Track
+
+Hours
+
+Subjects
+
+Topics
+
+Chapters
+
+Units
+
+Assignments
+
+Projects
+
+Labs
+
+Coding Practice
+
+LeetCode
+
+Revision Sessions
+
+Quiz Performance
+
+Flashcards Reviewed
+
+Completion %
+
+============================================================
+
+MODULE 12
+
+AI STUDY RECOMMENDATION ENGINE
+
+Recommend
+
+What to study
+
+When to study
+
+How long
+
+Which topic
+
+Which chapter
+
+Which resource
+
+Which quiz
+
+Which revision
+
+Based on
+
+Study History
+
+Deadlines
+
+Goals
+
+Habits
+
+Focus Sessions
+
+Weak Topics
+
+Planner
+
+============================================================
+
+MODULE 13
+
+VOICE STUDY ASSISTANT
+
+Voice must support
+
+Start studying
+
+Explain this
+
+Summarize this PDF
+
+Quiz me
+
+Revise Graphs
+
+Open DBMS notes
+
+Start revision
+
+Generate flashcards
+
+Everything must use the same AI pipeline.
+
+============================================================
+
+MODULE 14
+
+KNOWLEDGE GRAPH
+
+Whenever study data is created
+
+Automatically connect
+
+Subjects
+
+Resources
+
+Notes
+
+Flashcards
+
+Quizzes
+
+Concepts
+
+Topics
+
+Algorithms
+
+Definitions
+
+Programming Languages
+
+Projects
+
+============================================================
+
+MODULE 15
+
+MEMORY ENGINE
+
+Remember
+
+Favorite learning style
+
+Weak chapters
+
+Preferred teachers
+
+Preferred resources
+
+Frequently asked doubts
+
+Revision history
+
+Learning speed
+
+Programming progress
+
+Future recommendations should improve over time.
+
+============================================================
+
+MODULE 16
+
+DASHBOARD
+
+Upgrade dashboard.
+
+Display
+
+Today's Study Plan
+
+Study Hours
+
+Subjects
+
+Current Topic
+
+Revision Queue
+
+Upcoming Exams
+
+Weak Topics
+
+Resources Added
+
+Flashcards
+
+Quiz Scores
+
+Recommendations
+
+============================================================
+
+MODULE 17
+
+CHAT EXPERIENCE
+
+The AI should understand
+
+"I studied OS today."
+
+"I finished Unit 4."
+
+"Quiz me on Trees."
+
+"I forgot BFS."
+
+"Explain DBMS joins."
+
+"Summarize this note."
+
+"Generate flashcards."
+
+"Create revision plan."
+
+Everything should happen automatically.
+
+============================================================
+
+MODULE 18
+
+DATABASE
+
+Create only required schemas.
+
+Study Profiles
+
+Study Sessions
+
+Subjects
+
+Topics
+
+Resources Metadata
+
+Flashcards
+
+Flashcard Reviews
+
+Quizzes
+
+Quiz Attempts
+
+Revision Sessions
+
+Weak Topics
+
+Study Analytics
+
+Keep schema extensible.
+
+============================================================
+
+MODULE 19
+
+SERVICES
+
+Create reusable services.
+
+StudyService
+
+SubjectService
+
+FlashcardService
+
+QuizService
+
+RevisionService
+
+TeacherService
+
+AnalyticsService
+
+RecommendationService
+
+DocumentService
+
+LectureService
+
+Every AI action must use services.
+
+============================================================
+
+MODULE 20
+
+API
+
+Create clean REST APIs.
+
+Maintain compatibility.
+
+Support
+
+Web
+
+Future Mobile
+
+Telegram
+
+n8n
+
+Voice
+
+============================================================
+
+MODULE 21
+
+TESTING
+
+Before completing Phase 2B verify
+
+✓ Authentication works
+
+✓ Chat works
+
+✓ Voice works
+
+✓ Productivity OS still works
+
+✓ Resource uploads work
+
+✓ AI summaries work
+
+✓ Flashcards work
+
+✓ Quiz generation works
+
+✓ Revision works
+
+✓ Study planner works
+
+✓ Weak topic detection works
+
+✓ Dashboard updates
+
+✓ Knowledge Graph updates
+
+✓ Memory updates
+
+✓ APIs remain compatible
+
+✓ Shared services are reusable
+
+✓ No duplicated logic
+
+✓ No business logic inside routes
+
+============================================================
+
+DO NOT IMPLEMENT YET
+
+Resume AI
+
+ATS Analysis
+
+Job Matching
+
+Interview Preparation
+
+Career Roadmaps
+
+Application Tracking
+
+Browser Automation
+
+Job Auto Apply
+
+n8n Workflows
+
+Google Calendar Sync
+
+Telegram Bot
+
+WhatsApp Bot
+
+Email Automation
+
+Those belong to later phases.
+
+============================================================
+
+SUCCESS CRITERIA
+
+By the end of Phase 2B,
+
+AI Brain OS should function as a complete AI Study Operating System.
+
+The user should be able to manage nearly every aspect of learning—planning, studying, revising, practicing, and tracking progress—through natural language or voice. The AI should automatically organize study data, generate learning materials, update memory, enrich the knowledge graph, provide personalized recommendations, and keep the dashboard synchronized.
+
+Do not stop after implementing one module.
+
+Continue module-by-module until every requirement in this document has been fully implemented, integrated, tested, and verified.
+
+Finally provide:
+
+1. Completed modules.
+2. Files created.
+3. Files modified.
+4. Architecture decisions.
+5. Remaining technical debt.
+6. Deferred work for Phase 3.
+7. Verification checklist confirming every module was tested.

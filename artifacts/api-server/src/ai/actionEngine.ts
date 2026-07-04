@@ -13,6 +13,13 @@ import { focusService } from "../services/focusService";
 import { reminderService } from "../services/reminderService";
 import { plannerService } from "../services/plannerService";
 import { reviewService } from "../services/reviewService";
+import { studyProfileService } from "../services/studyProfileService";
+import { subjectService } from "../services/subjectService";
+import { flashcardService } from "../services/flashcardService";
+import { quizService } from "../services/quizService";
+import { revisionService } from "../services/revisionService";
+import { teacherService } from "../services/teacherService";
+import { studyAnalyticsService } from "../services/studyAnalyticsService";
 import { logger } from "../lib/logger";
 
 // ─── Phase 1 arg schemas ────────────────────────────────────────────────────
@@ -69,6 +76,42 @@ const planDayArgs = z.object({
 const startFocusArgs = z.object({ title: z.string().min(1), type: z.enum(["pomodoro", "deep_work", "study", "coding"]).optional().default("pomodoro"), plannedMinutes: z.number().int().optional().default(25) });
 const stopFocusArgs = z.object({ notes: z.string().optional() });
 const generateDailyReviewArgs = z.object({ date: z.string().optional() });
+
+// ─── Phase 2B: Study OS arg schemas ─────────────────────────────────────────
+const updateStudyProfileArgs = z.object({
+  semester: z.string().optional(),
+  branch: z.string().optional(),
+  dailyStudyGoalMinutes: z.number().int().optional(),
+  preferredStudyTime: z.string().optional(),
+  preferredLearningStyle: z.string().optional(),
+  preferredRevisionStyle: z.string().optional(),
+  weakSubjects: z.array(z.string()).optional(),
+  strongSubjects: z.array(z.string()).optional(),
+  programmingLanguages: z.array(z.string()).optional(),
+  currentSkills: z.array(z.string()).optional(),
+  targetSkills: z.array(z.string()).optional(),
+});
+const createSubjectArgs = z.object({
+  name: z.string().min(1),
+  code: z.string().optional(),
+  semester: z.string().optional(),
+  category: z.enum(["core", "elective", "lab", "project"]).optional().default("core"),
+  examDate: z.string().optional(),
+  priority: z.enum(["low", "medium", "high"]).optional().default("medium"),
+});
+const createTopicArgs = z.object({
+  subjectName: z.string().min(1),
+  title: z.string().min(1),
+  description: z.string().optional().default(""),
+  difficulty: z.enum(["easy", "medium", "hard"]).optional().default("medium"),
+  importance: z.enum(["low", "medium", "high"]).optional().default("medium"),
+  estimatedHours: z.number().int().optional(),
+});
+const updateTopicStatusArgs = z.object({ topicTitle: z.string().min(1), status: z.enum(["not_started", "in_progress", "completed", "revision_needed"]) });
+const generateFlashcardsArgs = z.object({ topic: z.string().min(1), count: z.number().int().min(1).max(20).optional().default(5), type: z.enum(["definition", "concept", "formula", "programming", "revision"]).optional().default("concept") });
+const generateQuizArgs = z.object({ topic: z.string().min(1), count: z.number().int().min(1).max(20).optional().default(5), difficulty: z.enum(["easy", "medium", "hard", "adaptive"]).optional().default("medium") });
+const logStudySessionArgs = z.object({ subjectName: z.string().optional(), durationMinutes: z.number().int().min(1), type: z.enum(["study", "revision", "practice", "coding"]).optional().default("study"), notes: z.string().optional().default("") });
+const explainTopicArgs = z.object({ topic: z.string().min(1), mode: z.enum(["simple", "deep", "examples", "interview", "coding", "exam", "step_by_step", "compare", "analogy", "default"]).optional().default("default") });
 
 export interface ActionResult {
   toolCallId: string;
@@ -312,6 +355,100 @@ export const actionEngine = {
           };
           await agentActionsService.log({ userId, chatId, actionType: "productivity_summary", summary: "Retrieved productivity summary", payload: summary });
           return { toolCallId, toolName, ok: true, result: summary };
+        }
+
+        // ─── Study Profile & Subjects (Phase 2B) ────────────────────────────
+        case "update_study_profile": {
+          const args = updateStudyProfileArgs.parse(parsedArgs);
+          const profile = await studyProfileService.upsert(userId, args);
+          const logged = await agentActionsService.log({ userId, chatId, actionType: "update_study_profile", summary: "Updated study profile", payload: profile });
+          return { toolCallId, toolName, ok: true, result: profile, actionLogged: { actionType: logged.actionType, summary: logged.summary } };
+        }
+        case "create_subject": {
+          const args = createSubjectArgs.parse(parsedArgs);
+          const subject = await subjectService.create(userId, args);
+          const logged = await agentActionsService.log({ userId, chatId, actionType: "create_subject", entityType: "subject", entityId: subject.id, summary: `Added subject "${subject.name}"`, payload: subject });
+          return { toolCallId, toolName, ok: true, result: subject, actionLogged: { actionType: logged.actionType, summary: logged.summary } };
+        }
+        case "list_subjects": {
+          const subjects = await subjectService.list(userId);
+          return { toolCallId, toolName, ok: true, result: subjects };
+        }
+        case "create_topic": {
+          const args = createTopicArgs.parse(parsedArgs);
+          const subject = await subjectService.findByName(userId, args.subjectName);
+          if (!subject) return { toolCallId, toolName, ok: false, result: { error: `Subject "${args.subjectName}" not found. Create it first.` } };
+          const topic = await subjectService.createTopic(userId, { subjectId: subject.id, title: args.title, description: args.description, difficulty: args.difficulty, importance: args.importance, estimatedHours: args.estimatedHours });
+          const logged = await agentActionsService.log({ userId, chatId, actionType: "create_topic", entityType: "topic", entityId: topic.id, summary: `Added topic "${topic.title}" under ${subject.name}`, payload: topic });
+          return { toolCallId, toolName, ok: true, result: topic, actionLogged: { actionType: logged.actionType, summary: logged.summary } };
+        }
+        case "update_topic_status": {
+          const args = updateTopicStatusArgs.parse(parsedArgs);
+          const found = await subjectService.findTopicByTitle(userId, args.topicTitle);
+          if (!found) return { toolCallId, toolName, ok: false, result: { error: `Topic "${args.topicTitle}" not found.` } };
+          const topic = await subjectService.updateTopic(userId, found.id, { status: args.status });
+          if (!topic) return { toolCallId, toolName, ok: false, result: { error: "Failed to update topic" } };
+          const logged = await agentActionsService.log({ userId, chatId, actionType: "update_topic_status", entityType: "topic", entityId: topic.id, summary: `Marked topic "${topic.title}" as ${args.status}`, payload: topic });
+          return { toolCallId, toolName, ok: true, result: topic, actionLogged: { actionType: logged.actionType, summary: logged.summary } };
+        }
+
+        // ─── Flashcards ──────────────────────────────────────────────────────
+        case "generate_flashcards": {
+          const args = generateFlashcardsArgs.parse(parsedArgs);
+          const generated = await flashcardService.generateWithAi(args);
+          const cards = await flashcardService.createMany(userId, generated.map((c) => ({ ...c, source: "ai" as const })));
+          const logged = await agentActionsService.log({ userId, chatId, actionType: "generate_flashcards", summary: `Generated ${cards.length} flashcards on "${args.topic}"`, payload: cards });
+          return { toolCallId, toolName, ok: true, result: cards, actionLogged: { actionType: logged.actionType, summary: logged.summary } };
+        }
+        case "list_flashcards_due": {
+          const cards = await flashcardService.due(userId);
+          return { toolCallId, toolName, ok: true, result: cards };
+        }
+
+        // ─── Quizzes ─────────────────────────────────────────────────────────
+        case "generate_quiz": {
+          const args = generateQuizArgs.parse(parsedArgs);
+          const questions = await quizService.generateWithAi(args);
+          const quiz = await quizService.create(userId, { title: `Quiz: ${args.topic}`, questions, difficulty: args.difficulty, source: "ai" });
+          const logged = await agentActionsService.log({ userId, chatId, actionType: "generate_quiz", entityType: "quiz", entityId: quiz.id, summary: `Generated a ${questions.length}-question quiz on "${args.topic}"`, payload: quiz });
+          return { toolCallId, toolName, ok: true, result: quiz, actionLogged: { actionType: logged.actionType, summary: logged.summary } };
+        }
+
+        // ─── Revision & weak topics ──────────────────────────────────────────
+        case "get_revision_recommendation": {
+          const recommendation = await revisionService.recommendToday(userId);
+          return { toolCallId, toolName, ok: true, result: recommendation };
+        }
+        case "get_weak_topics": {
+          const weakTopics = await revisionService.listWeakTopics(userId);
+          return { toolCallId, toolName, ok: true, result: weakTopics };
+        }
+        case "log_study_session": {
+          const args = logStudySessionArgs.parse(parsedArgs);
+          let subjectId: string | undefined;
+          if (args.subjectName) {
+            const subject = await subjectService.findByName(userId, args.subjectName);
+            subjectId = subject?.id;
+          }
+          const date = new Date().toISOString().slice(0, 10);
+          const session = await studyAnalyticsService.logSession(userId, { subjectId, durationMinutes: args.durationMinutes, type: args.type, notes: args.notes, date });
+          const logged = await agentActionsService.log({ userId, chatId, actionType: "log_study_session", summary: `Logged ${args.durationMinutes}min ${args.type} session${args.subjectName ? ` for ${args.subjectName}` : ""}`, payload: session });
+          return { toolCallId, toolName, ok: true, result: session, actionLogged: { actionType: logged.actionType, summary: logged.summary } };
+        }
+
+        // ─── AI Teacher ──────────────────────────────────────────────────────
+        case "explain_topic": {
+          const args = explainTopicArgs.parse(parsedArgs);
+          const explanation = await teacherService.explain(args);
+          const logged = await agentActionsService.log({ userId, chatId, actionType: "explain_topic", summary: `Explained "${args.topic}" (${args.mode} mode)`, payload: { topic: args.topic, mode: args.mode } });
+          return { toolCallId, toolName, ok: true, result: { explanation }, actionLogged: { actionType: logged.actionType, summary: logged.summary } };
+        }
+
+        // ─── Study recommendation ────────────────────────────────────────────
+        case "get_study_recommendation": {
+          const decisions = await decisionEngine.decide(userId);
+          const studyDecisions = decisions.filter((d) => d.actionType.startsWith("study_") || d.actionType.includes("revis") || d.actionType.includes("weak") || d.actionType.includes("subject") || d.actionType.includes("flashcard") || d.actionType.includes("quiz"));
+          return { toolCallId, toolName, ok: true, result: studyDecisions.length ? studyDecisions : decisions };
         }
 
         default:

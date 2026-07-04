@@ -28,3 +28,8 @@ description: Decisions, gotchas, and constraints from Phase 2A implementation (T
 ## useBrainActivity() return shape
 The hook returns a union type — safe access: `Array.isArray(activity) ? activity : (activity as any)?.actions ?? []`
 **Why:** Depending on version, the response may be a bare array or `{ actions: [...] }`.
+
+## Verifying hand-written frontend pages against routes
+This app's newer feature pages use hand-written `apiGet/apiPost/etc.` (no generated OpenAPI client), so route response shapes must be checked by reading the actual service/route source (or curling with a real JWT) before writing frontend interfaces — do not assume a shape from the route name.
+**Why:** Built a frontend page assuming `/revision/today` returned `{dueFlashcardsCount, weakTopicsCount, recommendations}`; actual shape was `{dueFlashcards, weakTopics, topicsFlaggedForRevision, totalItems}`. Caught only by curling the endpoint with a real auth token after registering a test user.
+**How to apply:** For any new hand-written page hitting a Phase 2A/2B-style route, grep the route file's handler + underlying service return statement (or curl `/api/...` with a bearer token from a test register) before coding the TS interface.

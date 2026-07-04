@@ -16,6 +16,11 @@ import focusRouter from "./focus";
 import remindersRouter from "./reminders";
 import plannerRouter from "./planner";
 import reviewsRouter from "./reviews";
+import studyProfileRouter from "./studyProfile";
+import subjectsRouter from "./subjects";
+import flashcardsRouter from "./flashcards";
+import quizzesRouter from "./quizzes";
+import revisionRouter from "./revision";
 
 const router: IRouter = Router();
 
@@ -36,5 +41,10 @@ router.use(focusRouter);
 router.use(remindersRouter);
 router.use(plannerRouter);
 router.use(reviewsRouter);
+router.use(studyProfileRouter);
+router.use(subjectsRouter);
+router.use(flashcardsRouter);
+router.use(quizzesRouter);
+router.use(revisionRouter);
 
 export default router;

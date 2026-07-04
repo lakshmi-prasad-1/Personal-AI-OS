@@ -359,4 +359,197 @@ export const chatTools: OpenAI.Chat.Completions.ChatCompletionTool[] = [
       parameters: { type: "object", properties: {} },
     },
   },
+
+  // ─── Study Profile & Subjects (Phase 2B: Study OS) ─────────────────────
+  {
+    type: "function",
+    function: {
+      name: "update_study_profile",
+      description: "Update the user's study profile (semester, branch, study goals, learning style, skills, weak/strong subjects).",
+      parameters: {
+        type: "object",
+        properties: {
+          semester: { type: "string" },
+          branch: { type: "string" },
+          dailyStudyGoalMinutes: { type: "integer" },
+          preferredStudyTime: { type: "string" },
+          preferredLearningStyle: { type: "string" },
+          preferredRevisionStyle: { type: "string" },
+          weakSubjects: { type: "array", items: { type: "string" } },
+          strongSubjects: { type: "array", items: { type: "string" } },
+          programmingLanguages: { type: "array", items: { type: "string" } },
+          currentSkills: { type: "array", items: { type: "string" } },
+          targetSkills: { type: "array", items: { type: "string" } },
+        },
+      },
+    },
+  },
+  {
+    type: "function",
+    function: {
+      name: "create_subject",
+      description: "Add a subject/course the user is studying this semester.",
+      parameters: {
+        type: "object",
+        properties: {
+          name: { type: "string" },
+          code: { type: "string" },
+          semester: { type: "string" },
+          category: { type: "string", enum: ["core", "elective", "lab", "project"] },
+          examDate: { type: "string", description: "YYYY-MM-DD" },
+          priority: { type: "string", enum: ["low", "medium", "high"] },
+        },
+        required: ["name"],
+      },
+    },
+  },
+  {
+    type: "function",
+    function: {
+      name: "list_subjects",
+      description: "List the user's subjects/courses with their progress.",
+      parameters: { type: "object", properties: {} },
+    },
+  },
+  {
+    type: "function",
+    function: {
+      name: "create_topic",
+      description: "Add a topic/chapter under a subject the user needs to study.",
+      parameters: {
+        type: "object",
+        properties: {
+          subjectName: { type: "string", description: "Name of the subject this topic belongs to" },
+          title: { type: "string" },
+          description: { type: "string" },
+          difficulty: { type: "string", enum: ["easy", "medium", "hard"] },
+          importance: { type: "string", enum: ["low", "medium", "high"] },
+          estimatedHours: { type: "integer" },
+        },
+        required: ["subjectName", "title"],
+      },
+    },
+  },
+  {
+    type: "function",
+    function: {
+      name: "update_topic_status",
+      description: "Mark a topic's study status, e.g. when the user says they finished studying a topic or need to revise it.",
+      parameters: {
+        type: "object",
+        properties: {
+          topicTitle: { type: "string" },
+          status: { type: "string", enum: ["not_started", "in_progress", "completed", "revision_needed"] },
+        },
+        required: ["topicTitle", "status"],
+      },
+    },
+  },
+
+  // ─── Flashcards ─────────────────────────────────────────────────────────
+  {
+    type: "function",
+    function: {
+      name: "generate_flashcards",
+      description: "Generate AI flashcards for a topic or subject the user wants to memorize/revise.",
+      parameters: {
+        type: "object",
+        properties: {
+          topic: { type: "string", description: "Topic or subject name to generate flashcards about" },
+          count: { type: "integer", description: "Number of flashcards, default 5" },
+          type: { type: "string", enum: ["definition", "concept", "formula", "programming", "revision"] },
+        },
+        required: ["topic"],
+      },
+    },
+  },
+  {
+    type: "function",
+    function: {
+      name: "list_flashcards_due",
+      description: "List flashcards due for spaced-repetition review today. Use when the user asks 'what flashcards should I review?'",
+      parameters: { type: "object", properties: {} },
+    },
+  },
+
+  // ─── Quizzes ────────────────────────────────────────────────────────────
+  {
+    type: "function",
+    function: {
+      name: "generate_quiz",
+      description: "Generate an AI quiz to test the user's knowledge on a topic or subject.",
+      parameters: {
+        type: "object",
+        properties: {
+          topic: { type: "string" },
+          count: { type: "integer", description: "Number of questions, default 5" },
+          difficulty: { type: "string", enum: ["easy", "medium", "hard", "adaptive"] },
+        },
+        required: ["topic"],
+      },
+    },
+  },
+
+  // ─── Revision & weak topics ─────────────────────────────────────────────
+  {
+    type: "function",
+    function: {
+      name: "get_revision_recommendation",
+      description: "Get a 'what should I revise today' recommendation combining due flashcards, weak topics, and topics flagged for revision.",
+      parameters: { type: "object", properties: {} },
+    },
+  },
+  {
+    type: "function",
+    function: {
+      name: "get_weak_topics",
+      description: "List topics the user is struggling with (weak topics), based on quiz performance and flagged difficulty.",
+      parameters: { type: "object", properties: {} },
+    },
+  },
+  {
+    type: "function",
+    function: {
+      name: "log_study_session",
+      description: "Log a completed study/revision/practice session with duration, e.g. when the user says they studied for X minutes.",
+      parameters: {
+        type: "object",
+        properties: {
+          subjectName: { type: "string" },
+          durationMinutes: { type: "integer" },
+          type: { type: "string", enum: ["study", "revision", "practice", "coding"] },
+          notes: { type: "string" },
+        },
+        required: ["durationMinutes"],
+      },
+    },
+  },
+
+  // ─── AI Teacher ─────────────────────────────────────────────────────────
+  {
+    type: "function",
+    function: {
+      name: "explain_topic",
+      description:
+        "Act as an AI teacher and explain a concept/topic to the user. Use when the user asks to explain, teach, or clarify something academic — pick the mode from how they phrased it (simple, deep, with examples, for an interview, with code, exam-style, step by step, comparison, or analogy).",
+      parameters: {
+        type: "object",
+        properties: {
+          topic: { type: "string" },
+          mode: { type: "string", enum: ["simple", "deep", "examples", "interview", "coding", "exam", "step_by_step", "compare", "analogy", "default"] },
+        },
+        required: ["topic"],
+      },
+    },
+  },
+
+  // ─── Study recommendation ───────────────────────────────────────────────
+  {
+    type: "function",
+    function: {
+      name: "get_study_recommendation",
+      description: "Get a proactive 'what should I study right now' recommendation based on exam dates, weak topics, and due revisions.",
+      parameters: { type: "object", properties: {} },
+    },
+  },
 ];
