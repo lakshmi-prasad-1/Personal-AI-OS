@@ -30,6 +30,14 @@ import {
   ClipboardList,
   Building2,
   Trophy,
+  Compass,
+  History,
+  Sparkles,
+  LineChart,
+  Settings2,
+  Zap,
+  Activity,
+  HeartPulse,
 } from "lucide-react";
 import { useAuth } from "@/lib/auth";
 import { useGetCurrentUser, getGetCurrentUserQueryKey } from "@workspace/api-client-react";
@@ -96,6 +104,27 @@ const NAV_STRUCTURE: NavGroup[] = [
       { href: "/memories", label: "Memories", icon: Brain },
       { href: "/resources", label: "Resources", icon: Files },
       { href: "/graph", label: "Knowledge Graph", icon: Network },
+    ],
+  },
+  {
+    label: "Life OS",
+    defaultOpen: true,
+    items: [
+      { href: "/command-center", label: "Command Center", icon: Compass },
+      { href: "/life-profile", label: "Life Profile", icon: Compass },
+      { href: "/timeline", label: "Timeline", icon: History },
+      { href: "/insights", label: "Insights", icon: Sparkles },
+      { href: "/analytics", label: "Analytics", icon: LineChart },
+      { href: "/automation", label: "Automation", icon: Zap },
+    ],
+  },
+  {
+    label: "System",
+    defaultOpen: false,
+    items: [
+      { href: "/activity-center", label: "Activity Center", icon: Activity },
+      { href: "/system-health", label: "System Health", icon: HeartPulse },
+      { href: "/ai-settings", label: "AI Settings", icon: Settings2 },
     ],
   },
 ];

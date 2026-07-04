@@ -1,6 +1,7 @@
 import { Router, type IRouter } from "express";
 import { requireAuth } from "../lib/auth";
 import { plannerService } from "../services/plannerService";
+import { dailyPlannerService } from "../services/dailyPlannerService";
 import { z } from "zod/v4";
 
 const router: IRouter = Router();
@@ -81,6 +82,31 @@ router.delete("/planner/:id", async (req, res): Promise<void> => {
   const event = await plannerService.remove(req.auth!.userId, params.data.id);
   if (!event) { res.status(404).json({ error: "Planner event not found" }); return; }
   res.sendStatus(204);
+});
+
+// ─── Phase 4, Modules 3-5: Smart Planner (auto-generate) ───────────────────
+router.get("/planner/generate/daily", async (req, res): Promise<void> => {
+  const params = z.object({ date: z.string().regex(/^\d{4}-\d{2}-\d{2}$/).optional() }).safeParse(req.query);
+  if (!params.success) { res.status(400).json({ error: params.error.message }); return; }
+  const date = params.data.date ?? new Date().toISOString().slice(0, 10);
+  const events = await dailyPlannerService.generateDaily(req.auth!.userId, date);
+  res.json({ date, events });
+});
+
+router.get("/planner/generate/weekly", async (req, res): Promise<void> => {
+  const params = z.object({ weekStart: z.string().regex(/^\d{4}-\d{2}-\d{2}$/).optional() }).safeParse(req.query);
+  if (!params.success) { res.status(400).json({ error: params.error.message }); return; }
+  const weekStart = params.data.weekStart ?? new Date().toISOString().slice(0, 10);
+  const byDay = await dailyPlannerService.generateWeekly(req.auth!.userId, weekStart);
+  res.json(byDay);
+});
+
+router.get("/planner/generate/monthly", async (req, res): Promise<void> => {
+  const params = z.object({ monthStart: z.string().regex(/^\d{4}-\d{2}-\d{2}$/).optional() }).safeParse(req.query);
+  if (!params.success) { res.status(400).json({ error: params.error.message }); return; }
+  const monthStart = params.data.monthStart ?? new Date().toISOString().slice(0, 10);
+  const weeks = await dailyPlannerService.generateMonthly(req.auth!.userId, monthStart);
+  res.json(weeks);
 });
 
 export default router;

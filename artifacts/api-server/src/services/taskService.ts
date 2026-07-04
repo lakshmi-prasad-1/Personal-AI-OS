@@ -1,5 +1,6 @@
 import { and, desc, eq, isNull, ne } from "drizzle-orm";
 import { db, tasksTable, type InsertTask, type Task } from "@workspace/db";
+import { knowledgeGraphService } from "./knowledgeGraphService";
 
 export const taskService = {
   async list(userId: string, filters?: { status?: string; priority?: string; category?: string }): Promise<Task[]> {
@@ -34,8 +35,14 @@ export const taskService = {
       .returning();
     if (!task) throw new Error("Failed to create task");
 
-    // Tasks are not yet linked to the knowledge graph (entity type not in graph schema)
-    // Link added when the task is also a note/idea in future phase.
+    await knowledgeGraphService.autoLink({
+      userId,
+      entityType: "task",
+      entityId: task.id,
+      label: task.title,
+      text: `${task.title} ${task.description ?? ""}`,
+      tags: task.tags as string[],
+    });
 
     return task;
   },

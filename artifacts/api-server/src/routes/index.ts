@@ -29,6 +29,14 @@ import careerGoalsRouter from "./careerGoals";
 import interviewRouter from "./interview";
 import applicationsRouter from "./applications";
 import companiesRouter from "./companies";
+import lifeProfileRouter from "./lifeProfile";
+import timelineRouter from "./timeline";
+import insightsRouter from "./insights";
+import analyticsRouter from "./analytics";
+import lifeDecisionRouter from "./lifeDecision";
+import aiSettingsRouter from "./aiSettings";
+import automationRouter from "./automation";
+import systemHealthRouter from "./systemHealth";
 
 const router: IRouter = Router();
 
@@ -62,5 +70,13 @@ router.use(careerGoalsRouter);
 router.use(interviewRouter);
 router.use(applicationsRouter);
 router.use(companiesRouter);
+router.use(lifeProfileRouter);
+router.use(timelineRouter);
+router.use(insightsRouter);
+router.use(analyticsRouter);
+router.use(lifeDecisionRouter);
+router.use(aiSettingsRouter);
+router.use(automationRouter);
+router.use(systemHealthRouter);
 
 export default router;

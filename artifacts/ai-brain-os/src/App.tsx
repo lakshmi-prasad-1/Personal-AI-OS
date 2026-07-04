@@ -35,6 +35,15 @@ import CareerGoalsPage from "@/pages/career-goals";
 import Interview from "@/pages/interview";
 import Applications from "@/pages/applications";
 import Companies from "@/pages/companies";
+import LifeProfile from "@/pages/life-profile";
+import Timeline from "@/pages/timeline";
+import Insights from "@/pages/insights";
+import Analytics from "@/pages/analytics";
+import CommandCenter from "@/pages/command-center";
+import AiSettings from "@/pages/ai-settings";
+import Automation from "@/pages/automation";
+import ActivityCenter from "@/pages/activity-center";
+import SystemHealth from "@/pages/system-health";
 
 const queryClient = new QueryClient();
 
@@ -85,6 +94,15 @@ function Router() {
         <ProtectedRoute path="/interview" component={Interview} />
         <ProtectedRoute path="/applications" component={Applications} />
         <ProtectedRoute path="/companies" component={Companies} />
+        <ProtectedRoute path="/life-profile" component={LifeProfile} />
+        <ProtectedRoute path="/timeline" component={Timeline} />
+        <ProtectedRoute path="/insights" component={Insights} />
+        <ProtectedRoute path="/analytics" component={Analytics} />
+        <ProtectedRoute path="/command-center" component={CommandCenter} />
+        <ProtectedRoute path="/ai-settings" component={AiSettings} />
+        <ProtectedRoute path="/automation" component={Automation} />
+        <ProtectedRoute path="/activity-center" component={ActivityCenter} />
+        <ProtectedRoute path="/system-health" component={SystemHealth} />
         <Route component={NotFound} />
       </Switch>
     </AppLayout>

@@ -1,5 +1,6 @@
 import { and, desc, eq } from "drizzle-orm";
 import { db, habitsTable, habitLogsTable, type InsertHabit, type Habit, type HabitLog } from "@workspace/db";
+import { knowledgeGraphService } from "./knowledgeGraphService";
 
 export const habitService = {
   async list(userId: string): Promise<Habit[]> {
@@ -14,6 +15,13 @@ export const habitService = {
   async create(userId: string, data: Omit<InsertHabit, "userId">): Promise<Habit> {
     const [habit] = await db.insert(habitsTable).values({ ...data, userId }).returning();
     if (!habit) throw new Error("Failed to create habit");
+    await knowledgeGraphService.autoLink({
+      userId,
+      entityType: "habit",
+      entityId: habit.id,
+      label: habit.name,
+      text: `${habit.name} ${habit.description ?? ""}`,
+    });
     return habit;
   },
 

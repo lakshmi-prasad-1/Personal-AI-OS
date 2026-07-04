@@ -30,6 +30,13 @@ import { careerAnalyticsService } from "../services/careerAnalyticsService";
 import { applicationService } from "../services/applicationService";
 import { companyService } from "../services/companyService";
 import { jobAnalysisService } from "../services/jobAnalysisService";
+import { lifeProfileService } from "../services/lifeProfileService";
+import { dailyPlannerService } from "../services/dailyPlannerService";
+import { insightsService } from "../services/insightsService";
+import { productivityAnalyticsService } from "../services/productivityAnalyticsService";
+import { timelineService } from "../services/timelineService";
+import { automationRuleService, RuleEngine } from "../services/automationService";
+import { lifeDecisionEngine } from "./lifeDecisionEngine";
 import { logger } from "../lib/logger";
 
 // ─── Phase 1 arg schemas ────────────────────────────────────────────────────
@@ -193,6 +200,37 @@ const generateCareerRoadmapArgs = z.object({
   currentLevel: z.enum(["beginner", "intermediate", "advanced"]).optional().default("beginner"),
   timelineMonths: z.number().int().min(1).max(24).optional().default(6),
 });
+
+// ─── Phase 4: Life OS arg schemas ────────────────────────────────────────────
+const updateLifeProfileArgs = z.object({
+  wakeTime: z.string().optional(),
+  sleepTime: z.string().optional(),
+  breakDurationMinutes: z.number().int().optional(),
+  exerciseSchedule: z.string().optional(),
+  workSchedule: z.string().optional(),
+  collegeSchedule: z.string().optional(),
+  energyPattern: z.string().optional(),
+  preferredPlanningStyle: z.enum(["relaxed", "balanced", "aggressive"]).optional(),
+  weekendSchedule: z.string().optional(),
+  personalInterests: z.array(z.string()).optional(),
+  personalPriorities: z.array(z.string()).optional(),
+  personalValues: z.array(z.string()).optional(),
+  futureGoals: z.string().optional(),
+  lifeVision: z.string().optional(),
+});
+const getDailyPlanArgs = z.object({ date: z.string().optional() });
+const getWeeklyPlanArgs = z.object({ weekStart: z.string().optional() });
+const getMonthlyPlanArgs = z.object({ monthStart: z.string().optional() });
+const getAnalyticsArgs = z.object({ days: z.number().int().min(1).max(365).optional().default(30) });
+const getTimelineArgs = z.object({ days: z.number().int().min(1).max(90).optional().default(7) });
+const createAutomationRuleArgs = z.object({
+  name: z.string().min(1),
+  description: z.string().optional().default(""),
+  triggerType: z.enum(["assignment_due_soon", "focus_goal_missed", "resume_outdated", "habit_streak_broken", "exam_within_week"]),
+  triggerParams: z.record(z.string(), z.unknown()).optional().default({}),
+  actionType: z.enum(["create_reminder", "suggest_reschedule", "recommend_update", "suggest_recovery_plan"]),
+});
+const toggleAutomationRuleArgs = z.object({ name: z.string().min(1), enabled: z.boolean() });
 
 export interface ActionResult {
   toolCallId: string;
@@ -610,6 +648,96 @@ export const actionEngine = {
           const roadmap = await jobAnalysisService.generateRoadmap(userId, args.targetRole, args.currentLevel, args.timelineMonths);
           await agentActionsService.log({ userId, chatId, actionType: "generate_career_roadmap", summary: `Generated ${args.timelineMonths}-month roadmap for "${args.targetRole}"`, payload: roadmap });
           return { toolCallId, toolName, ok: true, result: roadmap };
+        }
+
+        // ─── Life OS (Phase 4) ──────────────────────────────────────────────
+        case "update_life_profile": {
+          const args = updateLifeProfileArgs.parse(parsedArgs);
+          const profile = await lifeProfileService.upsert(userId, args);
+          const logged = await agentActionsService.log({ userId, chatId, actionType: "update_life_profile", summary: "Updated life profile", payload: profile });
+          return { toolCallId, toolName, ok: true, result: profile, actionLogged: { actionType: logged.actionType, summary: logged.summary } };
+        }
+        case "get_daily_plan": {
+          const args = getDailyPlanArgs.parse(parsedArgs);
+          const date = args.date ?? new Date().toISOString().slice(0, 10);
+          const events = await dailyPlannerService.generateDaily(userId, date);
+          await agentActionsService.log({ userId, chatId, actionType: "get_daily_plan", summary: `Generated daily plan for ${date} (${events.length} block(s))`, payload: { date, events } });
+          return { toolCallId, toolName, ok: true, result: { date, events } };
+        }
+        case "get_weekly_plan": {
+          const args = getWeeklyPlanArgs.parse(parsedArgs);
+          const weekStart = args.weekStart ?? new Date().toISOString().slice(0, 10);
+          const byDay = await dailyPlannerService.generateWeekly(userId, weekStart);
+          await agentActionsService.log({ userId, chatId, actionType: "get_weekly_plan", summary: `Generated weekly plan starting ${weekStart}`, payload: byDay });
+          return { toolCallId, toolName, ok: true, result: byDay };
+        }
+        case "get_monthly_plan": {
+          const args = getMonthlyPlanArgs.parse(parsedArgs);
+          const monthStart = args.monthStart ?? new Date().toISOString().slice(0, 10);
+          const weeks = await dailyPlannerService.generateMonthly(userId, monthStart);
+          await agentActionsService.log({ userId, chatId, actionType: "get_monthly_plan", summary: `Generated monthly plan starting ${monthStart}`, payload: { weekCount: weeks.length } });
+          return { toolCallId, toolName, ok: true, result: weeks };
+        }
+        case "get_life_decision": {
+          const decision = await lifeDecisionEngine.decide(userId);
+          await agentActionsService.log({ userId, chatId, actionType: "get_life_decision", summary: `Life decision: ${decision.headline}`, payload: decision });
+          return { toolCallId, toolName, ok: true, result: decision };
+        }
+        case "get_insights": {
+          const insights = await insightsService.generate(userId);
+          await agentActionsService.log({ userId, chatId, actionType: "get_insights", summary: `Generated ${insights.length} insight(s)`, payload: insights });
+          return { toolCallId, toolName, ok: true, result: insights };
+        }
+        case "get_productivity_analytics": {
+          const args = getAnalyticsArgs.parse(parsedArgs);
+          const analytics = await productivityAnalyticsService.compute(userId, args.days);
+          return { toolCallId, toolName, ok: true, result: analytics };
+        }
+        case "get_life_timeline": {
+          const args = getTimelineArgs.parse(parsedArgs);
+          const entries = await timelineService.recent(userId, args.days);
+          return { toolCallId, toolName, ok: true, result: entries };
+        }
+        case "reschedule_today": {
+          const today = new Date().toISOString().slice(0, 10);
+          const existing = await plannerService.getDay(userId, today);
+          for (const event of existing) {
+            if (!event.isCompleted) await plannerService.remove(userId, event.id);
+          }
+          const events = await dailyPlannerService.generateDaily(userId, today);
+          const logged = await agentActionsService.log({ userId, chatId, actionType: "reschedule_today", summary: `Rescheduled today's plan (${events.length} block(s))`, payload: { date: today, events } });
+          return { toolCallId, toolName, ok: true, result: { date: today, events }, actionLogged: { actionType: logged.actionType, summary: logged.summary } };
+        }
+
+        case "create_automation_rule": {
+          const args = createAutomationRuleArgs.parse(parsedArgs);
+          const rule = await automationRuleService.create(userId, {
+            name: args.name,
+            description: args.description,
+            trigger: { type: args.triggerType, params: args.triggerParams },
+            action: { type: args.actionType, params: {} },
+            isEnabled: true,
+            isBuiltIn: false,
+          });
+          const logged = await agentActionsService.log({ userId, chatId, actionType: "create_automation_rule", entityType: "automation_rule", entityId: rule.id, summary: `Created automation rule "${rule.name}"`, payload: rule });
+          return { toolCallId, toolName, ok: true, result: rule, actionLogged: { actionType: logged.actionType, summary: logged.summary } };
+        }
+        case "list_automation_rules": {
+          const rules = await automationRuleService.list(userId);
+          return { toolCallId, toolName, ok: true, result: rules };
+        }
+        case "toggle_automation_rule": {
+          const args = toggleAutomationRuleArgs.parse(parsedArgs);
+          const rules = await automationRuleService.list(userId);
+          const match = rules.find((r) => r.name.toLowerCase().includes(args.name.toLowerCase()));
+          if (!match) return { toolCallId, toolName, ok: false, result: { error: `No automation rule found matching "${args.name}"` } };
+          const rule = await automationRuleService.update(userId, match.id, { isEnabled: args.enabled });
+          const logged = await agentActionsService.log({ userId, chatId, actionType: "toggle_automation_rule", entityType: "automation_rule", entityId: match.id, summary: `${args.enabled ? "Enabled" : "Disabled"} automation rule "${match.name}"`, payload: rule });
+          return { toolCallId, toolName, ok: true, result: rule, actionLogged: { actionType: logged.actionType, summary: logged.summary } };
+        }
+        case "run_automation_rules": {
+          const results = await RuleEngine.runAll(userId);
+          return { toolCallId, toolName, ok: true, result: results };
         }
 
         default:

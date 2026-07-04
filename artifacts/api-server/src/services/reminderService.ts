@@ -1,5 +1,6 @@
 import { and, asc, desc, eq, lte } from "drizzle-orm";
 import { db, remindersTable, type InsertReminder, type Reminder } from "@workspace/db";
+import { knowledgeGraphService } from "./knowledgeGraphService";
 
 export const reminderService = {
   async list(userId: string): Promise<Reminder[]> {
@@ -24,6 +25,13 @@ export const reminderService = {
       .values({ ...data, userId })
       .returning();
     if (!reminder) throw new Error("Failed to create reminder");
+    await knowledgeGraphService.autoLink({
+      userId,
+      entityType: "reminder",
+      entityId: reminder.id,
+      label: reminder.title,
+      text: `${reminder.title} ${reminder.body ?? ""}`,
+    });
     return reminder;
   },
 

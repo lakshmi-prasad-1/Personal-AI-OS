@@ -1,5 +1,6 @@
 import { and, desc, eq } from "drizzle-orm";
 import { db, goalsTable, type InsertGoal, type Goal } from "@workspace/db";
+import { knowledgeGraphService } from "./knowledgeGraphService";
 
 export const goalService = {
   async list(userId: string): Promise<Goal[]> {
@@ -24,7 +25,13 @@ export const goalService = {
       .values({ ...data, userId })
       .returning();
     if (!goal) throw new Error("Failed to create goal");
-    // Goals are not yet linked to the knowledge graph (entity type not in graph schema).
+    await knowledgeGraphService.autoLink({
+      userId,
+      entityType: "goal",
+      entityId: goal.id,
+      label: goal.title,
+      text: `${goal.title} ${goal.description ?? ""}`,
+    });
     return goal;
   },
 

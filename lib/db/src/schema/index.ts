@@ -19,3 +19,6 @@ export * from "./flashcards";
 export * from "./quizzes";
 export * from "./studyTracking";
 export * from "./career";
+export * from "./lifeProfile";
+export * from "./aiSettings";
+export * from "./automationRules";

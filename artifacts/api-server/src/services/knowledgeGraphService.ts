@@ -16,7 +16,11 @@ export type LinkableEntityType =
   | "career_goal"
   | "interview_topic"
   | "job_application"
-  | "company";
+  | "company"
+  | "task"
+  | "goal"
+  | "habit"
+  | "reminder";
 
 function tokenize(text: string): Set<string> {
   return new Set(

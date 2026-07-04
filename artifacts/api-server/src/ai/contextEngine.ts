@@ -14,6 +14,8 @@ import { careerProfileService } from "../services/careerProfileService";
 import { skillService } from "../services/skillService";
 import { careerGoalService } from "../services/careerGoalService";
 import { interviewService } from "../services/interviewService";
+import { lifeProfileService } from "../services/lifeProfileService";
+import { timelineService } from "../services/timelineService";
 
 export interface AssembledContext {
   pinnedNotes: { title: string; content: string }[];
@@ -35,6 +37,9 @@ export interface AssembledContext {
   topSkills: { name: string; level: string; confidence: number }[];
   activeCareerGoals: { title: string; type: string; progressPercent: number }[];
   interviewReadinessPercent: number;
+  // Phase 4 additions
+  lifeProfile: { wakeTime: string | null; sleepTime: string | null; energyPattern: string | null; personalPriorities: string[]; lifeVision: string | null } | null;
+  recentActivityCount: number;
   summary: string;
 }
 
@@ -62,6 +67,7 @@ export const contextEngine = {
       todayTasks, activeGoals, habitStatus, upcomingReminders, activeFocus,
       subjects, dueFlashcards, weakTopics,
       careerProfile, skills, careerGoals, interviewStats,
+      lifeProfile, recentTimeline,
     ] = await Promise.all([
       notesService.list(userId),
       ideasService.list(userId),
@@ -79,6 +85,8 @@ export const contextEngine = {
       skillService.list(userId),
       careerGoalService.list(userId),
       interviewService.stats(userId),
+      lifeProfileService.getOrCreate(userId),
+      timelineService.recent(userId, 3),
     ]);
 
     const pinnedNotes = allNotes.slice(0, 5);
@@ -107,6 +115,16 @@ export const contextEngine = {
       topSkills: skills.sort((a, b) => b.confidence - a.confidence).slice(0, 8).map((s) => ({ name: s.name, level: s.level, confidence: s.confidence })),
       activeCareerGoals: careerGoals.filter((g) => g.status === "active").slice(0, 5).map((g) => ({ title: g.title, type: g.type, progressPercent: g.progressPercent })),
       interviewReadinessPercent: interviewStats.readinessPercent,
+      lifeProfile: lifeProfileService.isPopulated(lifeProfile)
+        ? {
+            wakeTime: lifeProfile.wakeTime,
+            sleepTime: lifeProfile.sleepTime,
+            energyPattern: lifeProfile.energyPattern || null,
+            personalPriorities: lifeProfile.personalPriorities as string[],
+            lifeVision: lifeProfile.lifeVision || null,
+          }
+        : null,
+      recentActivityCount: recentTimeline.length,
       summary: "",
     };
 
@@ -162,6 +180,12 @@ export const contextEngine = {
     }
     if (context.interviewReadinessPercent > 0) {
       parts.push(`Interview readiness: ${context.interviewReadinessPercent}% of interview topics mastered.`);
+    }
+    if (context.lifeProfile) {
+      const lp = context.lifeProfile;
+      parts.push(
+        `Life profile: ${lp.wakeTime ? `wakes at ${lp.wakeTime}` : "wake time unknown"}${lp.sleepTime ? `, sleeps at ${lp.sleepTime}` : ""}${lp.energyPattern ? `, ${lp.energyPattern.replace("_", " ")}` : ""}${lp.personalPriorities.length ? `. Priorities: ${lp.personalPriorities.join(", ")}` : ""}${lp.lifeVision ? `. Vision: ${lp.lifeVision}` : ""}.`,
+      );
     }
 
     context.summary = parts.length

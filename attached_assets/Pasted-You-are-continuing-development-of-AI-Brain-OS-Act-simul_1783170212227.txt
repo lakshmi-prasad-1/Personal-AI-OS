@@ -1,0 +1,959 @@
+You are continuing development of AI Brain OS.
+
+Act simultaneously as:
+
+• Principal AI Systems Architect
+• Principal Software Architect
+• Principal Backend Engineer
+• Principal Frontend Engineer
+• Principal AI Engineer
+• Principal Database Architect
+• Principal UX Engineer
+• Principal Automation Architect
+• Principal QA Engineer
+
+===============================================================
+
+MISSION
+
+Continue development of AI Brain OS.
+
+DO NOT rebuild existing functionality.
+
+DO NOT duplicate services.
+
+DO NOT replace architecture.
+
+DO NOT change the tech stack.
+
+DO NOT break authentication.
+
+DO NOT remove any existing modules.
+
+Reuse every service, AI pipeline, database model, UI component, route, and architecture already implemented.
+
+Before writing code:
+
+Audit the entire repository.
+
+Identify everything already completed in Phases 1, 2 and 3.
+
+Only implement the missing functionality for Phase 4.
+
+Do not reimplement completed features.
+
+===============================================================
+
+PROJECT VISION
+
+AI Brain OS is NOT a CRUD application.
+
+It is my personal AI Operating System.
+
+The AI assistant is the center of the application.
+
+Everything else is an internal service.
+
+The AI should understand my life, schedule, studies, career, productivity, memories, resources, habits and goals.
+
+I should almost never need to manually open pages.
+
+Instead I should simply talk or speak to the AI.
+
+Examples
+
+"I have class tomorrow at 9."
+
+↓
+
+Creates calendar event
+
+Creates reminder
+
+Updates planner
+
+Adjusts tomorrow schedule
+
+Updates dashboard
+
+Stores context
+
+------------------------------------------------
+
+"I am tired today."
+
+↓
+
+AI understands
+
+Suggests lighter schedule
+
+Moves non-urgent work
+
+Adjusts focus sessions
+
+------------------------------------------------
+
+"I wasted 2 hours scrolling."
+
+↓
+
+AI updates productivity analysis
+
+Suggests improvements
+
+Adjusts remaining daily plan
+
+------------------------------------------------
+
+"What should I do now?"
+
+↓
+
+AI analyses
+
+tasks
+
+planner
+
+calendar
+
+goals
+
+habits
+
+career
+
+study
+
+focus
+
+deadlines
+
+energy
+
+previous activity
+
+and produces the best recommendation.
+
+===============================================================
+
+PHASE 4 GOAL
+
+Transform AI Brain OS into a Life Operating System.
+
+Everything should become connected.
+
+The AI should become proactive.
+
+It should continuously help optimize my life.
+
+===============================================================
+
+MODULE 1
+
+LIFE PROFILE
+
+Create a complete personal profile.
+
+Store
+
+wake time
+
+sleep time
+
+preferred work hours
+
+study hours
+
+break duration
+
+exercise schedule
+
+food timing
+
+college schedule
+
+work schedule
+
+timezone
+
+preferred notification times
+
+preferred learning style
+
+preferred planning style
+
+energy pattern
+
+daily productivity pattern
+
+weekend schedule
+
+personal interests
+
+personal priorities
+
+personal values
+
+favorite technologies
+
+future goals
+
+life vision
+
+AI should continuously update this profile.
+
+===============================================================
+
+MODULE 2
+
+PERSONAL TIMELINE
+
+Create chronological timeline.
+
+Include
+
+memories
+
+notes
+
+ideas
+
+tasks
+
+planner
+
+study
+
+career
+
+projects
+
+goals
+
+reviews
+
+AI actions
+
+resources
+
+Everything should appear in one timeline.
+
+===============================================================
+
+MODULE 3
+
+SMART DAILY PLANNER
+
+The AI should automatically create today's plan.
+
+Consider
+
+deadlines
+
+college
+
+study
+
+career
+
+habits
+
+focus sessions
+
+energy
+
+sleep
+
+unfinished work
+
+priority
+
+difficulty
+
+Generate
+
+Morning
+
+Afternoon
+
+Evening
+
+Night schedule
+
+Support automatic rescheduling.
+
+===============================================================
+
+MODULE 4
+
+WEEKLY PLANNER
+
+Generate weekly plans automatically.
+
+Balance
+
+study
+
+projects
+
+career
+
+revision
+
+coding
+
+rest
+
+exercise
+
+personal time
+
+===============================================================
+
+MODULE 5
+
+MONTHLY PLANNER
+
+Generate
+
+monthly roadmap
+
+goal breakdown
+
+important deadlines
+
+career milestones
+
+study milestones
+
+review schedule
+
+===============================================================
+
+MODULE 6
+
+SMART REMINDER ENGINE
+
+Improve reminders.
+
+Support
+
+recurring
+
+location-ready architecture
+
+smart snooze
+
+priority
+
+deadline awareness
+
+dependency reminders
+
+AI-generated reminders
+
+Reminder suggestions
+
+No notification delivery yet.
+
+===============================================================
+
+MODULE 7
+
+LIFE DECISION ENGINE
+
+Expand Decision Engine.
+
+AI should answer
+
+What should I do now?
+
+Should I study?
+
+Should I rest?
+
+Should I revise?
+
+Should I code?
+
+Should I finish assignments?
+
+Should I work on resume?
+
+Should I exercise?
+
+Should I sleep?
+
+Reason using all available data.
+
+===============================================================
+
+MODULE 8
+
+PERSONAL INSIGHTS
+
+Generate insights like
+
+Most productive time
+
+Biggest distractions
+
+Most completed habits
+
+Study consistency
+
+Coding consistency
+
+Sleep consistency
+
+Task completion rate
+
+Weekly improvement
+
+Monthly improvement
+
+===============================================================
+
+MODULE 9
+
+PRODUCTIVITY ANALYTICS
+
+Create analytics for
+
+tasks
+
+focus
+
+planner
+
+study
+
+career
+
+habits
+
+goals
+
+daily completion
+
+weekly completion
+
+monthly completion
+
+AI productivity score
+
+===============================================================
+
+MODULE 10
+
+AI RECOMMENDATION ENGINE
+
+Generate proactive recommendations.
+
+Examples
+
+Study DSA today.
+
+Resume overdue.
+
+Need revision.
+
+Schedule break.
+
+Complete assignment.
+
+Update resume.
+
+Practice interview.
+
+Read saved resource.
+
+===============================================================
+
+MODULE 11
+
+UNIFIED COMMAND CENTER
+
+Create one unified dashboard.
+
+Include
+
+Today's plan
+
+Current focus
+
+Upcoming reminders
+
+Recent memories
+
+Recent notes
+
+Study progress
+
+Career progress
+
+Tasks
+
+Goals
+
+Habits
+
+Focus
+
+Knowledge Graph stats
+
+Recent AI actions
+
+AI recommendations
+
+Weekly progress
+
+Monthly progress
+
+===============================================================
+
+MODULE 12
+
+NATURAL LANGUAGE PLANNING
+
+Support prompts
+
+Plan today.
+
+Plan tomorrow.
+
+Plan this week.
+
+Plan exams.
+
+Prepare for interview.
+
+Prepare for semester.
+
+Prepare vacation.
+
+Reschedule today.
+
+Free my evening.
+
+Move today's tasks.
+
+===============================================================
+
+MODULE 13
+
+VOICE IMPROVEMENTS
+
+Improve microphone support.
+
+Voice must support every feature.
+
+Speech
+
+↓
+
+Intent
+
+↓
+
+Context
+
+↓
+
+Decision
+
+↓
+
+Action
+
+↓
+
+Response
+
+No duplicate logic.
+
+===============================================================
+
+MODULE 14
+
+AI MEMORY EVOLUTION
+
+Improve long-term memory.
+
+Track
+
+preferences
+
+behavior
+
+frequently discussed topics
+
+life goals
+
+career goals
+
+study preferences
+
+working hours
+
+favorite tools
+
+learning history
+
+AI should continuously refine memories.
+
+===============================================================
+
+MODULE 15
+
+CONTEXT ENGINE
+
+Expand context retrieval.
+
+Include
+
+tasks
+
+habits
+
+goals
+
+planner
+
+study
+
+career
+
+projects
+
+reviews
+
+timeline
+
+life profile
+
+recent activity
+
+focus sessions
+
+===============================================================
+
+MODULE 16
+
+KNOWLEDGE GRAPH
+
+Automatically connect
+
+tasks
+
+planner
+
+study
+
+career
+
+projects
+
+timeline
+
+goals
+
+habits
+
+life profile
+
+reviews
+
+Everything becomes interconnected.
+
+===============================================================
+
+MODULE 17
+
+UNIVERSAL SEARCH
+
+Search across every module.
+
+Support
+
+filters
+
+ranking
+
+recency
+
+entity types
+
+future semantic search compatibility
+
+===============================================================
+
+MODULE 18
+
+AUTOMATION FOUNDATION
+
+DO NOT implement real automation.
+
+Instead build reusable architecture.
+
+Create interfaces for
+
+NotificationService
+
+CalendarService
+
+EmailService
+
+WebhookService
+
+AutomationService
+
+SchedulerService
+
+TriggerEngine
+
+RuleEngine
+
+These should be pluggable.
+
+No external APIs yet.
+
+===============================================================
+
+MODULE 19
+
+AUTOMATION RULES
+
+Support future rules like
+
+If assignment due tomorrow
+
+↓
+
+Create reminder
+
+If focus goal missed
+
+↓
+
+Suggest new schedule
+
+If resume outdated
+
+↓
+
+Recommend update
+
+If habit streak breaks
+
+↓
+
+Suggest recovery plan
+
+Only create architecture.
+
+===============================================================
+
+MODULE 20
+
+ACTIVITY CENTER
+
+Create one activity feed.
+
+Include every AI action.
+
+Task created
+
+Reminder created
+
+Memory stored
+
+Study session
+
+Career update
+
+Resume analysed
+
+Planner updated
+
+Review generated
+
+Everything logged.
+
+===============================================================
+
+MODULE 21
+
+SYSTEM HEALTH
+
+Monitor
+
+database
+
+AI pipeline
+
+context engine
+
+search
+
+voice
+
+planner
+
+knowledge graph
+
+Display health status.
+
+===============================================================
+
+MODULE 22
+
+AI SETTINGS
+
+Create settings for
+
+planning aggressiveness
+
+AI personality
+
+recommendation frequency
+
+study mode
+
+career mode
+
+focus mode
+
+voice mode
+
+privacy
+
+automation preferences
+
+===============================================================
+
+MODULE 23
+
+SECURITY
+
+Validate every AI action.
+
+Respect authentication.
+
+Respect ownership.
+
+Never trust AI output.
+
+===============================================================
+
+MODULE 24
+
+TESTING
+
+Verify
+
+Authentication
+
+Chat
+
+Voice
+
+Planner
+
+Tasks
+
+Habits
+
+Goals
+
+Study
+
+Career
+
+Timeline
+
+Dashboard
+
+Life Profile
+
+Knowledge Graph
+
+Universal Search
+
+Reminder Engine
+
+Decision Engine
+
+Context Engine
+
+Recommendation Engine
+
+Analytics
+
+Activity Feed
+
+Automation Architecture
+
+Everything must work together.
+
+===============================================================
+
+IMPORTANT
+
+DO NOT IMPLEMENT
+
+Job scraping
+
+Auto Apply
+
+Browser automation
+
+LinkedIn automation
+
+Email sending
+
+Calendar sync
+
+Telegram bot
+
+WhatsApp
+
+n8n workflows
+
+Mobile app
+
+Multi-agent orchestration
+
+Voice output
+
+Cloud deployment
+
+These belong to Phase 5.
+
+===============================================================
+
+SUCCESS CRITERIA
+
+By the end of Phase 4,
+
+AI Brain OS should function as a complete AI Life Operating System.
+
+The assistant should intelligently coordinate Productivity OS, Study OS, Career OS, and Personal Life through one unified AI interface.
+
+The architecture must be modular, reusable, scalable, and fully integrated with the existing AI pipeline.
+
+Work continuously until every Phase 4 requirement is implemented, tested, and verified.
+
+At completion provide:
+
+• Completed modules
+• Files created
+• Files modified
+• Database changes
+• AI tools added
+• APIs added
+• Frontend pages/components added
+• Remaining Phase 5 items only
+• Verification checklist confirming all Phase 4 features are working.

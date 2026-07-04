@@ -754,4 +754,157 @@ export const chatTools: OpenAI.Chat.Completions.ChatCompletionTool[] = [
       },
     },
   },
+
+  // ─── Life OS (Phase 4) ────────────────────────────────────────────────────
+  {
+    type: "function",
+    function: {
+      name: "update_life_profile",
+      description: "Update the user's life profile: wake/sleep times, work/study hours, energy pattern, personal priorities/values/interests, or life vision. Use when the user shares routine or lifestyle details.",
+      parameters: {
+        type: "object",
+        properties: {
+          wakeTime: { type: "string", description: "HH:MM" },
+          sleepTime: { type: "string", description: "HH:MM" },
+          breakDurationMinutes: { type: "integer" },
+          exerciseSchedule: { type: "string" },
+          workSchedule: { type: "string" },
+          collegeSchedule: { type: "string" },
+          energyPattern: { type: "string", description: "e.g. morning_person, night_owl" },
+          preferredPlanningStyle: { type: "string", enum: ["relaxed", "balanced", "aggressive"] },
+          weekendSchedule: { type: "string" },
+          personalInterests: { type: "array", items: { type: "string" } },
+          personalPriorities: { type: "array", items: { type: "string" } },
+          personalValues: { type: "array", items: { type: "string" } },
+          futureGoals: { type: "string" },
+          lifeVision: { type: "string" },
+        },
+      },
+    },
+  },
+  {
+    type: "function",
+    function: {
+      name: "get_daily_plan",
+      description: "Get (and auto-generate if needed) a smart daily schedule combining tasks, habits, and reminders into time blocks around the user's life profile. Use for 'plan my day' or 'what's my schedule today'.",
+      parameters: {
+        type: "object",
+        properties: { date: { type: "string", description: "YYYY-MM-DD, default today" } },
+      },
+    },
+  },
+  {
+    type: "function",
+    function: {
+      name: "get_weekly_plan",
+      description: "Get (and auto-generate if needed) a smart weekly schedule. Use for 'plan my week'.",
+      parameters: {
+        type: "object",
+        properties: { weekStart: { type: "string", description: "YYYY-MM-DD Monday of the target week, default this week" } },
+      },
+    },
+  },
+  {
+    type: "function",
+    function: {
+      name: "get_monthly_plan",
+      description: "Get (and auto-generate if needed) a smart monthly schedule broken down by week. Use for 'plan my month'.",
+      parameters: {
+        type: "object",
+        properties: { monthStart: { type: "string", description: "YYYY-MM-DD first day of the target month, default this month" } },
+      },
+    },
+  },
+  {
+    type: "function",
+    function: {
+      name: "get_life_decision",
+      description: "Answer 'what should I do right now / next' by reasoning across tasks, habits, goals, study, career, focus state, and life profile all at once. Use for open-ended prioritization questions, not narrow single-domain ones.",
+      parameters: { type: "object", properties: {} },
+    },
+  },
+  {
+    type: "function",
+    function: {
+      name: "get_insights",
+      description: "Get AI-detected patterns and insights across productivity, habits, focus, goals, and overall balance. Use when asked for insights, patterns, or 'how have I been doing lately'.",
+      parameters: { type: "object", properties: {} },
+    },
+  },
+  {
+    type: "function",
+    function: {
+      name: "get_productivity_analytics",
+      description: "Get quantitative productivity analytics/trends (tasks completed, focus minutes, habit completion) over a time range.",
+      parameters: {
+        type: "object",
+        properties: { days: { type: "integer", description: "Number of days to analyze, default 30" } },
+      },
+    },
+  },
+  {
+    type: "function",
+    function: {
+      name: "get_life_timeline",
+      description: "Get a chronological timeline of everything that's happened recently across tasks, goals, habits, focus sessions, reminders, planner events, notes, ideas, memories, resources, and AI actions.",
+      parameters: {
+        type: "object",
+        properties: { days: { type: "integer", description: "How many days back, default 7" } },
+      },
+    },
+  },
+  {
+    type: "function",
+    function: {
+      name: "reschedule_today",
+      description: "Regenerate/reschedule the rest of today's plan when the user says they're behind, want to start over, or their day changed.",
+      parameters: { type: "object", properties: {} },
+    },
+  },
+  {
+    type: "function",
+    function: {
+      name: "create_automation_rule",
+      description: "Create an automation rule that watches for a condition (e.g. assignment due soon, focus goal missed, resume outdated, habit streak broken, exam within a week) and suggests an action when it fires. This never performs real external actions (no email/SMS) — it only logs a suggestion.",
+      parameters: {
+        type: "object",
+        properties: {
+          name: { type: "string" },
+          description: { type: "string" },
+          triggerType: { type: "string", enum: ["assignment_due_soon", "focus_goal_missed", "resume_outdated", "habit_streak_broken", "exam_within_week"] },
+          triggerParams: { type: "object", description: "e.g. { withinDays: 1 } or { dailyGoalMinutes: 60 } or { staleDays: 90 }" },
+          actionType: { type: "string", enum: ["create_reminder", "suggest_reschedule", "recommend_update", "suggest_recovery_plan"] },
+        },
+        required: ["name", "triggerType", "actionType"],
+      },
+    },
+  },
+  {
+    type: "function",
+    function: {
+      name: "list_automation_rules",
+      description: "List the user's automation rules and whether each is enabled.",
+      parameters: { type: "object", properties: {} },
+    },
+  },
+  {
+    type: "function",
+    function: {
+      name: "toggle_automation_rule",
+      description: "Enable or disable an automation rule by name.",
+      parameters: {
+        type: "object",
+        properties: { name: { type: "string" }, enabled: { type: "boolean" } },
+        required: ["name", "enabled"],
+      },
+    },
+  },
+  {
+    type: "function",
+    function: {
+      name: "run_automation_rules",
+      description: "Evaluate all enabled automation rules right now against live data and report which ones fired. Use when the user asks to check automations or 'run my rules'.",
+      parameters: { type: "object", properties: {} },
+    },
+  },
 ];
