@@ -240,10 +240,22 @@ export interface SearchInput {
   limit?: number;
 }
 
+export type DecisionActionPriority = typeof DecisionActionPriority[keyof typeof DecisionActionPriority];
+
+
+export const DecisionActionPriority = {
+  low: 'low',
+  medium: 'medium',
+  high: 'high',
+} as const;
+
 export interface DecisionAction {
   title: string;
   description: string;
   actionType: string;
+  /** Explanation of why the AI is recommending this, referencing the signals that led to it. */
+  reason: string;
+  priority: DecisionActionPriority;
 }
 
 export interface BrainDecisionResult {

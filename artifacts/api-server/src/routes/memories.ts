@@ -1,6 +1,5 @@
 import { Router, type IRouter } from "express";
 import { memoriesService } from "../services/memoriesService";
-import { knowledgeGraphService } from "../services/knowledgeGraphService";
 import {
   ListMemoriesResponse,
   CreateMemoryBody,
@@ -31,14 +30,6 @@ router.post("/memories", async (req, res): Promise<void> => {
   }
 
   const memory = await memoriesService.create(req.auth!.userId, parsed.data);
-  await knowledgeGraphService.autoLink({
-    userId: req.auth!.userId,
-    entityType: "memory",
-    entityId: memory.id,
-    label: memory.title,
-    text: `${memory.title} ${memory.description}`,
-    tags: memory.tags,
-  });
 
   res.status(201).json(CreateMemoryResponse.parse(memory));
 });

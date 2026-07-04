@@ -645,7 +645,9 @@ export const BrainDecideResponse = zod.object({
   "decisions": zod.array(zod.object({
   "title": zod.string(),
   "description": zod.string(),
-  "actionType": zod.string()
+  "actionType": zod.string(),
+  "reason": zod.string().describe('Explanation of why the AI is recommending this, referencing the signals that led to it.'),
+  "priority": zod.enum(['low', 'medium', 'high'])
 }))
 })
 

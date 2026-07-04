@@ -114,10 +114,28 @@ export default function Dashboard() {
               {suggestions.decisions.map((decision, i) => (
                 <Card key={i} className="bg-card/50 backdrop-blur-sm border">
                   <CardHeader className="p-4 pb-2">
-                    <CardTitle className="text-base">{decision.title}</CardTitle>
+                    <div className="flex items-center justify-between gap-2">
+                      <CardTitle className="text-base">{decision.title}</CardTitle>
+                      {decision.priority && (
+                        <span
+                          className={`text-[10px] uppercase tracking-wide px-1.5 py-0.5 rounded shrink-0 ${
+                            decision.priority === "high"
+                              ? "bg-destructive/15 text-destructive"
+                              : decision.priority === "medium"
+                                ? "bg-primary/15 text-primary"
+                                : "bg-muted text-muted-foreground"
+                          }`}
+                        >
+                          {decision.priority}
+                        </span>
+                      )}
+                    </div>
                   </CardHeader>
-                  <CardContent className="p-4 pt-0">
+                  <CardContent className="p-4 pt-0 space-y-1">
                     <CardDescription>{decision.description}</CardDescription>
+                    {decision.reason && (
+                      <p className="text-xs text-muted-foreground italic">Why: {decision.reason}</p>
+                    )}
                   </CardContent>
                 </Card>
               ))}

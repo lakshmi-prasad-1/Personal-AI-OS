@@ -7,12 +7,13 @@ import {
   resourcesTable,
   chatMessagesTable,
   chatsTable,
+  graphNodesTable,
 } from "@workspace/db";
 
 export interface SearchResultItem {
   id: string;
   title: string;
-  type: "note" | "idea" | "memory" | "resource" | "chat";
+  type: "note" | "idea" | "memory" | "resource" | "chat" | "graph_node";
   snippet: string | null;
   score: number;
 }
@@ -31,15 +32,16 @@ function scoreMatch(needle: string, title: string, body: string): number {
 
 export const searchService = {
   /**
-   * Ranked universal search across notes, ideas, memories, resources and chat
-   * history. Used by both the /brain/search REST endpoint and the AI Search
-   * Engine tool so ranking logic never diverges between the two entry points.
+   * Ranked universal search across notes, ideas, memories, resources, the
+   * knowledge graph, and chat history. Used by both the /brain/search REST
+   * endpoint and the AI Search Engine tool so ranking logic never diverges
+   * between the two entry points.
    */
   async search(userId: string, query: string, limit = 20): Promise<SearchResultItem[]> {
     const needle = query.trim().toLowerCase();
     if (!needle) return [];
 
-    const [notes, ideas, memories, resources, chats] = await Promise.all([
+    const [notes, ideas, memories, resources, chats, graphNodes] = await Promise.all([
       db.select().from(notesTable).where(eq(notesTable.userId, userId)),
       db.select().from(ideasTable).where(eq(ideasTable.userId, userId)),
       db.select().from(memoriesTable).where(eq(memoriesTable.userId, userId)),
@@ -57,6 +59,7 @@ export const searchService = {
         .where(eq(chatsTable.userId, userId))
         .orderBy(desc(chatMessagesTable.createdAt))
         .limit(500),
+      db.select().from(graphNodesTable).where(eq(graphNodesTable.userId, userId)),
     ]);
 
     const results: SearchResultItem[] = [];
@@ -86,6 +89,17 @@ export const searchService = {
           title: c.chatTitle,
           type: "chat",
           snippet: c.content.slice(0, 160) || null,
+          score,
+        });
+    }
+    for (const g of graphNodes) {
+      const score = scoreMatch(needle, g.label, g.entityType);
+      if (score > 0)
+        results.push({
+          id: g.entityId,
+          title: g.label,
+          type: "graph_node",
+          snippet: `Linked ${g.entityType} in your knowledge graph`,
           score,
         });
     }

@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useLocation } from "wouter";
-import { Search, StickyNote, Lightbulb, Brain, Files, MessageSquare } from "lucide-react";
+import { Search, StickyNote, Lightbulb, Brain, Files, MessageSquare, Share2 } from "lucide-react";
 import {
   CommandDialog,
   CommandEmpty,
@@ -18,6 +18,7 @@ const TYPE_META: Record<string, { label: string; icon: typeof StickyNote; href: 
   memory: { label: "Memory", icon: Brain, href: "/memories" },
   resource: { label: "Resource", icon: Files, href: "/resources" },
   chat: { label: "Chat", icon: MessageSquare, href: "/" },
+  graph_node: { label: "Graph", icon: Share2, href: "/graph" },
 };
 
 export function GlobalSearch() {

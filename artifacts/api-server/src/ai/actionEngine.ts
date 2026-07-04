@@ -4,7 +4,6 @@ import { ideasService } from "../services/ideasService";
 import { memoriesService } from "../services/memoriesService";
 import { resourcesService } from "../services/resourcesService";
 import { agentActionsService } from "../services/agentActionsService";
-import { knowledgeGraphService } from "../services/knowledgeGraphService";
 import { searchService } from "../services/searchService";
 import { decisionEngine } from "./decisionEngine";
 import { logger } from "../lib/logger";
@@ -81,14 +80,6 @@ export const actionEngine = {
         case "create_note": {
           const args = createNoteArgs.parse(parsedArgs);
           const note = await notesService.create(userId, args);
-          await knowledgeGraphService.autoLink({
-            userId,
-            entityType: "note",
-            entityId: note.id,
-            label: note.title,
-            text: `${note.title} ${note.content}`,
-            tags: note.tags,
-          });
           const logged = await agentActionsService.log({
             userId,
             chatId,
@@ -103,14 +94,6 @@ export const actionEngine = {
         case "create_idea": {
           const args = createIdeaArgs.parse(parsedArgs);
           const idea = await ideasService.create(userId, args);
-          await knowledgeGraphService.autoLink({
-            userId,
-            entityType: "idea",
-            entityId: idea.id,
-            label: idea.title,
-            text: `${idea.title} ${idea.content}`,
-            tags: idea.tags,
-          });
           const logged = await agentActionsService.log({
             userId,
             chatId,
@@ -125,14 +108,6 @@ export const actionEngine = {
         case "create_memory": {
           const args = createMemoryArgs.parse(parsedArgs);
           const memory = await memoriesService.create(userId, args);
-          await knowledgeGraphService.autoLink({
-            userId,
-            entityType: "memory",
-            entityId: memory.id,
-            label: memory.title,
-            text: `${memory.title} ${memory.description}`,
-            tags: memory.tags,
-          });
           const logged = await agentActionsService.log({
             userId,
             chatId,
@@ -147,13 +122,6 @@ export const actionEngine = {
         case "create_resource": {
           const args = createResourceArgs.parse(parsedArgs);
           const resource = await resourcesService.create(userId, args);
-          await knowledgeGraphService.autoLink({
-            userId,
-            entityType: "resource",
-            entityId: resource.id,
-            label: resource.title,
-            text: `${resource.title} ${resource.description ?? ""}`,
-          });
           const logged = await agentActionsService.log({
             userId,
             chatId,

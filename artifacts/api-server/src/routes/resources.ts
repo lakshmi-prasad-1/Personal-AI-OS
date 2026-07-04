@@ -1,6 +1,5 @@
 import { Router, type IRouter } from "express";
 import { resourcesService } from "../services/resourcesService";
-import { knowledgeGraphService } from "../services/knowledgeGraphService";
 import {
   ListResourcesResponse,
   CreateResourceBody,
@@ -31,13 +30,6 @@ router.post("/resources", async (req, res): Promise<void> => {
   }
 
   const resource = await resourcesService.create(req.auth!.userId, parsed.data);
-  await knowledgeGraphService.autoLink({
-    userId: req.auth!.userId,
-    entityType: "resource",
-    entityId: resource.id,
-    label: resource.title,
-    text: `${resource.title} ${resource.description ?? ""}`,
-  });
 
   res.status(201).json(CreateResourceResponse.parse(resource));
 });

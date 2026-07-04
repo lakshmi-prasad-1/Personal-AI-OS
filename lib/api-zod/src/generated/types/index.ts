@@ -18,6 +18,7 @@ export * from './chatDetail';
 export * from './chatInput';
 export * from './chatMessage';
 export * from './decisionAction';
+export * from './decisionActionPriority';
 export * from './errorResponse';
 export * from './graphEdge';
 export * from './graphEdgeInput';

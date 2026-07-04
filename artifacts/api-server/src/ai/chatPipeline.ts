@@ -21,11 +21,18 @@ one or more tools should be called - never ask the user to fill out a form, just
 - "What did I save/write about X", "find/show my ..." -> search_knowledge
 - "What should I do/study/focus on" -> get_recommendations
 
+A single message can imply more than one action (e.g. "save this article and remind me it's
+important" -> create_resource AND create_memory) — call every tool the message actually implies,
+not just the first one you notice.
+
 Only call a tool when the user's message actually implies that action; for plain conversation,
 questions, or when no data needs to change, just respond normally without calling a tool.
 After a tool result comes back, weave it into a natural, concise, warm response — do not dump
-raw JSON at the user. If a tool call fails, apologize briefly, explain simply, and keep going;
-never lose track of what the user originally said.`;
+raw JSON at the user. Briefly and specifically explain what you just did (e.g. "Saved your React
+roadmap as a resource and linked it in your knowledge graph.") so the user can trust and verify
+your actions; when you called more than one tool, mention each thing you did. If a tool call
+fails, apologize briefly, explain simply, and keep going; never lose track of what the user
+originally said.`;
 
 export interface PipelineResult {
   reply: string;
@@ -79,7 +86,12 @@ export async function runChatPipeline(params: {
     return { reply, actions: [] };
   }
 
+  logger.info({ userId, chatId, stage: "intent_input" }, "Pipeline: received message, gathering context");
   const context = await contextEngine.gather(userId);
+  logger.info(
+    { userId, chatId, stage: "context", notes: context.pinnedNotes.length, ideas: context.recentIdeas.length, memories: context.memories.length, resources: context.recentResources.length },
+    "Pipeline: context assembled",
+  );
   const systemContent = context.summary
     ? `${SYSTEM_PROMPT}\n\nContext about this user:\n${context.summary}`
     : SYSTEM_PROMPT;
@@ -104,6 +116,10 @@ export async function runChatPipeline(params: {
 
     const choice = first.choices[0];
     const toolCalls = choice?.message.tool_calls ?? [];
+    logger.info(
+      { userId, chatId, stage: "intent", toolCalls: toolCalls.map((c) => (c.type === "function" ? c.function.name : c.type)) },
+      "Pipeline: intent classified",
+    );
 
     if (toolCalls.length === 0) {
       // No action needed - stream the direct response.
@@ -117,10 +133,12 @@ export async function runChatPipeline(params: {
       return streamFinal(baseMessages, onToken);
     }
 
-    // Step 2: Action Engine executes every requested tool call.
+    // Step 2: Action Engine executes every requested tool call (multi-intent:
+    // a single message can trigger several chained actions in one turn).
     const toolResults: ActionResult[] = [];
     for (const call of toolCalls) {
       if (call.type !== "function") continue;
+      logger.info({ userId, chatId, stage: "action", tool: call.function.name }, "Pipeline: executing action");
       const result = await actionEngine.execute({
         userId,
         chatId,
@@ -128,6 +146,10 @@ export async function runChatPipeline(params: {
         toolName: call.function.name,
         rawArgs: call.function.arguments,
       });
+      logger.info(
+        { userId, chatId, stage: "action_result", tool: call.function.name, ok: result.ok },
+        "Pipeline: action executed",
+      );
       toolResults.push(result);
       if (result.actionLogged) actionsPerformed.push(result.actionLogged);
     }

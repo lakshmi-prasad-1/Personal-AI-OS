@@ -1,6 +1,5 @@
 import { Router, type IRouter } from "express";
 import { notesService } from "../services/notesService";
-import { knowledgeGraphService } from "../services/knowledgeGraphService";
 import {
   ListNotesResponse,
   CreateNoteBody,
@@ -31,14 +30,6 @@ router.post("/notes", async (req, res): Promise<void> => {
   }
 
   const note = await notesService.create(req.auth!.userId, parsed.data);
-  await knowledgeGraphService.autoLink({
-    userId: req.auth!.userId,
-    entityType: "note",
-    entityId: note.id,
-    label: note.title,
-    text: `${note.title} ${note.content}`,
-    tags: note.tags,
-  });
 
   res.status(201).json(CreateNoteResponse.parse(note));
 });

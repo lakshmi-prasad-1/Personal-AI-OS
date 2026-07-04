@@ -1,5 +1,7 @@
-import { desc, eq } from "drizzle-orm";
-import { db, notesTable, ideasTable, memoriesTable, resourcesTable } from "@workspace/db";
+import { notesService } from "../services/notesService";
+import { ideasService } from "../services/ideasService";
+import { memoriesService } from "../services/memoriesService";
+import { resourcesService } from "../services/resourcesService";
 
 export interface AssembledContext {
   pinnedNotes: { title: string; content: string }[];
@@ -10,34 +12,45 @@ export interface AssembledContext {
 }
 
 /**
+ * Converts a timestamp into a natural recency label ("today", "yesterday",
+ * "this week", "last week", "a while ago") so the AI can talk about the
+ * user's activity the way a person would, not with raw dates - this is what
+ * lets follow-up conversations continue naturally across sessions.
+ */
+function recencyLabel(date: Date): string {
+  const now = new Date();
+  const startOfDay = (d: Date) => new Date(d.getFullYear(), d.getMonth(), d.getDate()).getTime();
+  const daysAgo = Math.round((startOfDay(now) - startOfDay(date)) / 86_400_000);
+
+  if (daysAgo <= 0) return "today";
+  if (daysAgo === 1) return "yesterday";
+  if (daysAgo <= 7) return "this week";
+  if (daysAgo <= 14) return "last week";
+  return "a while ago";
+}
+
+/**
  * The Context Engine decides what a user's own data is relevant enough to
  * inject into the AI prompt. It intentionally keeps the payload small
  * (top-N per entity, capped length) so prompts stay cheap and focused
  * instead of dumping the user's entire second brain into every request.
+ * Reuses the same domain services as REST routes so retrieval logic never
+ * diverges from what the user sees in their notes/ideas/memories/resources
+ * pages.
  */
 export const contextEngine = {
   async gather(userId: string): Promise<AssembledContext> {
-    const [pinnedNotes, recentIdeas, memories, recentResources] = await Promise.all([
-      db
-        .select()
-        .from(notesTable)
-        .where(eq(notesTable.userId, userId))
-        .orderBy(desc(notesTable.isPinned), desc(notesTable.updatedAt))
-        .limit(5),
-      db.select().from(ideasTable).where(eq(ideasTable.userId, userId)).orderBy(desc(ideasTable.updatedAt)).limit(5),
-      db
-        .select()
-        .from(memoriesTable)
-        .where(eq(memoriesTable.userId, userId))
-        .orderBy(desc(memoriesTable.importanceScore))
-        .limit(8),
-      db
-        .select()
-        .from(resourcesTable)
-        .where(eq(resourcesTable.userId, userId))
-        .orderBy(desc(resourcesTable.updatedAt))
-        .limit(5),
+    const [allNotes, allIdeas, allMemories, allResources] = await Promise.all([
+      notesService.list(userId),
+      ideasService.list(userId),
+      memoriesService.list(userId),
+      resourcesService.list(userId),
     ]);
+
+    const pinnedNotes = allNotes.slice(0, 5);
+    const recentIdeas = allIdeas.slice(0, 5);
+    const memories = allMemories.slice(0, 8);
+    const recentResources = allResources.slice(0, 5);
 
     const context: AssembledContext = {
       pinnedNotes: pinnedNotes.map((n) => ({ title: n.title, content: n.content.slice(0, 200) })),
@@ -59,16 +72,26 @@ export const contextEngine = {
           .join("; ")}.`,
       );
     }
-    if (context.pinnedNotes.length) {
-      parts.push(`Recent/pinned notes: ${context.pinnedNotes.map((n) => n.title).join(", ")}.`);
+    if (pinnedNotes.length) {
+      parts.push(
+        `Recent/pinned notes: ${pinnedNotes.map((n) => `${n.title} (${recencyLabel(new Date(n.createdAt))})`).join(", ")}.`,
+      );
     }
-    if (context.recentIdeas.length) {
-      parts.push(`Recent ideas: ${context.recentIdeas.map((i) => `${i.title} [${i.status}]`).join(", ")}.`);
+    if (recentIdeas.length) {
+      parts.push(
+        `Recent ideas: ${recentIdeas
+          .map((i) => `${i.title} [${i.status}, ${recencyLabel(new Date(i.createdAt))}]`)
+          .join(", ")}.`,
+      );
     }
-    if (context.recentResources.length) {
-      parts.push(`Recent resources: ${context.recentResources.map((r) => r.title).join(", ")}.`);
+    if (recentResources.length) {
+      parts.push(
+        `Recent resources: ${recentResources.map((r) => `${r.title} (${recencyLabel(new Date(r.createdAt))})`).join(", ")}.`,
+      );
     }
-    context.summary = parts.join(" ");
+    context.summary = parts.length
+      ? `${parts.join(" ")} When relevant, refer to things naturally by recency (today, yesterday, this week) instead of exact dates, and continue prior conversations/decisions rather than treating every message as brand new.`
+      : "";
 
     return context;
   },

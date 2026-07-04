@@ -1,5 +1,6 @@
 import { and, desc, eq } from "drizzle-orm";
 import { db, ideasTable, type InsertIdea, type Idea } from "@workspace/db";
+import { knowledgeGraphService } from "./knowledgeGraphService";
 
 export const ideasService = {
   async list(userId: string): Promise<Idea[]> {
@@ -20,6 +21,14 @@ export const ideasService = {
       .values({ ...data, userId })
       .returning();
     if (!idea) throw new Error("Failed to create idea");
+    await knowledgeGraphService.autoLink({
+      userId,
+      entityType: "idea",
+      entityId: idea.id,
+      label: idea.title,
+      text: `${idea.title} ${idea.content}`,
+      tags: idea.tags,
+    });
     return idea;
   },
 

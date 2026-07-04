@@ -1,5 +1,6 @@
 import { and, desc, eq } from "drizzle-orm";
 import { db, memoriesTable, type InsertMemory, type Memory } from "@workspace/db";
+import { knowledgeGraphService } from "./knowledgeGraphService";
 
 export const memoriesService = {
   async list(userId: string): Promise<Memory[]> {
@@ -24,6 +25,14 @@ export const memoriesService = {
       .values({ ...data, userId })
       .returning();
     if (!memory) throw new Error("Failed to create memory");
+    await knowledgeGraphService.autoLink({
+      userId,
+      entityType: "memory",
+      entityId: memory.id,
+      label: memory.title,
+      text: `${memory.title} ${memory.description}`,
+      tags: memory.tags,
+    });
     return memory;
   },
 

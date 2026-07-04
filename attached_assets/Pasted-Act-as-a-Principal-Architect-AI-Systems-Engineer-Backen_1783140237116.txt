@@ -1,0 +1,67 @@
+Act as a Principal Architect, AI Systems Engineer, Backend, Frontend, QA, and DevOps Engineer.
+
+Mission: Verify that AI Brain OS Phase 1A is fully complete and production-ready. Do not add features or implement Phase 2.
+
+1. Repository Audit
+
+Review the entire project:
+
+Frontend, Backend, Database, Authentication
+Services, Repositories
+AI Pipeline (Intent, Context, Decision, Action, Memory)
+Search, Knowledge Graph, Voice
+Dashboard, APIs, Logging, Validation
+Folder Structure & Dependencies
+2. Code Quality Check
+
+Find and report/fix:
+
+Duplicate business logic/APIs/services/database access
+Dead/unused code, files, components, models
+Circular dependencies
+Performance or memory issues
+Missing validation, ownership checks, error handling, retry logic, logging
+3. Verify AI Pipeline
+
+Ensure all requests (text & voice) follow exactly:
+
+User → Text/Voice → Intent → Context → Decision → Action → Shared Services → Repositories → Database → Dashboard Update → AI Response
+
+No shortcuts allowed.
+
+4. Service Architecture
+
+Confirm route handlers contain no business logic.
+All features (Notes, Ideas, Resources, Memories, Knowledge Graph, Chat, Search) must use reusable services.
+
+5. Voice
+
+Verify voice and keyboard share the same pipeline (no separate implementations).
+
+6. Knowledge Graph
+
+Creating a Note, Idea, Memory, or Resource must automatically update the graph.
+
+7. Search
+
+Verify unified search across:
+Notes, Ideas, Resources, Memories, Knowledge Graph, and Chat.
+
+8. Long-Term Memory
+
+Confirm AI remembers:
+Preferences, Goals, Projects, Important Facts, Learning Style, Career Interests, Previous Decisions.
+
+9. Dashboard
+
+Verify accurate display of:
+Recent Activity, AI Actions, Knowledge Statistics, Memories, Resources, and Ideas.
+
+10. Engineering Review
+
+Rate each module as Excellent / Good / Needs Improvement:
+Architecture, AI Design, Backend, Frontend, Security, Database, Performance, Scalability, Maintainability, Code Quality.
+
+11. Fixes
+
+Only if issues exist, fix them. Do not add features or start Phase 2.

@@ -5,9 +5,13 @@
  * API specification
  * OpenAPI spec version: 0.1.0
  */
+import type { DecisionActionPriority } from './decisionActionPriority';
 
 export interface DecisionAction {
   title: string;
   description: string;
   actionType: string;
+  /** Explanation of why the AI is recommending this, referencing the signals that led to it. */
+  reason: string;
+  priority: DecisionActionPriority;
 }

@@ -1,5 +1,6 @@
 import { and, desc, eq } from "drizzle-orm";
 import { db, resourcesTable, type InsertResource, type Resource } from "@workspace/db";
+import { knowledgeGraphService } from "./knowledgeGraphService";
 
 export const resourcesService = {
   async list(userId: string): Promise<Resource[]> {
@@ -24,6 +25,13 @@ export const resourcesService = {
       .values({ ...data, userId })
       .returning();
     if (!resource) throw new Error("Failed to create resource");
+    await knowledgeGraphService.autoLink({
+      userId,
+      entityType: "resource",
+      entityId: resource.id,
+      label: resource.title,
+      text: `${resource.title} ${resource.description ?? ""}`,
+    });
     return resource;
   },
 

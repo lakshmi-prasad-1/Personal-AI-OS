@@ -1,5 +1,6 @@
 import { and, desc, eq } from "drizzle-orm";
 import { db, notesTable, type InsertNote, type Note } from "@workspace/db";
+import { knowledgeGraphService } from "./knowledgeGraphService";
 
 export const notesService = {
   async list(userId: string): Promise<Note[]> {
@@ -24,6 +25,14 @@ export const notesService = {
       .values({ ...data, userId })
       .returning();
     if (!note) throw new Error("Failed to create note");
+    await knowledgeGraphService.autoLink({
+      userId,
+      entityType: "note",
+      entityId: note.id,
+      label: note.title,
+      text: `${note.title} ${note.content}`,
+      tags: note.tags,
+    });
     return note;
   },
 

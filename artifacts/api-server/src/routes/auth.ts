@@ -1,9 +1,6 @@
 import { Router, type IRouter } from "express";
-import bcrypt from "bcryptjs";
-import { eq } from "drizzle-orm";
-import { db, usersTable } from "@workspace/db";
 import { RegisterBody, RegisterResponse, LoginBody, LoginResponse } from "@workspace/api-zod";
-import { signToken } from "../lib/auth";
+import { authService } from "../services/authService";
 
 const router: IRouter = Router();
 
@@ -14,32 +11,13 @@ router.post("/auth/register", async (req, res): Promise<void> => {
     return;
   }
 
-  const { email, password } = parsed.data;
-
-  const [existing] = await db
-    .select()
-    .from(usersTable)
-    .where(eq(usersTable.email, email));
-
-  if (existing) {
-    res.status(400).json({ error: "Email already registered" });
+  const result = await authService.register(parsed.data.email, parsed.data.password);
+  if ("error" in result) {
+    res.status(400).json({ error: result.error });
     return;
   }
 
-  const passwordHash = await bcrypt.hash(password, 10);
-
-  const [user] = await db
-    .insert(usersTable)
-    .values({ email, passwordHash })
-    .returning();
-
-  if (!user) {
-    res.status(400).json({ error: "Failed to create user" });
-    return;
-  }
-
-  const token = signToken({ userId: user.id, email: user.email, role: user.role });
-
+  const { token, user } = result;
   res.status(201).json(
     RegisterResponse.parse({
       token,
@@ -55,26 +33,13 @@ router.post("/auth/login", async (req, res): Promise<void> => {
     return;
   }
 
-  const { email, password } = parsed.data;
-
-  const [user] = await db
-    .select()
-    .from(usersTable)
-    .where(eq(usersTable.email, email));
-
-  if (!user) {
-    res.status(401).json({ error: "Invalid credentials" });
+  const result = await authService.login(parsed.data.email, parsed.data.password);
+  if ("error" in result) {
+    res.status(401).json({ error: result.error });
     return;
   }
 
-  const valid = await bcrypt.compare(password, user.passwordHash);
-  if (!valid) {
-    res.status(401).json({ error: "Invalid credentials" });
-    return;
-  }
-
-  const token = signToken({ userId: user.id, email: user.email, role: user.role });
-
+  const { token, user } = result;
   res.json(
     LoginResponse.parse({
       token,

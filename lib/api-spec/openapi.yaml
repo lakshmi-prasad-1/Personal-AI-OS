@@ -976,11 +976,17 @@ components:
 
     DecisionAction:
       type: object
-      required: [title, description, actionType]
+      required: [title, description, actionType, reason, priority]
       properties:
         title: { type: string }
         description: { type: string }
         actionType: { type: string }
+        reason:
+          type: string
+          description: Explanation of why the AI is recommending this, referencing the signals that led to it.
+        priority:
+          type: string
+          enum: [low, medium, high]
 
     BrainDecisionResult:
       type: object
