@@ -20,7 +20,9 @@ import type {
 } from '@tanstack/react-query';
 
 import type {
+  AgentActivityResult,
   AuthResult,
+  BrainActivityParams,
   BrainDecisionResult,
   BrainSearchResult,
   Chat,
@@ -36,6 +38,7 @@ import type {
   Idea,
   IdeaInput,
   IdeaUpdate,
+  KnowledgeStats,
   LoginInput,
   Memory,
   MemoryInput,
@@ -2483,4 +2486,165 @@ export const useBrainSearch = <TError = ErrorType<unknown>,
       > => {
       return useMutation(getBrainSearchMutationOptions(options));
     }
+
+export const getBrainActivityUrl = (params?: BrainActivityParams,) => {
+  const normalizedParams = new URLSearchParams();
+
+  Object.entries(params || {}).forEach(([key, value]) => {
+
+    if (value !== undefined) {
+      normalizedParams.append(key, value === null ? 'null' : String(value))
+    }
+  });
+
+  const stringifiedParams = normalizedParams.toString();
+
+  return stringifiedParams.length > 0 ? `/api/brain/activity?${stringifiedParams}` : `/api/brain/activity`
+}
+
+/**
+ * @summary Recent AI agent actions (activity timeline)
+ */
+export const brainActivity = async (params?: BrainActivityParams, options?: RequestInit): Promise<AgentActivityResult> => {
+
+  return customFetch<AgentActivityResult>(getBrainActivityUrl(params),
+  {
+    ...options,
+    method: 'GET'
+
+
+  }
+);}
+
+
+
+
+
+export const getBrainActivityQueryKey = (params?: BrainActivityParams,) => {
+    return [
+    `/api/brain/activity`, ...(params ? [params] : [])
+    ] as const;
+    }
+
+
+export const getBrainActivityQueryOptions = <TData = Awaited<ReturnType<typeof brainActivity>>, TError = ErrorType<unknown>>(params?: BrainActivityParams, options?: { query?:UseQueryOptions<Awaited<ReturnType<typeof brainActivity>>, TError, TData>, request?: SecondParameter<typeof customFetch>}
+) => {
+
+const {query: queryOptions, request: requestOptions} = options ?? {};
+
+  const queryKey =  queryOptions?.queryKey ?? getBrainActivityQueryKey(params);
+
+
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof brainActivity>>> = ({ signal }) => brainActivity(params, { signal, ...requestOptions });
+
+
+
+
+
+   return  { queryKey, queryFn, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof brainActivity>>, TError, TData> & { queryKey: QueryKey }
+}
+
+export type BrainActivityQueryResult = NonNullable<Awaited<ReturnType<typeof brainActivity>>>
+export type BrainActivityQueryError = ErrorType<unknown>
+
+
+/**
+ * @summary Recent AI agent actions (activity timeline)
+ */
+
+export function useBrainActivity<TData = Awaited<ReturnType<typeof brainActivity>>, TError = ErrorType<unknown>>(
+ params?: BrainActivityParams, options?: { query?:UseQueryOptions<Awaited<ReturnType<typeof brainActivity>>, TError, TData>, request?: SecondParameter<typeof customFetch>}
+
+ ):  UseQueryResult<TData, TError> & { queryKey: QueryKey } {
+
+  const queryOptions = getBrainActivityQueryOptions(params,options)
+
+  const query = useQuery(queryOptions) as  UseQueryResult<TData, TError> & { queryKey: QueryKey };
+
+  return withQueryKey(query, queryOptions.queryKey);
+}
+
+
+
+
+
+
+
+export const getBrainKnowledgeStatsUrl = () => {
+
+
+
+
+  return `/api/brain/knowledge-stats`
+}
+
+/**
+ * @summary Knowledge graph statistics for the dashboard overview
+ */
+export const brainKnowledgeStats = async ( options?: RequestInit): Promise<KnowledgeStats> => {
+
+  return customFetch<KnowledgeStats>(getBrainKnowledgeStatsUrl(),
+  {
+    ...options,
+    method: 'GET'
+
+
+  }
+);}
+
+
+
+
+
+export const getBrainKnowledgeStatsQueryKey = () => {
+    return [
+    `/api/brain/knowledge-stats`
+    ] as const;
+    }
+
+
+export const getBrainKnowledgeStatsQueryOptions = <TData = Awaited<ReturnType<typeof brainKnowledgeStats>>, TError = ErrorType<unknown>>( options?: { query?:UseQueryOptions<Awaited<ReturnType<typeof brainKnowledgeStats>>, TError, TData>, request?: SecondParameter<typeof customFetch>}
+) => {
+
+const {query: queryOptions, request: requestOptions} = options ?? {};
+
+  const queryKey =  queryOptions?.queryKey ?? getBrainKnowledgeStatsQueryKey();
+
+
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof brainKnowledgeStats>>> = ({ signal }) => brainKnowledgeStats({ signal, ...requestOptions });
+
+
+
+
+
+   return  { queryKey, queryFn, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof brainKnowledgeStats>>, TError, TData> & { queryKey: QueryKey }
+}
+
+export type BrainKnowledgeStatsQueryResult = NonNullable<Awaited<ReturnType<typeof brainKnowledgeStats>>>
+export type BrainKnowledgeStatsQueryError = ErrorType<unknown>
+
+
+/**
+ * @summary Knowledge graph statistics for the dashboard overview
+ */
+
+export function useBrainKnowledgeStats<TData = Awaited<ReturnType<typeof brainKnowledgeStats>>, TError = ErrorType<unknown>>(
+  options?: { query?:UseQueryOptions<Awaited<ReturnType<typeof brainKnowledgeStats>>, TError, TData>, request?: SecondParameter<typeof customFetch>}
+
+ ):  UseQueryResult<TData, TError> & { queryKey: QueryKey } {
+
+  const queryOptions = getBrainKnowledgeStatsQueryOptions(options)
+
+  const query = useQuery(queryOptions) as  UseQueryResult<TData, TError> & { queryKey: QueryKey };
+
+  return withQueryKey(query, queryOptions.queryKey);
+}
+
+
+
+
+
+
 

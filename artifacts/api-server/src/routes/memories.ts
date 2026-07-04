@@ -1,6 +1,6 @@
 import { Router, type IRouter } from "express";
-import { and, desc, eq } from "drizzle-orm";
-import { db, memoriesTable } from "@workspace/db";
+import { memoriesService } from "../services/memoriesService";
+import { knowledgeGraphService } from "../services/knowledgeGraphService";
 import {
   ListMemoriesResponse,
   CreateMemoryBody,
@@ -19,12 +19,7 @@ const router: IRouter = Router();
 router.use(requireAuth);
 
 router.get("/memories", async (req, res): Promise<void> => {
-  const memories = await db
-    .select()
-    .from(memoriesTable)
-    .where(eq(memoriesTable.userId, req.auth!.userId))
-    .orderBy(desc(memoriesTable.importanceScore), desc(memoriesTable.updatedAt));
-
+  const memories = await memoriesService.list(req.auth!.userId);
   res.json(ListMemoriesResponse.parse(memories));
 });
 
@@ -35,10 +30,15 @@ router.post("/memories", async (req, res): Promise<void> => {
     return;
   }
 
-  const [memory] = await db
-    .insert(memoriesTable)
-    .values({ ...parsed.data, userId: req.auth!.userId })
-    .returning();
+  const memory = await memoriesService.create(req.auth!.userId, parsed.data);
+  await knowledgeGraphService.autoLink({
+    userId: req.auth!.userId,
+    entityType: "memory",
+    entityId: memory.id,
+    label: memory.title,
+    text: `${memory.title} ${memory.description}`,
+    tags: memory.tags,
+  });
 
   res.status(201).json(CreateMemoryResponse.parse(memory));
 });
@@ -50,11 +50,7 @@ router.get("/memories/:id", async (req, res): Promise<void> => {
     return;
   }
 
-  const [memory] = await db
-    .select()
-    .from(memoriesTable)
-    .where(and(eq(memoriesTable.id, params.data.id), eq(memoriesTable.userId, req.auth!.userId)));
-
+  const memory = await memoriesService.get(req.auth!.userId, params.data.id);
   if (!memory) {
     res.status(404).json({ error: "Memory not found" });
     return;
@@ -76,12 +72,7 @@ router.patch("/memories/:id", async (req, res): Promise<void> => {
     return;
   }
 
-  const [memory] = await db
-    .update(memoriesTable)
-    .set(parsed.data)
-    .where(and(eq(memoriesTable.id, params.data.id), eq(memoriesTable.userId, req.auth!.userId)))
-    .returning();
-
+  const memory = await memoriesService.update(req.auth!.userId, params.data.id, parsed.data);
   if (!memory) {
     res.status(404).json({ error: "Memory not found" });
     return;
@@ -97,11 +88,7 @@ router.delete("/memories/:id", async (req, res): Promise<void> => {
     return;
   }
 
-  const [memory] = await db
-    .delete(memoriesTable)
-    .where(and(eq(memoriesTable.id, params.data.id), eq(memoriesTable.userId, req.auth!.userId)))
-    .returning();
-
+  const memory = await memoriesService.remove(req.auth!.userId, params.data.id);
   if (!memory) {
     res.status(404).json({ error: "Memory not found" });
     return;

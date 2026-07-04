@@ -1,7 +1,6 @@
 import { Router, type IRouter } from "express";
-import { and, asc, desc, eq } from "drizzle-orm";
-import OpenAI from "openai";
-import { db, chatsTable, chatMessagesTable } from "@workspace/db";
+import { chatService } from "../services/chatService";
+import { runChatPipeline } from "../ai/chatPipeline";
 import {
   ListChatsResponse,
   CreateChatBody,
@@ -17,16 +16,8 @@ const router: IRouter = Router();
 
 router.use(requireAuth);
 
-const openaiApiKey = process.env["OPENAI_API_KEY"];
-const openai = openaiApiKey ? new OpenAI({ apiKey: openaiApiKey }) : null;
-
 router.get("/chats", async (req, res): Promise<void> => {
-  const chats = await db
-    .select()
-    .from(chatsTable)
-    .where(eq(chatsTable.userId, req.auth!.userId))
-    .orderBy(desc(chatsTable.updatedAt));
-
+  const chats = await chatService.list(req.auth!.userId);
   res.json(ListChatsResponse.parse(chats));
 });
 
@@ -37,11 +28,7 @@ router.post("/chats", async (req, res): Promise<void> => {
     return;
   }
 
-  const [chat] = await db
-    .insert(chatsTable)
-    .values({ ...parsed.data, userId: req.auth!.userId })
-    .returning();
-
+  const chat = await chatService.create(req.auth!.userId, parsed.data.title);
   res.status(201).json(CreateChatResponse.parse(chat));
 });
 
@@ -52,22 +39,13 @@ router.get("/chats/:id", async (req, res): Promise<void> => {
     return;
   }
 
-  const [chat] = await db
-    .select()
-    .from(chatsTable)
-    .where(and(eq(chatsTable.id, params.data.id), eq(chatsTable.userId, req.auth!.userId)));
-
+  const chat = await chatService.get(req.auth!.userId, params.data.id);
   if (!chat) {
     res.status(404).json({ error: "Chat not found" });
     return;
   }
 
-  const messages = await db
-    .select()
-    .from(chatMessagesTable)
-    .where(eq(chatMessagesTable.chatId, chat.id))
-    .orderBy(asc(chatMessagesTable.createdAt));
-
+  const messages = await chatService.getMessages(chat.id);
   res.json(GetChatResponse.parse({ ...chat, messages }));
 });
 
@@ -78,11 +56,7 @@ router.delete("/chats/:id", async (req, res): Promise<void> => {
     return;
   }
 
-  const [chat] = await db
-    .delete(chatsTable)
-    .where(and(eq(chatsTable.id, params.data.id), eq(chatsTable.userId, req.auth!.userId)))
-    .returning();
-
+  const chat = await chatService.remove(req.auth!.userId, params.data.id);
   if (!chat) {
     res.status(404).json({ error: "Chat not found" });
     return;
@@ -104,73 +78,44 @@ router.post("/chats/:id/message", async (req, res): Promise<void> => {
     return;
   }
 
-  const [chat] = await db
-    .select()
-    .from(chatsTable)
-    .where(and(eq(chatsTable.id, params.data.id), eq(chatsTable.userId, req.auth!.userId)));
-
+  const userId = req.auth!.userId;
+  const chat = await chatService.get(userId, params.data.id);
   if (!chat) {
     res.status(404).json({ error: "Chat not found" });
     return;
   }
 
-  await db.insert(chatMessagesTable).values({ chatId: chat.id, role: "user", content });
-
-  const history = await db
-    .select()
-    .from(chatMessagesTable)
-    .where(eq(chatMessagesTable.chatId, chat.id))
-    .orderBy(asc(chatMessagesTable.createdAt));
+  // Persist the user's message immediately so it is never lost, even if the
+  // AI pipeline below fails.
+  await chatService.addMessage(chat.id, "user", content);
+  const history = await chatService.getMessages(chat.id);
 
   res.setHeader("Content-Type", "text/plain; charset=utf-8");
   res.setHeader("Cache-Control", "no-cache");
   res.setHeader("X-Accel-Buffering", "no");
 
   let fullReply = "";
-
   try {
-    if (!openai) {
-      fullReply =
-        "AI chat is not configured on this server (missing OPENAI_API_KEY). Your message was saved.";
-      res.write(fullReply);
-    } else {
-      const stream = await openai.chat.completions.create({
-        model: "gpt-4o-mini",
-        stream: true,
-        messages: [
-          {
-            role: "system",
-            content:
-              "You are the assistant inside AI Brain OS, a personal second-brain app. Be concise, helpful, and warm.",
-          },
-          ...history.map((m) => ({
-            role: m.role === "assistant" ? ("assistant" as const) : ("user" as const),
-            content: m.content,
-          })),
-        ],
-      });
-
-      for await (const chunk of stream) {
-        const token = chunk.choices[0]?.delta?.content ?? "";
-        if (token) {
-          fullReply += token;
-          res.write(token);
-        }
-      }
-    }
+    const result = await runChatPipeline({
+      userId,
+      chatId: chat.id,
+      history: history.map((m) => ({ role: m.role === "assistant" ? "assistant" : "user", content: m.content })),
+      onToken: (token) => {
+        fullReply += token;
+        res.write(token);
+      },
+    });
+    if (!fullReply) fullReply = result.reply;
   } catch (err) {
-    req.log.error({ err }, "Chat completion failed");
+    req.log.error({ err }, "Chat pipeline failed");
     if (!fullReply) {
       fullReply = "Sorry, something went wrong generating a response.";
       res.write(fullReply);
     }
   }
 
-  await db.insert(chatMessagesTable).values({ chatId: chat.id, role: "assistant", content: fullReply });
-  await db
-    .update(chatsTable)
-    .set({ title: chat.title === "New Chat" ? content.slice(0, 60) : chat.title })
-    .where(eq(chatsTable.id, chat.id));
+  await chatService.addMessage(chat.id, "assistant", fullReply || "...");
+  await chatService.renameIfDefault(chat.id, chat.title, content);
 
   res.end();
 });

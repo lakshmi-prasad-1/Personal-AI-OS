@@ -1,6 +1,6 @@
 import { Router, type IRouter } from "express";
-import { and, desc, eq } from "drizzle-orm";
-import { db, notesTable } from "@workspace/db";
+import { notesService } from "../services/notesService";
+import { knowledgeGraphService } from "../services/knowledgeGraphService";
 import {
   ListNotesResponse,
   CreateNoteBody,
@@ -19,12 +19,7 @@ const router: IRouter = Router();
 router.use(requireAuth);
 
 router.get("/notes", async (req, res): Promise<void> => {
-  const notes = await db
-    .select()
-    .from(notesTable)
-    .where(eq(notesTable.userId, req.auth!.userId))
-    .orderBy(desc(notesTable.isPinned), desc(notesTable.updatedAt));
-
+  const notes = await notesService.list(req.auth!.userId);
   res.json(ListNotesResponse.parse(notes));
 });
 
@@ -35,10 +30,15 @@ router.post("/notes", async (req, res): Promise<void> => {
     return;
   }
 
-  const [note] = await db
-    .insert(notesTable)
-    .values({ ...parsed.data, userId: req.auth!.userId })
-    .returning();
+  const note = await notesService.create(req.auth!.userId, parsed.data);
+  await knowledgeGraphService.autoLink({
+    userId: req.auth!.userId,
+    entityType: "note",
+    entityId: note.id,
+    label: note.title,
+    text: `${note.title} ${note.content}`,
+    tags: note.tags,
+  });
 
   res.status(201).json(CreateNoteResponse.parse(note));
 });
@@ -50,11 +50,7 @@ router.get("/notes/:id", async (req, res): Promise<void> => {
     return;
   }
 
-  const [note] = await db
-    .select()
-    .from(notesTable)
-    .where(and(eq(notesTable.id, params.data.id), eq(notesTable.userId, req.auth!.userId)));
-
+  const note = await notesService.get(req.auth!.userId, params.data.id);
   if (!note) {
     res.status(404).json({ error: "Note not found" });
     return;
@@ -76,12 +72,7 @@ router.patch("/notes/:id", async (req, res): Promise<void> => {
     return;
   }
 
-  const [note] = await db
-    .update(notesTable)
-    .set(parsed.data)
-    .where(and(eq(notesTable.id, params.data.id), eq(notesTable.userId, req.auth!.userId)))
-    .returning();
-
+  const note = await notesService.update(req.auth!.userId, params.data.id, parsed.data);
   if (!note) {
     res.status(404).json({ error: "Note not found" });
     return;
@@ -97,11 +88,7 @@ router.delete("/notes/:id", async (req, res): Promise<void> => {
     return;
   }
 
-  const [note] = await db
-    .delete(notesTable)
-    .where(and(eq(notesTable.id, params.data.id), eq(notesTable.userId, req.auth!.userId)))
-    .returning();
-
+  const note = await notesService.remove(req.auth!.userId, params.data.id);
   if (!note) {
     res.status(404).json({ error: "Note not found" });
     return;

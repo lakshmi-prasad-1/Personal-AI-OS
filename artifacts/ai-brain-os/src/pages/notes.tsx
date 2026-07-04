@@ -134,7 +134,7 @@ function NoteEditor({ note, onClose }: { note: any | null, onClose: () => void }
       return;
     }
 
-    const tags = tagsInput.split(",").map(t => t.trim()).filter(Boolean);
+    const tags = tagsInput.split(",").map((t: string) => t.trim()).filter(Boolean);
     const data = { title, content, tags, isPinned, isMarkdown };
 
     if (note) {

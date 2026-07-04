@@ -1,0 +1,969 @@
+You are now acting as all of the following simultaneously:
+
+1. Product Manager
+2. Senior Software Architect
+3. AI Systems Architect
+4. Senior Backend Engineer
+5. Senior Frontend Engineer
+6. Senior Database Architect
+7. Senior AI Engineer
+8. Senior DevOps Engineer
+9. Senior QA Engineer
+
+============================================================
+
+MISSION
+
+You are NOT building another CRUD application.
+
+You are building an AI Operating System.
+
+This project is called AI Brain OS.
+
+Its purpose is to become my second brain, productivity assistant, study assistant and career assistant.
+
+The AI Assistant must become the center of the application.
+
+Everything else becomes an internal service.
+
+============================================================
+
+IMPORTANT RULES
+
+DO NOT rewrite the project.
+
+DO NOT replace frameworks.
+
+DO NOT change the existing stack.
+
+DO NOT break authentication.
+
+DO NOT remove existing CRUD pages.
+
+DO NOT remove existing APIs.
+
+DO NOT delete working code.
+
+Instead
+
+Understand the repository.
+
+Reuse existing architecture.
+
+Refactor only where necessary.
+
+Extend existing functionality.
+
+Always prefer improving existing code over replacing it.
+
+============================================================
+
+FIRST TASK
+
+Before writing ANY code
+
+inspect the ENTIRE repository.
+
+Understand
+
+Frontend
+
+Backend
+
+Database
+
+Authentication
+
+Routes
+
+Services
+
+Components
+
+AI Integration
+
+Chat
+
+Knowledge Graph
+
+Resources
+
+Memories
+
+Ideas
+
+Notes
+
+Dashboard
+
+API Layer
+
+Database Layer
+
+Shared Libraries
+
+Current Folder Structure
+
+After understanding the repository
+
+continue implementation.
+
+Do NOT ask me for confirmation after every small task.
+
+Work module by module until this entire phase is completed.
+
+============================================================
+
+PRODUCT VISION
+
+The application should behave like an AI Executive Assistant.
+
+Instead of manually opening pages
+
+like
+
+Notes
+
+Ideas
+
+Resources
+
+Tasks
+
+Planner
+
+Memories
+
+The user should simply talk to the AI.
+
+Example
+
+"I have an assignment due tomorrow."
+
+↓
+
+AI understands
+
+↓
+
+Creates Task
+
+Creates Reminder
+
+Updates Planner
+
+Updates Dashboard
+
+Stores Context
+
+Responds naturally
+
+============================================================
+
+Another Example
+
+"Remember that I study better at night."
+
+↓
+
+AI stores long-term memory
+
+↓
+
+Future study recommendations use this preference.
+
+============================================================
+
+Another Example
+
+"Save this React roadmap."
+
+↓
+
+AI stores Resource
+
+↓
+
+Generates AI Summary
+
+↓
+
+Categorizes
+
+↓
+
+Links Knowledge Graph
+
+↓
+
+Stores searchable metadata
+
+============================================================
+
+THIS IS THE CORE ARCHITECTURE
+
+Everything in the project must follow this flow.
+
+User
+
+↓
+
+Text Chat
+
+or
+
+Voice Input
+
+↓
+
+Speech Recognition (if voice)
+
+↓
+
+Transcript
+
+↓
+
+Intent Engine
+
+↓
+
+Context Retrieval
+
+↓
+
+Decision Engine
+
+↓
+
+Action Engine
+
+↓
+
+Shared Services
+
+↓
+
+Database
+
+↓
+
+Dashboard Updates
+
+↓
+
+AI Response
+
+Never bypass this pipeline.
+
+============================================================
+
+GOAL OF PHASE 1A
+
+Convert the current project
+
+from
+
+CRUD First
+
+to
+
+AI First.
+
+The AI Assistant becomes the primary interface.
+
+The CRUD pages become supporting Library pages.
+
+============================================================
+
+PART 1
+
+REPOSITORY REFACTORING
+
+Inspect current architecture.
+
+Create a reusable architecture.
+
+Business logic must never remain inside route handlers.
+
+Move business logic into reusable services where required.
+
+Examples
+
+notesService
+
+ideasService
+
+memoryService
+
+resourceService
+
+chatService
+
+searchService
+
+knowledgeGraphService
+
+future
+
+taskService
+
+plannerService
+
+studyService
+
+careerService
+
+Every API route
+
+and every AI Action
+
+must use the same services.
+
+Never duplicate logic.
+
+============================================================
+
+PART 2
+
+AI CORE ARCHITECTURE
+
+Create a modular AI architecture.
+
+Separate responsibilities.
+
+Intent Engine
+
+Context Engine
+
+Decision Engine
+
+Action Engine
+
+Memory Engine
+
+Search Engine
+
+Knowledge Engine
+
+Every module must have a single responsibility.
+
+Future modules should be pluggable.
+
+============================================================
+
+PART 3
+
+INTENT ENGINE
+
+This is one of the most important modules.
+
+The AI must understand user intent.
+
+Examples
+
+"I have an assignment"
+
+↓
+
+Create Task
+
+------------------------------------------------
+
+"I got an idea"
+
+↓
+
+Create Idea
+
+------------------------------------------------
+
+"Remember this"
+
+↓
+
+Store Memory
+
+------------------------------------------------
+
+"Save this"
+
+↓
+
+Create Resource
+
+------------------------------------------------
+
+"What should I study today?"
+
+↓
+
+Decision Request
+
+------------------------------------------------
+
+"What did I decide last week?"
+
+↓
+
+Memory Retrieval
+
+------------------------------------------------
+
+"Show my React resources."
+
+↓
+
+Search Request
+
+------------------------------------------------
+
+"Plan tomorrow."
+
+↓
+
+Planner Request
+
+Do NOT hardcode keywords.
+
+Use structured AI intent detection.
+
+Design intent architecture for future expansion.
+
+============================================================
+
+PART 4
+
+CONTEXT ENGINE
+
+Before generating every response
+
+retrieve relevant information.
+
+Possible Context Sources
+
+Chats
+
+Notes
+
+Ideas
+
+Resources
+
+Memories
+
+Knowledge Graph
+
+Tasks (future)
+
+Planner (future)
+
+Study Logs (future)
+
+Resume (future)
+
+Goals (future)
+
+Habits (future)
+
+The Context Engine must determine
+
+what information is actually relevant.
+
+Do not overload prompts.
+
+============================================================
+
+PART 5
+
+LONG TERM MEMORY
+
+The AI should remember
+
+Goals
+
+Preferences
+
+Study Style
+
+Career Interests
+
+Important Decisions
+
+Projects
+
+Learning Style
+
+Frequently Mentioned Topics
+
+Future recommendations should use these memories.
+
+Memory should become smarter over time.
+
+============================================================
+
+PART 6
+
+UNIVERSAL SEARCH
+
+One search.
+
+Search across
+
+Notes
+
+Ideas
+
+Resources
+
+Memories
+
+Knowledge Graph
+
+Chat History
+
+Future Modules
+
+Results should be ranked.
+
+Design search architecture for future semantic search.
+
+============================================================
+
+PART 7
+
+KNOWLEDGE GRAPH
+
+Current implementation is manual.
+
+Improve architecture.
+
+Whenever AI creates
+
+Idea
+
+Memory
+
+Note
+
+Resource
+
+automatically
+
+Create Node
+
+Create Relationships
+
+Link Similar Topics
+
+Update Graph
+
+Knowledge Graph should update automatically.
+
+============================================================
+
+PART 8
+
+VOICE ARCHITECTURE
+
+IMPORTANT
+
+Voice support starts TODAY.
+
+NOT Version 2.
+
+Requirements
+
+Microphone Button
+
+Speech Recognition
+
+Transcript
+
+Transcript automatically enters the same AI pipeline.
+
+There must NOT be separate voice logic.
+
+Voice Input
+
+↓
+
+Transcript
+
+↓
+
+Intent Engine
+
+↓
+
+Context
+
+↓
+
+Decision
+
+↓
+
+Action
+
+↓
+
+Response
+
+The same architecture must support
+
+Keyboard
+
+Voice
+
+Future Mobile App
+
+Future Telegram
+
+Future WhatsApp
+
+without rewriting logic.
+
+If a microphone implementation already exists in the repository
+
+reuse it.
+
+Otherwise
+
+integrate browser speech recognition using modular architecture.
+
+============================================================
+
+PART 9
+
+CHAT
+
+Chat becomes the Home Page.
+
+The Dashboard becomes an overview.
+
+Chat should eventually control every feature.
+
+Chat should become capable of
+
+Creating data
+
+Updating data
+
+Searching data
+
+Explaining data
+
+Planning
+
+Remembering
+
+Making recommendations
+
+============================================================
+
+PART 10
+
+SHARED SERVICES
+
+Every AI Action should call services.
+
+Never call database directly.
+
+Example
+
+Intent
+
+↓
+
+Action
+
+↓
+
+Task Service
+
+↓
+
+Database
+
+NOT
+
+Intent
+
+↓
+
+Database
+
+This architecture is mandatory.
+
+============================================================
+
+PART 11
+
+API DESIGN
+
+Design clean API architecture.
+
+Current APIs remain compatible.
+
+Create reusable endpoints for
+
+Intent
+
+Context
+
+Search
+
+Memory
+
+Knowledge
+
+Decision
+
+Voice
+
+Action
+
+Future modules should plug into these APIs.
+
+============================================================
+
+PART 12
+
+DATABASE
+
+Review current schema.
+
+Do not redesign existing working schema.
+
+Prepare architecture for
+
+Tasks
+
+Planner
+
+Goals
+
+Habits
+
+Study
+
+Career
+
+Agent Logs
+
+without fully implementing them yet.
+
+============================================================
+
+PART 13
+
+DASHBOARD
+
+Dashboard becomes informational only.
+
+Display
+
+Today's Summary
+
+Recent Activity
+
+AI Suggestions
+
+Recent Memories
+
+Recent Resources
+
+Recent Ideas
+
+Knowledge Statistics
+
+Recent AI Actions
+
+============================================================
+
+PART 14
+
+LOGGING
+
+Every AI action must be logged.
+
+Examples
+
+Created Memory
+
+Created Resource
+
+Created Idea
+
+Updated Context
+
+Search Performed
+
+Knowledge Updated
+
+This will become the Activity Timeline.
+
+============================================================
+
+PART 15
+
+SECURITY
+
+Every AI-generated action
+
+must pass validation.
+
+Never trust AI output.
+
+Validate everything.
+
+Respect authentication.
+
+Respect user ownership.
+
+============================================================
+
+PART 16
+
+ERROR HANDLING
+
+If AI fails
+
+Never lose user message.
+
+Retry where appropriate.
+
+Return graceful fallback.
+
+Log failures.
+
+============================================================
+
+PART 17
+
+PERFORMANCE
+
+Reuse services.
+
+Avoid duplicate queries.
+
+Keep architecture scalable.
+
+Avoid unnecessary re-renders.
+
+Prepare for thousands of memories.
+
+============================================================
+
+PART 18
+
+CODE QUALITY
+
+Maintain existing code style.
+
+Write modular code.
+
+Avoid large files.
+
+Avoid duplicate logic.
+
+Use clear naming.
+
+Add comments only where helpful.
+
+Follow SOLID principles.
+
+============================================================
+
+PART 19
+
+TESTING
+
+Before marking Phase 1A complete
+
+verify
+
+✓ Authentication still works
+
+✓ Existing CRUD pages still work
+
+✓ Chat works
+
+✓ Voice input works
+
+✓ Intent pipeline works
+
+✓ Context retrieval works
+
+✓ Search works
+
+✓ Knowledge Graph updates automatically
+
+✓ Dashboard updates correctly
+
+✓ Shared services are reusable
+
+✓ APIs remain compatible
+
+✓ Error handling works
+
+✓ Logging works
+
+============================================================
+
+DO NOT IMPLEMENT YET
+
+Task Manager
+
+Planner
+
+Goals
+
+Habits
+
+Study Module
+
+Career Module
+
+Resume AI
+
+ATS
+
+Job Tracking
+
+Browser Automation
+
+n8n
+
+Telegram
+
+Calendar Sync
+
+Email
+
+Notifications
+
+Voice Output
+
+Mobile App
+
+Those belong to later phases.
+
+============================================================
+
+SUCCESS CRITERIA
+
+By the end of Phase 1A
+
+The application should have a professional AI architecture.
+
+The AI Assistant should become the center of the system.
+
+The repository should be ready for Productivity OS, Study OS, Career OS and Life Optimization Engine without requiring another architectural refactor.
+
+Do NOT stop after one task.
+
+Continue working until every requirement in this document has been completed.
+
+Only stop when Phase 1A is fully implemented and verified.

@@ -1,0 +1,1 @@
+- [pnpm zod/v4 subpath resolution](pnpm-zod-v4-subpath.md) — a package importing `zod/v4` needs `zod` as its own direct dependency, not just transitive via another workspace package.

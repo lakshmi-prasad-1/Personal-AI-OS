@@ -263,3 +263,34 @@ export interface BrainSearchResult {
   results: BrainSearchResultItem[];
 }
 
+export interface AgentAction {
+  id: string;
+  userId: string;
+  /** @nullable */
+  chatId?: string | null;
+  actionType: string;
+  /** @nullable */
+  entityType?: string | null;
+  /** @nullable */
+  entityId?: string | null;
+  summary: string;
+  status: string;
+  createdAt: string;
+}
+
+export interface AgentActivityResult {
+  actions: AgentAction[];
+}
+
+export type KnowledgeStatsByType = {[key: string]: number};
+
+export interface KnowledgeStats {
+  nodeCount: number;
+  edgeCount: number;
+  byType: KnowledgeStatsByType;
+}
+
+export type BrainActivityParams = {
+limit?: number;
+};
+

@@ -38,13 +38,13 @@ function Router() {
     <AppLayout>
       <Switch>
         <Route path="/login" component={Login} />
-        <ProtectedRoute path="/" component={Dashboard} />
+        <ProtectedRoute path="/" component={Chat} />
+        <ProtectedRoute path="/dashboard" component={Dashboard} />
         <ProtectedRoute path="/notes" component={Notes} />
         <ProtectedRoute path="/ideas" component={Ideas} />
         <ProtectedRoute path="/memories" component={Memories} />
         <ProtectedRoute path="/resources" component={Resources} />
         <ProtectedRoute path="/graph" component={Graph} />
-        <ProtectedRoute path="/chat" component={Chat} />
         <Route component={NotFound} />
       </Switch>
     </AppLayout>

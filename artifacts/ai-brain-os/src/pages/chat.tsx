@@ -8,7 +8,7 @@ import {
   getListChatsQueryKey,
   getGetChatQueryKey,
 } from "@workspace/api-client-react";
-import { MessageSquare, Plus, Trash2, Send, Bot, User } from "lucide-react";
+import { MessageSquare, Plus, Trash2, Send, Bot, User, Mic, MicOff } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useAuth } from "@/lib/auth";
@@ -136,7 +136,63 @@ function ChatThread({ chatId }: { chatId: string }) {
   const [isStreaming, setIsStreaming] = useState(false);
   const [streamingText, setStreamingText] = useState("");
   const [optimisticUserMessage, setOptimisticUserMessage] = useState<string | null>(null);
+  const [isListening, setIsListening] = useState(false);
+  const [voiceSupported, setVoiceSupported] = useState(true);
   const scrollRef = useRef<HTMLDivElement>(null);
+  const recognitionRef = useRef<any>(null);
+
+  useEffect(() => {
+    const SpeechRecognitionCtor =
+      (window as any).SpeechRecognition || (window as any).webkitSpeechRecognition;
+
+    if (!SpeechRecognitionCtor) {
+      setVoiceSupported(false);
+      return;
+    }
+
+    const recognition = new SpeechRecognitionCtor();
+    recognition.continuous = false;
+    recognition.interimResults = true;
+    recognition.lang = "en-US";
+
+    recognition.onresult = (event: any) => {
+      let transcript = "";
+      for (let i = event.resultIndex; i < event.results.length; i++) {
+        transcript += event.results[i][0].transcript;
+      }
+      setInput(transcript);
+    };
+
+    recognition.onerror = () => {
+      setIsListening(false);
+    };
+
+    recognition.onend = () => {
+      setIsListening(false);
+    };
+
+    recognitionRef.current = recognition;
+
+    return () => {
+      recognition.onresult = null;
+      recognition.onerror = null;
+      recognition.onend = null;
+      recognition.abort();
+    };
+  }, []);
+
+  const toggleListening = () => {
+    if (!recognitionRef.current) return;
+
+    if (isListening) {
+      recognitionRef.current.stop();
+      setIsListening(false);
+    } else {
+      setInput("");
+      recognitionRef.current.start();
+      setIsListening(true);
+    }
+  };
 
   const messages: LocalMessage[] = [
     ...(chat?.messages.map((m) => ({ id: m.id, role: m.role as "user" | "assistant", content: m.content })) || []),
@@ -151,6 +207,11 @@ function ChatThread({ chatId }: { chatId: string }) {
   const handleSend = async () => {
     const content = input.trim();
     if (!content || isStreaming) return;
+
+    if (isListening) {
+      recognitionRef.current?.stop();
+      setIsListening(false);
+    }
 
     setInput("");
     setOptimisticUserMessage(content);
@@ -238,7 +299,7 @@ function ChatThread({ chatId }: { chatId: string }) {
 
       <div className="p-4 border-t border-border flex items-center gap-2 bg-card/50">
         <Input
-          placeholder="Type a message..."
+          placeholder={isListening ? "Listening..." : "Type a message..."}
           value={input}
           onChange={(e) => setInput(e.target.value)}
           onKeyDown={(e) => {
@@ -250,6 +311,19 @@ function ChatThread({ chatId }: { chatId: string }) {
           disabled={isStreaming}
           data-testid="input-chat-message"
         />
+        {voiceSupported && (
+          <Button
+            type="button"
+            variant={isListening ? "destructive" : "outline"}
+            size="icon"
+            onClick={toggleListening}
+            disabled={isStreaming}
+            title={isListening ? "Stop voice input" : "Speak your message"}
+            data-testid="button-voice-input"
+          >
+            {isListening ? <MicOff className="w-4 h-4" /> : <Mic className="w-4 h-4" />}
+          </Button>
+        )}
         <Button onClick={handleSend} disabled={isStreaming || !input.trim()} data-testid="button-send-message">
           <Send className="w-4 h-4" />
         </Button>

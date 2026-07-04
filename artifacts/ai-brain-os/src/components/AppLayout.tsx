@@ -15,13 +15,13 @@ import { useEffect } from "react";
 import { Button } from "@/components/ui/button";
 
 const NAV_ITEMS = [
-  { href: "/", label: "Dashboard", icon: LayoutDashboard },
+  { href: "/", label: "Chat", icon: MessageSquare },
+  { href: "/dashboard", label: "Overview", icon: LayoutDashboard },
   { href: "/notes", label: "Notes", icon: StickyNote },
   { href: "/ideas", label: "Ideas", icon: Lightbulb },
   { href: "/memories", label: "Memories", icon: Brain },
   { href: "/resources", label: "Resources", icon: Files },
   { href: "/graph", label: "Knowledge Graph", icon: Network },
-  { href: "/chat", label: "Assistant Chat", icon: MessageSquare },
 ];
 
 export function AppLayout({ children }: { children: React.ReactNode }) {
@@ -30,6 +30,7 @@ export function AppLayout({ children }: { children: React.ReactNode }) {
   
   const { data: user, error } = useGetCurrentUser({
     query: {
+      queryKey: getGetCurrentUserQueryKey(),
       enabled: isAuthenticated,
       retry: false,
     }

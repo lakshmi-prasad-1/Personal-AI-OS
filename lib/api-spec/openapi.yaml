@@ -637,6 +637,37 @@ paths:
               schema:
                 $ref: "#/components/schemas/BrainSearchResult"
 
+  /brain/activity:
+    get:
+      operationId: brainActivity
+      tags: [brain]
+      summary: Recent AI agent actions (activity timeline)
+      parameters:
+        - name: limit
+          in: query
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/AgentActivityResult"
+
+  /brain/knowledge-stats:
+    get:
+      operationId: brainKnowledgeStats
+      tags: [brain]
+      summary: Knowledge graph statistics for the dashboard overview
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/KnowledgeStats"
+
 components:
   schemas:
     HealthStatus:
@@ -978,3 +1009,37 @@ components:
           type: array
           items:
             $ref: "#/components/schemas/BrainSearchResultItem"
+
+    AgentAction:
+      type: object
+      required: [id, userId, actionType, summary, status, createdAt]
+      properties:
+        id: { type: string }
+        userId: { type: string }
+        chatId: { type: ["string", "null"] }
+        actionType: { type: string }
+        entityType: { type: ["string", "null"] }
+        entityId: { type: ["string", "null"] }
+        summary: { type: string }
+        status: { type: string }
+        createdAt: { type: string, format: date-time }
+
+    AgentActivityResult:
+      type: object
+      required: [actions]
+      properties:
+        actions:
+          type: array
+          items:
+            $ref: "#/components/schemas/AgentAction"
+
+    KnowledgeStats:
+      type: object
+      required: [nodeCount, edgeCount, byType]
+      properties:
+        nodeCount: { type: integer }
+        edgeCount: { type: integer }
+        byType:
+          type: object
+          additionalProperties:
+            type: integer

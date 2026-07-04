@@ -1,6 +1,5 @@
 import { Router, type IRouter } from "express";
-import { eq } from "drizzle-orm";
-import { db, graphNodesTable, graphEdgesTable } from "@workspace/db";
+import { knowledgeGraphService } from "../services/knowledgeGraphService";
 import {
   GetGraphResponse,
   CreateGraphNodeBody,
@@ -15,12 +14,8 @@ const router: IRouter = Router();
 router.use(requireAuth);
 
 router.get("/graph", async (req, res): Promise<void> => {
-  const [nodes, edges] = await Promise.all([
-    db.select().from(graphNodesTable).where(eq(graphNodesTable.userId, req.auth!.userId)),
-    db.select().from(graphEdgesTable).where(eq(graphEdgesTable.userId, req.auth!.userId)),
-  ]);
-
-  res.json(GetGraphResponse.parse({ nodes, edges }));
+  const graph = await knowledgeGraphService.getAll(req.auth!.userId);
+  res.json(GetGraphResponse.parse(graph));
 });
 
 router.post("/graph/nodes", async (req, res): Promise<void> => {
@@ -30,11 +25,7 @@ router.post("/graph/nodes", async (req, res): Promise<void> => {
     return;
   }
 
-  const [node] = await db
-    .insert(graphNodesTable)
-    .values({ ...parsed.data, userId: req.auth!.userId })
-    .returning();
-
+  const node = await knowledgeGraphService.createNode(req.auth!.userId, parsed.data);
   res.status(201).json(CreateGraphNodeResponse.parse(node));
 });
 
@@ -45,11 +36,7 @@ router.post("/graph/edges", async (req, res): Promise<void> => {
     return;
   }
 
-  const [edge] = await db
-    .insert(graphEdgesTable)
-    .values({ ...parsed.data, userId: req.auth!.userId })
-    .returning();
-
+  const edge = await knowledgeGraphService.createEdge(req.auth!.userId, parsed.data);
   res.status(201).json(CreateGraphEdgeResponse.parse(edge));
 });
 

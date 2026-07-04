@@ -669,3 +669,35 @@ export const BrainSearchResponse = zod.object({
 })
 
 
+/**
+ * @summary Recent AI agent actions (activity timeline)
+ */
+export const BrainActivityQueryParams = zod.object({
+  "limit": zod.coerce.number().optional()
+})
+
+export const BrainActivityResponse = zod.object({
+  "actions": zod.array(zod.object({
+  "id": zod.string(),
+  "userId": zod.string(),
+  "chatId": zod.string().nullish(),
+  "actionType": zod.string(),
+  "entityType": zod.string().nullish(),
+  "entityId": zod.string().nullish(),
+  "summary": zod.string(),
+  "status": zod.string(),
+  "createdAt": zod.coerce.date()
+}))
+})
+
+
+/**
+ * @summary Knowledge graph statistics for the dashboard overview
+ */
+export const BrainKnowledgeStatsResponse = zod.object({
+  "nodeCount": zod.number(),
+  "edgeCount": zod.number(),
+  "byType": zod.record(zod.string(), zod.number())
+})
+
+

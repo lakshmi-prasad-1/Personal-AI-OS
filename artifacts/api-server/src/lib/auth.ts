@@ -1,11 +1,15 @@
 import jwt from "jsonwebtoken";
 import type { Request, Response, NextFunction } from "express";
 
-const JWT_SECRET = process.env["JWT_SECRET"];
-
-if (!JWT_SECRET) {
-  throw new Error("JWT_SECRET must be set.");
+function getJwtSecret(): string {
+  const secret = process.env["JWT_SECRET"];
+  if (!secret) {
+    throw new Error("JWT_SECRET must be set.");
+  }
+  return secret;
 }
+
+const JWT_SECRET: string = getJwtSecret();
 
 export interface AuthTokenPayload {
   userId: string;

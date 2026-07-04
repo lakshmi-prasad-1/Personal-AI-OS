@@ -1,6 +1,6 @@
 import { Router, type IRouter } from "express";
-import { and, desc, eq } from "drizzle-orm";
-import { db, ideasTable } from "@workspace/db";
+import { ideasService } from "../services/ideasService";
+import { knowledgeGraphService } from "../services/knowledgeGraphService";
 import {
   ListIdeasResponse,
   CreateIdeaBody,
@@ -19,12 +19,7 @@ const router: IRouter = Router();
 router.use(requireAuth);
 
 router.get("/ideas", async (req, res): Promise<void> => {
-  const ideas = await db
-    .select()
-    .from(ideasTable)
-    .where(eq(ideasTable.userId, req.auth!.userId))
-    .orderBy(desc(ideasTable.updatedAt));
-
+  const ideas = await ideasService.list(req.auth!.userId);
   res.json(ListIdeasResponse.parse(ideas));
 });
 
@@ -35,10 +30,15 @@ router.post("/ideas", async (req, res): Promise<void> => {
     return;
   }
 
-  const [idea] = await db
-    .insert(ideasTable)
-    .values({ ...parsed.data, userId: req.auth!.userId })
-    .returning();
+  const idea = await ideasService.create(req.auth!.userId, parsed.data);
+  await knowledgeGraphService.autoLink({
+    userId: req.auth!.userId,
+    entityType: "idea",
+    entityId: idea.id,
+    label: idea.title,
+    text: `${idea.title} ${idea.content}`,
+    tags: idea.tags,
+  });
 
   res.status(201).json(CreateIdeaResponse.parse(idea));
 });
@@ -50,11 +50,7 @@ router.get("/ideas/:id", async (req, res): Promise<void> => {
     return;
   }
 
-  const [idea] = await db
-    .select()
-    .from(ideasTable)
-    .where(and(eq(ideasTable.id, params.data.id), eq(ideasTable.userId, req.auth!.userId)));
-
+  const idea = await ideasService.get(req.auth!.userId, params.data.id);
   if (!idea) {
     res.status(404).json({ error: "Idea not found" });
     return;
@@ -76,12 +72,7 @@ router.patch("/ideas/:id", async (req, res): Promise<void> => {
     return;
   }
 
-  const [idea] = await db
-    .update(ideasTable)
-    .set(parsed.data)
-    .where(and(eq(ideasTable.id, params.data.id), eq(ideasTable.userId, req.auth!.userId)))
-    .returning();
-
+  const idea = await ideasService.update(req.auth!.userId, params.data.id, parsed.data);
   if (!idea) {
     res.status(404).json({ error: "Idea not found" });
     return;
@@ -97,11 +88,7 @@ router.delete("/ideas/:id", async (req, res): Promise<void> => {
     return;
   }
 
-  const [idea] = await db
-    .delete(ideasTable)
-    .where(and(eq(ideasTable.id, params.data.id), eq(ideasTable.userId, req.auth!.userId)))
-    .returning();
-
+  const idea = await ideasService.remove(req.auth!.userId, params.data.id);
   if (!idea) {
     res.status(404).json({ error: "Idea not found" });
     return;

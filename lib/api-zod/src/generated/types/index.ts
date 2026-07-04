@@ -6,7 +6,10 @@
  * OpenAPI spec version: 0.1.0
  */
 
+export * from './agentAction';
+export * from './agentActivityResult';
 export * from './authResult';
+export * from './brainActivityParams';
 export * from './brainDecisionResult';
 export * from './brainSearchResult';
 export * from './brainSearchResultItem';
@@ -25,6 +28,8 @@ export * from './healthStatus';
 export * from './idea';
 export * from './ideaInput';
 export * from './ideaUpdate';
+export * from './knowledgeStats';
+export * from './knowledgeStatsByType';
 export * from './loginInput';
 export * from './memory';
 export * from './memoryInput';

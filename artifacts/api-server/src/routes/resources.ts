@@ -1,6 +1,6 @@
 import { Router, type IRouter } from "express";
-import { and, desc, eq } from "drizzle-orm";
-import { db, resourcesTable } from "@workspace/db";
+import { resourcesService } from "../services/resourcesService";
+import { knowledgeGraphService } from "../services/knowledgeGraphService";
 import {
   ListResourcesResponse,
   CreateResourceBody,
@@ -19,12 +19,7 @@ const router: IRouter = Router();
 router.use(requireAuth);
 
 router.get("/resources", async (req, res): Promise<void> => {
-  const resources = await db
-    .select()
-    .from(resourcesTable)
-    .where(eq(resourcesTable.userId, req.auth!.userId))
-    .orderBy(desc(resourcesTable.updatedAt));
-
+  const resources = await resourcesService.list(req.auth!.userId);
   res.json(ListResourcesResponse.parse(resources));
 });
 
@@ -35,10 +30,14 @@ router.post("/resources", async (req, res): Promise<void> => {
     return;
   }
 
-  const [resource] = await db
-    .insert(resourcesTable)
-    .values({ ...parsed.data, userId: req.auth!.userId })
-    .returning();
+  const resource = await resourcesService.create(req.auth!.userId, parsed.data);
+  await knowledgeGraphService.autoLink({
+    userId: req.auth!.userId,
+    entityType: "resource",
+    entityId: resource.id,
+    label: resource.title,
+    text: `${resource.title} ${resource.description ?? ""}`,
+  });
 
   res.status(201).json(CreateResourceResponse.parse(resource));
 });
@@ -50,11 +49,7 @@ router.get("/resources/:id", async (req, res): Promise<void> => {
     return;
   }
 
-  const [resource] = await db
-    .select()
-    .from(resourcesTable)
-    .where(and(eq(resourcesTable.id, params.data.id), eq(resourcesTable.userId, req.auth!.userId)));
-
+  const resource = await resourcesService.get(req.auth!.userId, params.data.id);
   if (!resource) {
     res.status(404).json({ error: "Resource not found" });
     return;
@@ -76,12 +71,7 @@ router.patch("/resources/:id", async (req, res): Promise<void> => {
     return;
   }
 
-  const [resource] = await db
-    .update(resourcesTable)
-    .set(parsed.data)
-    .where(and(eq(resourcesTable.id, params.data.id), eq(resourcesTable.userId, req.auth!.userId)))
-    .returning();
-
+  const resource = await resourcesService.update(req.auth!.userId, params.data.id, parsed.data);
   if (!resource) {
     res.status(404).json({ error: "Resource not found" });
     return;
@@ -97,11 +87,7 @@ router.delete("/resources/:id", async (req, res): Promise<void> => {
     return;
   }
 
-  const [resource] = await db
-    .delete(resourcesTable)
-    .where(and(eq(resourcesTable.id, params.data.id), eq(resourcesTable.userId, req.auth!.userId)))
-    .returning();
-
+  const resource = await resourcesService.remove(req.auth!.userId, params.data.id);
   if (!resource) {
     res.status(404).json({ error: "Resource not found" });
     return;
