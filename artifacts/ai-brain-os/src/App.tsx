@@ -15,6 +15,13 @@ import Memories from "@/pages/memories";
 import Resources from "@/pages/resources";
 import Graph from "@/pages/graph";
 import Chat from "@/pages/chat";
+import Tasks from "@/pages/tasks";
+import Goals from "@/pages/goals";
+import Habits from "@/pages/habits";
+import Focus from "@/pages/focus";
+import Reminders from "@/pages/reminders";
+import Planner from "@/pages/planner";
+import Reviews from "@/pages/reviews";
 
 const queryClient = new QueryClient();
 
@@ -45,6 +52,13 @@ function Router() {
         <ProtectedRoute path="/memories" component={Memories} />
         <ProtectedRoute path="/resources" component={Resources} />
         <ProtectedRoute path="/graph" component={Graph} />
+        <ProtectedRoute path="/tasks" component={Tasks} />
+        <ProtectedRoute path="/goals" component={Goals} />
+        <ProtectedRoute path="/habits" component={Habits} />
+        <ProtectedRoute path="/focus" component={Focus} />
+        <ProtectedRoute path="/reminders" component={Reminders} />
+        <ProtectedRoute path="/planner" component={Planner} />
+        <ProtectedRoute path="/reviews" component={Reviews} />
         <Route component={NotFound} />
       </Switch>
     </AppLayout>

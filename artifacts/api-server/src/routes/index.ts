@@ -9,6 +9,13 @@ import resourcesRouter from "./resources";
 import graphRouter from "./graph";
 import chatsRouter from "./chats";
 import brainRouter from "./brain";
+import tasksRouter from "./tasks";
+import goalsRouter from "./goals";
+import habitsRouter from "./habits";
+import focusRouter from "./focus";
+import remindersRouter from "./reminders";
+import plannerRouter from "./planner";
+import reviewsRouter from "./reviews";
 
 const router: IRouter = Router();
 
@@ -22,5 +29,12 @@ router.use(resourcesRouter);
 router.use(graphRouter);
 router.use(chatsRouter);
 router.use(brainRouter);
+router.use(tasksRouter);
+router.use(goalsRouter);
+router.use(habitsRouter);
+router.use(focusRouter);
+router.use(remindersRouter);
+router.use(plannerRouter);
+router.use(reviewsRouter);
 
 export default router;

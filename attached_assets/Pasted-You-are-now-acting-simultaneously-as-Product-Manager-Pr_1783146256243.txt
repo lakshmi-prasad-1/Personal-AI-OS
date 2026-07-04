@@ -1,0 +1,976 @@
+You are now acting simultaneously as:
+
+• Product Manager
+• Principal Software Architect
+• Principal AI Systems Architect
+• Principal Backend Engineer
+• Principal Frontend Engineer
+• Principal Database Architect
+• Principal AI Engineer
+• Senior DevOps Engineer
+• Senior QA Engineer
+
+============================================================
+
+MISSION
+
+Phase 1 has already been completed.
+
+DO NOT redesign the project.
+
+DO NOT rewrite existing architecture.
+
+DO NOT replace frameworks.
+
+DO NOT remove any existing features.
+
+DO NOT break authentication.
+
+DO NOT break AI Chat.
+
+DO NOT break Voice.
+
+DO NOT break Memory.
+
+DO NOT break Search.
+
+DO NOT break Knowledge Graph.
+
+DO NOT remove CRUD pages.
+
+Instead,
+
+extend the current project into
+
+AI Brain OS
+
+Phase 2A
+
+Productivity Operating System.
+
+============================================================
+
+IMPORTANT
+
+Before writing ANY code
+
+inspect the ENTIRE repository again.
+
+Understand
+
+Current Folder Structure
+
+Authentication
+
+Database
+
+Repositories
+
+Services
+
+Chat
+
+Voice
+
+Intent Engine
+
+Context Engine
+
+Decision Engine
+
+Action Engine
+
+Memory Engine
+
+Knowledge Graph
+
+Dashboard
+
+Activity Timeline
+
+Shared Services
+
+Validation
+
+Logging
+
+Search
+
+Current APIs
+
+Understand how everything currently works.
+
+Reuse existing architecture.
+
+Never duplicate logic.
+
+============================================================
+
+GOAL
+
+The AI should become my personal productivity assistant.
+
+I should no longer need to manually manage
+
+Tasks
+
+Planner
+
+Goals
+
+Habits
+
+Reminders
+
+Focus Sessions
+
+Reviews
+
+Everything should be manageable through
+
+Chat
+
+or
+
+Voice.
+
+============================================================
+
+ARCHITECTURE
+
+Every productivity feature must follow
+
+User
+
+↓
+
+Text
+
+or
+
+Voice
+
+↓
+
+Speech Recognition
+
+↓
+
+Intent Engine
+
+↓
+
+Context Engine
+
+↓
+
+Decision Engine
+
+↓
+
+Productivity Action Engine
+
+↓
+
+Shared Services
+
+↓
+
+Repositories
+
+↓
+
+Database
+
+↓
+
+Knowledge Graph
+
+↓
+
+Dashboard
+
+↓
+
+Activity Timeline
+
+↓
+
+AI Response
+
+Never bypass this pipeline.
+
+============================================================
+
+MODULE 1
+
+TASK MANAGEMENT
+
+Implement a professional task system.
+
+Support
+
+Task Title
+
+Description
+
+Priority
+
+Category
+
+Status
+
+Due Date
+
+Due Time
+
+Estimated Time
+
+Tags
+
+Difficulty
+
+Subtasks
+
+Attachments (future-ready)
+
+AI Summary
+
+Created By AI
+
+Created Manually
+
+Completion Time
+
+Recurring Tasks
+
+Task Dependencies
+
+Soft Delete
+
+Archive
+
+Search
+
+Filtering
+
+Sorting
+
+Bulk Operations
+
+The AI should automatically create tasks from conversation.
+
+Example
+
+"I have a DBMS assignment due Friday."
+
+↓
+
+Task created
+
+↓
+
+Priority assigned
+
+↓
+
+Deadline stored
+
+↓
+
+Knowledge updated
+
+↓
+
+Dashboard updated
+
+↓
+
+Activity logged
+
+↓
+
+AI confirms action.
+
+============================================================
+
+MODULE 2
+
+SMART PLANNER
+
+Implement an intelligent planner.
+
+Planner should support
+
+Daily Plan
+
+Weekly Plan
+
+Monthly Plan
+
+Time Blocks
+
+Study Sessions
+
+Project Sessions
+
+Coding Sessions
+
+College Schedule
+
+Break Time
+
+Free Time
+
+Buffer Time
+
+AI should automatically arrange schedule.
+
+Example
+
+"I have college till 4."
+
+↓
+
+Planner rearranges
+
+↓
+
+Moves study session
+
+↓
+
+Moves project work
+
+↓
+
+Updates dashboard.
+
+============================================================
+
+MODULE 3
+
+REMINDER ENGINE
+
+Support
+
+One-time reminders
+
+Recurring reminders
+
+Relative reminders
+
+Smart reminders
+
+Deadline reminders
+
+Overdue reminders
+
+Examples
+
+Remind me tomorrow at 6.
+
+Every Wednesday check Microsoft Careers.
+
+Remind me after class.
+
+Remind me every month to update resume.
+
+The AI should infer reminders from conversations whenever appropriate.
+
+============================================================
+
+MODULE 4
+
+GOAL MANAGEMENT
+
+Implement long-term goals.
+
+Support
+
+Short-term goals
+
+Long-term goals
+
+Milestones
+
+Progress
+
+Priority
+
+Completion %
+
+Categories
+
+Examples
+
+Learn React
+
+Master DSA
+
+Get Internship
+
+Complete AI Brain OS
+
+Become Software Engineer
+
+AI should connect goals with tasks.
+
+============================================================
+
+MODULE 5
+
+HABIT TRACKER
+
+Support
+
+Daily Habits
+
+Weekly Habits
+
+Monthly Habits
+
+Habit Streak
+
+Completion %
+
+Missed Days
+
+Statistics
+
+Examples
+
+Study
+
+Coding
+
+LeetCode
+
+Projects
+
+Reading
+
+Gym
+
+Meditation
+
+Sleep
+
+The AI should recommend habits based on user behavior.
+
+============================================================
+
+MODULE 6
+
+FOCUS MODE
+
+Implement
+
+Pomodoro
+
+Focus Sessions
+
+Break Timer
+
+Long Break
+
+Session Statistics
+
+Focus History
+
+Session Notes
+
+Distraction Count (future-ready)
+
+Examples
+
+Start Focus Mode
+
+Pause
+
+Resume
+
+Stop
+
+Everything should update automatically.
+
+============================================================
+
+MODULE 7
+
+DAILY REVIEW
+
+Generate automatically
+
+Tasks Completed
+
+Hours Studied
+
+Hours Coding
+
+Goals Progress
+
+Habit Progress
+
+Focus Time
+
+Recommendations
+
+Missed Work
+
+Knowledge Added
+
+Ideas Added
+
+Resources Saved
+
+============================================================
+
+MODULE 8
+
+WEEKLY REVIEW
+
+Every week generate
+
+Study Hours
+
+Coding Hours
+
+Project Progress
+
+LeetCode
+
+Goals
+
+Habits
+
+Focus
+
+Completed Tasks
+
+Pending Tasks
+
+Recommendations
+
+Achievements
+
+============================================================
+
+MODULE 9
+
+PRODUCTIVITY DASHBOARD
+
+Transform Dashboard into
+
+Today's Brain
+
+Display
+
+Today's Tasks
+
+Today's Planner
+
+Current Focus Session
+
+Today's Goals
+
+Today's Habits
+
+Upcoming Reminders
+
+Recent Activity
+
+AI Suggestions
+
+Weekly Progress
+
+Knowledge Growth
+
+============================================================
+
+MODULE 10
+
+AI PRODUCTIVITY ENGINE
+
+The AI should answer
+
+What should I do today?
+
+What should I study?
+
+Plan my tomorrow.
+
+Plan next week.
+
+Which task is most important?
+
+What deadlines are near?
+
+What habit should I improve?
+
+The AI should reason before answering.
+
+============================================================
+
+MODULE 11
+
+VOICE EXPERIENCE
+
+Everything must work through microphone.
+
+Examples
+
+Create task
+
+Delete task
+
+Complete task
+
+Plan tomorrow
+
+Start focus mode
+
+Pause timer
+
+Resume timer
+
+Complete goal
+
+Create reminder
+
+Update planner
+
+Voice must use
+
+the exact same pipeline
+
+as text.
+
+============================================================
+
+MODULE 12
+
+CHAT EXPERIENCE
+
+Natural language should automatically
+
+Create Tasks
+
+Update Tasks
+
+Delete Tasks
+
+Complete Tasks
+
+Create Goals
+
+Create Habits
+
+Create Reminders
+
+Plan Days
+
+Start Focus Mode
+
+Generate Reviews
+
+The user should never need to manually fill forms unless editing.
+
+============================================================
+
+MODULE 13
+
+DATABASE
+
+Create schemas only where necessary.
+
+Tasks
+
+Planner
+
+Planner Events
+
+Goals
+
+Habits
+
+Habit Logs
+
+Focus Sessions
+
+Pomodoro Sessions
+
+Reminders
+
+Daily Reviews
+
+Weekly Reviews
+
+Keep schema future-ready.
+
+============================================================
+
+MODULE 14
+
+SERVICES
+
+Create reusable services.
+
+Never duplicate logic.
+
+TaskService
+
+PlannerService
+
+ReminderService
+
+GoalService
+
+HabitService
+
+FocusService
+
+PomodoroService
+
+ReviewService
+
+RecommendationService
+
+All AI actions must call services.
+
+============================================================
+
+MODULE 15
+
+API
+
+Create clean REST APIs.
+
+Maintain compatibility.
+
+Support AI Action layer.
+
+Support future mobile app.
+
+Support future Telegram.
+
+Support future n8n.
+
+Support future Calendar.
+
+============================================================
+
+MODULE 16
+
+KNOWLEDGE GRAPH
+
+Tasks
+
+Goals
+
+Habits
+
+Planner
+
+Reminders
+
+Focus Sessions
+
+should automatically connect into the Knowledge Graph.
+
+============================================================
+
+MODULE 17
+
+MEMORY
+
+The AI should remember
+
+Preferred study times
+
+Preferred work times
+
+Frequently delayed tasks
+
+Favorite subjects
+
+Recurring goals
+
+Habit history
+
+Productivity patterns
+
+Use these memories in future planning.
+
+============================================================
+
+MODULE 18
+
+RECOMMENDATION ENGINE
+
+AI should proactively recommend
+
+Study
+
+Projects
+
+LeetCode
+
+Assignments
+
+Breaks
+
+Sleep
+
+Coding
+
+Career preparation
+
+based on
+
+Goals
+
+Habits
+
+Planner
+
+Tasks
+
+History
+
+Current workload
+
+============================================================
+
+MODULE 19
+
+ACTIVITY TIMELINE
+
+Log every productivity action.
+
+Examples
+
+Task Created
+
+Task Updated
+
+Reminder Created
+
+Planner Updated
+
+Goal Completed
+
+Habit Updated
+
+Focus Started
+
+Focus Completed
+
+Daily Review Generated
+
+Weekly Review Generated
+
+============================================================
+
+MODULE 20
+
+TESTING
+
+Before stopping verify
+
+✓ Authentication still works
+
+✓ Existing CRUD works
+
+✓ Chat works
+
+✓ Voice works
+
+✓ Intent Engine works
+
+✓ Context Engine works
+
+✓ Decision Engine works
+
+✓ Task creation through AI works
+
+✓ Voice task creation works
+
+✓ Planner works
+
+✓ Goals work
+
+✓ Habits work
+
+✓ Reminders work
+
+✓ Focus Mode works
+
+✓ Reviews work
+
+✓ Dashboard updates correctly
+
+✓ Knowledge Graph updates correctly
+
+✓ Activity Timeline updates correctly
+
+✓ APIs remain compatible
+
+✓ No duplicated business logic
+
+✓ No route contains business logic
+
+✓ Everything uses shared services
+
+============================================================
+
+DO NOT IMPLEMENT
+
+Study OS
+
+Career OS
+
+Resume AI
+
+ATS
+
+Job Automation
+
+Interview AI
+
+n8n Workflows
+
+Google Calendar
+
+Telegram
+
+WhatsApp
+
+Browser Automation
+
+Mobile App
+
+Leave interfaces ready for them.
+
+============================================================
+
+SUCCESS CRITERIA
+
+By the end of Phase 2A,
+
+AI Brain OS should feel like a professional AI-powered Productivity Operating System.
+
+A user should be able to manage nearly all daily productivity through natural conversation or voice, while the AI automatically plans, schedules, tracks progress, updates memory, maintains the knowledge graph, logs actions, and keeps the dashboard synchronized.
+
+Do not stop after implementing one feature.
+
+Continue module-by-module until every module in this document is implemented, integrated, tested, and verified.
+
+Finally, provide:
+
+1. Completed modules.
+2. Files created.
+3. Files modified.
+4. Architecture decisions.
+5. Remaining technical debt.
+6. Any deferred work for Phase 2B.
