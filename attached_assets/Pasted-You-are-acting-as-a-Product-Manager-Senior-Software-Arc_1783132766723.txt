@@ -1,0 +1,153 @@
+You are acting as a Product Manager, Senior Software Architect, AI Systems Architect, and Senior Full Stack Engineer.
+
+IMPORTANT:
+Stop coding. Do NOT create or modify files, generate components, APIs, or write any code. Your only task is to analyze the entire repository, compare it against the product vision below, identify gaps, and produce a Version 1 implementation roadmap.
+
+PROJECT: AI Brain OS
+
+PRODUCT VISION:
+This is not a Notes app, Task Manager, CRUD app, or chatbot. Those are only internal systems. The real goal is a Personal AI Operating System—an AI Executive Assistant that manages my academic, career, productivity, and personal knowledge. The AI should be the primary interface. Users should simply chat naturally while the AI understands intent, performs actions automatically, remembers everything, organizes knowledge, tracks progress, optimizes schedules, and becomes smarter over time.
+
+HOW IT SHOULD WORK:
+The user should only interact with the AI Chat. Example inputs include:
+- I have an assignment
+- I have an idea
+- Remember this
+- Plan tomorrow
+- Save this article
+- Remind me tomorrow
+- I finished studying
+- I solved five LeetCode problems
+- I have an interview next week
+- What should I study today?
+- What should I do now?
+
+The AI should automatically detect intent and execute the required actions.
+
+AUTOMATIC AI ACTIONS:
+- Create Tasks & Reminders
+- Store Memories, Notes, Ideas & Resources
+- Update Planner, Goals & Habits
+- Track Study & Career Progress
+- Update Dashboard
+- Retrieve Relevant Context
+- Generate Recommendations & AI Responses
+
+The user should never need to manually navigate multiple pages.
+
+LONG-TERM MEMORY:
+The AI should remember Goals, Semester, Subjects, Skills, Resume, Projects, Career Interests, Companies, Interview Preparation, Books, Roadmaps, Resources, Coding & LeetCode Progress, Study Progress, Daily Notes, Thoughts, Habits, Tasks, Planner, Important Conversations, and Preferences.
+
+CORE MODULES:
+
+AI Brain:
+- AI Chat
+- Memory Engine
+- Context Engine
+- Semantic Search
+- Smart Notes
+- Resource Vault
+- Idea Vault
+- Knowledge Graph
+- Decision Engine
+- Intent Classifier
+- Action Executor
+- Voice-ready Architecture
+
+Productivity:
+Tasks, Planner, Goals, Habits, Focus Sessions, Pomodoro, Reminders, Daily/Weekly Reviews, Study Planner, Calendar, Natural Language Planning.
+
+Study:
+PDF/Notes/PPT Uploads, Video Links, Summaries, Flashcards, Quiz Generation, Weak Topic Detection, Revision Suggestions, Analytics, Learning Progress.
+
+Career:
+Resume Upload & Versioning, Resume/ATS Analysis, Resume Improvement, Job Description Analysis, Skill Gap Analysis, Career Roadmap, Application Tracker, Internship Tracker, Interview Tracker, Company Tracker, Resume Suggestions.
+
+Version 1 MUST NOT include:
+- Job Scraping
+- Browser Automation
+- Auto Applications
+- LinkedIn Automation
+
+Automation (Architecture Only):
+Prepare architecture for n8n, Telegram, Google Calendar, Email, Notifications, Browser Automation, Job Monitoring, and Voice Commands. Do not implement them.
+
+CURRENT ISSUE:
+The project currently appears centered around CRUD pages (Notes, Ideas, Resources, Memories, Knowledge Graph). These should only be internal databases. The AI Chat must become the primary interface, with every other module supporting it behind the scenes.
+
+YOUR TASK:
+Inspect the entire repository, including Frontend, Backend, Architecture, Database, Services, Routes, Models, Components, Pages, AI Services, and Business Logic. Compare the implementation with the product vision.
+
+GENERATE A COMPLETE REPORT:
+
+1. Current Project Summary
+- Explain what the repository currently is.
+
+2. Completed Features
+Group by:
+- Authentication
+- AI Brain
+- Productivity
+- Study
+- Career
+- Infrastructure
+- Frontend
+- Backend
+
+3. Partially Completed Features
+- Explain what exists but still needs work.
+
+4. Features Misaligned with the Vision
+- Explain why they don't match the vision and how they should evolve.
+
+5. Missing Features
+Group into:
+- AI Brain
+- Productivity
+- Study
+- Career
+- Automation
+
+6. Architecture Review
+Evaluate:
+- Folder Structure
+- Code Quality
+- Scalability
+- Maintainability
+- Reusability
+- Performance
+- Security
+- Database Design
+- API Design
+- Frontend Design
+- AI Design
+- Knowledge Flow
+- Context Flow
+- Decision Flow
+- Intent Flow
+
+7. Version 1 User Experience
+Describe how Version 1 should behave from the user's perspective. AI Chat should be the primary interface, while every other module works behind it.
+
+8. Version 1 Roadmap
+Provide the exact implementation order, including only Version 1 features.
+
+9. Version 2 Roadmap
+Include only advanced features:
+- Job Monitoring
+- Job Scraping
+- Browser Automation
+- Auto Apply
+- Voice Recognition
+- Mobile App
+- n8n Automation
+- Multi-Agent AI
+
+10. Implementation Strategy
+Recommend the safest development order, explain dependencies, estimate complexity, identify risks, and justify the sequence.
+
+FINAL INSTRUCTIONS:
+Do NOT implement anything.
+Do NOT write code.
+Do NOT generate files.
+Fully understand the repository, compare it against the product vision, and deliver a professional Product Review, Architecture Review, Gap Analysis, and Version 1 Roadmap. Implementation should begin only after this report is approved.
