@@ -14,7 +14,9 @@ export type LinkableEntityType =
   | "project"
   | "resume"
   | "career_goal"
-  | "interview_topic";
+  | "interview_topic"
+  | "job_application"
+  | "company";
 
 function tokenize(text: string): Set<string> {
   return new Set(

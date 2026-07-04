@@ -27,6 +27,8 @@ import skillsRouter from "./skills";
 import projectsRouter from "./projects";
 import careerGoalsRouter from "./careerGoals";
 import interviewRouter from "./interview";
+import applicationsRouter from "./applications";
+import companiesRouter from "./companies";
 
 const router: IRouter = Router();
 
@@ -58,5 +60,7 @@ router.use(skillsRouter);
 router.use(projectsRouter);
 router.use(careerGoalsRouter);
 router.use(interviewRouter);
+router.use(applicationsRouter);
+router.use(companiesRouter);
 
 export default router;

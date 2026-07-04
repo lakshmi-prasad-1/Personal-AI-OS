@@ -1,0 +1,848 @@
+You are continuing development of an existing project called "AI Brain OS".
+
+You are NOT starting from scratch.
+
+Act simultaneously as:
+
+• Principal Product Manager
+• Principal Software Architect
+• Principal AI Systems Architect
+• Principal Backend Engineer
+• Principal Frontend Engineer
+• Principal Database Architect
+• Principal AI Engineer
+• Principal QA Engineer
+• Principal DevOps Engineer
+
+========================================================
+
+MISSION
+
+Continue implementing AI Brain OS.
+
+DO NOT rewrite the project.
+
+DO NOT replace frameworks.
+
+DO NOT remove existing code.
+
+DO NOT duplicate services.
+
+DO NOT recreate already existing modules.
+
+Instead:
+
+• Inspect the complete repository.
+• Understand what is already implemented.
+• Identify completed, partially completed and missing features.
+• Continue ONLY the remaining work.
+
+Always reuse the existing architecture.
+
+========================================================
+
+CURRENT STATUS
+
+Phase 1 is complete.
+
+Included:
+
+✓ AI Intent Engine
+✓ Context Engine
+✓ Decision Engine
+✓ Action Engine
+✓ Memory Engine
+✓ Universal Search
+✓ Knowledge Graph
+✓ Voice Input
+✓ Shared Services
+✓ Dashboard
+✓ Logging
+✓ Validation
+✓ AI Chat Pipeline
+
+--------------------------------------------------------
+
+Phase 2A is complete.
+
+Included:
+
+✓ Tasks
+✓ Goals
+✓ Habits
+✓ Planner
+✓ Focus Sessions
+✓ Pomodoro
+✓ Reminders
+✓ Reviews
+✓ Dashboard Widgets
+✓ AI Integration
+
+--------------------------------------------------------
+
+Phase 2B is complete.
+
+Included:
+
+✓ Study Profile
+✓ Subjects
+✓ Topics
+✓ Flashcards
+✓ Quizzes
+✓ Revision Engine
+✓ Weak Topic Detection
+✓ AI Teacher
+✓ Study Analytics
+✓ Voice Integration
+✓ Knowledge Graph Integration
+
+--------------------------------------------------------
+
+Career OS has already been started.
+
+Some database models
+
+services
+
+routes
+
+AI tools
+
+frontend pages
+
+already exist.
+
+You MUST inspect everything first.
+
+Never recreate existing implementations.
+
+Only finish what remains.
+
+========================================================
+
+GOAL
+
+Complete Career OS Version 1.
+
+Everything must integrate into the existing AI architecture.
+
+Chat remains the primary interface.
+
+Voice uses the exact same pipeline.
+
+========================================================
+
+MODULE 1
+
+Resume Manager
+
+Implement or complete:
+
+• Resume Upload
+• Resume Storage
+• Resume Version History
+• Resume Metadata
+• Resume Preview
+• Resume Rename
+• Resume Duplicate
+• Resume Delete
+• Resume Statistics
+• Default Resume Selection
+
+AI must be able to access resumes.
+
+========================================================
+
+MODULE 2
+
+Resume AI
+
+Given a stored resume,
+
+AI should:
+
+Summarize Resume
+
+Analyze Strengths
+
+Analyze Weaknesses
+
+ATS Compatibility Score
+
+Keyword Suggestions
+
+Missing Skills
+
+Technical Skills Analysis
+
+Soft Skills Analysis
+
+Project Analysis
+
+Education Analysis
+
+Experience Analysis
+
+Resume Quality Score
+
+Improvement Suggestions
+
+Everything available through chat.
+
+Examples:
+
+Analyze my resume
+
+Improve my resume
+
+What skills am I lack?
+
+========================================================
+
+MODULE 3
+
+Job Description Analysis
+
+User pastes a Job Description.
+
+AI should:
+
+Extract:
+
+Role
+
+Company
+
+Responsibilities
+
+Skills
+
+Technologies
+
+Experience
+
+Education
+
+Employment Type
+
+Location
+
+Salary (if available)
+
+Then compare against Resume.
+
+Return:
+
+Resume Match %
+
+Missing Skills
+
+Matching Skills
+
+Learning Suggestions
+
+Priority Skills
+
+========================================================
+
+MODULE 4
+
+Skill Gap Engine
+
+Maintain user's skills.
+
+Compare
+
+Resume
+
+Projects
+
+Study Profile
+
+Career Goals
+
+against
+
+Job Description
+
+Generate:
+
+Missing Skills
+
+Learning Priority
+
+Estimated Time
+
+Recommended Resources
+
+Weekly Learning Plan
+
+========================================================
+
+MODULE 5
+
+Career Roadmap
+
+Generate personalized roadmap.
+
+Examples:
+
+Frontend
+
+Backend
+
+Full Stack
+
+AI Engineer
+
+ML Engineer
+
+Cloud Engineer
+
+Cyber Security
+
+Roadmap contains:
+
+Skills
+
+Projects
+
+Certifications
+
+Timeline
+
+Weekly Goals
+
+Monthly Goals
+
+Resources
+
+Progress
+
+AI continuously updates roadmap.
+
+========================================================
+
+MODULE 6
+
+Career Goals
+
+Implement:
+
+Career Goals
+
+Dream Companies
+
+Preferred Technologies
+
+Preferred Roles
+
+Expected Salary
+
+Preferred Location
+
+Graduation Target
+
+Milestones
+
+Progress Tracking
+
+AI Recommendations
+
+========================================================
+
+MODULE 7
+
+Projects Portfolio
+
+Manage:
+
+Projects
+
+Github
+
+Demo
+
+Description
+
+Technologies
+
+Images
+
+Status
+
+Progress
+
+Learning Outcomes
+
+AI Suggestions
+
+Portfolio Score
+
+========================================================
+
+MODULE 8
+
+Interview Preparation
+
+Build:
+
+Interview Questions
+
+Behavioral
+
+Technical
+
+Coding
+
+System Design
+
+HR
+
+Company Specific
+
+Difficulty Levels
+
+AI Interviewer
+
+Answer Evaluation
+
+Feedback
+
+Score
+
+Weak Areas
+
+History
+
+========================================================
+
+MODULE 9
+
+Application Tracker
+
+IMPORTANT
+
+Do NOT automate applications.
+
+Do NOT scrape websites.
+
+Implement Manual Tracker only.
+
+Fields:
+
+Company
+
+Role
+
+Applied Date
+
+Deadline
+
+Status
+
+Interview
+
+Assessment
+
+Offer
+
+Rejected
+
+Notes
+
+Documents
+
+Reminder
+
+Timeline
+
+========================================================
+
+MODULE 10
+
+Company Tracker
+
+Manage:
+
+Companies
+
+Career Page
+
+Website
+
+Research
+
+Culture
+
+Benefits
+
+Hiring Process
+
+Interview Rounds
+
+Priority
+
+Notes
+
+AI Summary
+
+========================================================
+
+MODULE 11
+
+Career Dashboard
+
+Dashboard should display:
+
+Resume Health
+
+Career Goals
+
+Projects
+
+Interview Readiness
+
+Applications
+
+Upcoming Interviews
+
+Skill Gaps
+
+Learning Progress
+
+AI Recommendations
+
+Weekly Career Summary
+
+========================================================
+
+MODULE 12
+
+AI Chat Integration
+
+Everything should work through chat.
+
+Examples:
+
+Analyze my resume
+
+Improve my resume
+
+Create career goal
+
+Add project
+
+Track application
+
+Compare with job description
+
+Generate roadmap
+
+Show interview questions
+
+Everything follows:
+
+User
+
+↓
+
+Chat
+
+↓
+
+Voice/Text
+
+↓
+
+Intent Engine
+
+↓
+
+Context Engine
+
+↓
+
+Decision Engine
+
+↓
+
+Action Engine
+
+↓
+
+Shared Services
+
+↓
+
+Database
+
+↓
+
+Response
+
+Never bypass this architecture.
+
+========================================================
+
+MODULE 13
+
+Voice Integration
+
+Voice commands:
+
+Analyze my resume
+
+Track application
+
+Create goal
+
+Add project
+
+Explain skill gap
+
+Same pipeline as text.
+
+========================================================
+
+MODULE 14
+
+Knowledge Graph
+
+Automatically connect:
+
+Resume
+
+Projects
+
+Skills
+
+Career Goals
+
+Companies
+
+Applications
+
+Interview Questions
+
+Roadmaps
+
+Knowledge graph updates automatically.
+
+========================================================
+
+MODULE 15
+
+Memory Engine
+
+Remember:
+
+Career Interests
+
+Dream Companies
+
+Preferred Stack
+
+Resume Versions
+
+Skills
+
+Interview History
+
+Career Decisions
+
+Use these memories in future AI responses.
+
+========================================================
+
+MODULE 16
+
+Universal Search
+
+Career entities must appear in:
+
+Global Search
+
+AI Search
+
+Context Retrieval
+
+Semantic Search
+
+========================================================
+
+MODULE 17
+
+AI Recommendations
+
+Generate recommendations:
+
+Improve Resume
+
+Learn Docker
+
+Build Project
+
+Practice DSA
+
+Mock Interview
+
+Apply Next Week
+
+Revise React
+
+Study Cloud
+
+========================================================
+
+MODULE 18
+
+Validation
+
+Validate every AI action.
+
+Validate:
+
+Resume
+
+Projects
+
+Applications
+
+Goals
+
+Companies
+
+Interview Records
+
+Never trust AI output directly.
+
+========================================================
+
+MODULE 19
+
+Performance
+
+Reuse:
+
+Existing Services
+
+Repositories
+
+Database Layer
+
+Shared Architecture
+
+Avoid duplicate queries.
+
+Avoid duplicated code.
+
+Follow SOLID principles.
+
+========================================================
+
+MODULE 20
+
+Verification
+
+Before completion verify:
+
+✓ Authentication
+
+✓ Existing CRUD pages
+
+✓ Productivity OS
+
+✓ Study OS
+
+✓ Career OS
+
+✓ AI Chat
+
+✓ Voice Input
+
+✓ Dashboard
+
+✓ Knowledge Graph
+
+✓ Context Engine
+
+✓ Search
+
+✓ Memory
+
+✓ AI Pipeline
+
+✓ Database Migration
+
+✓ APIs
+
+✓ Frontend
+
+✓ No new TypeScript errors
+
+========================================================
+
+DO NOT IMPLEMENT YET
+
+❌ Automatic Job Search
+
+❌ LinkedIn Scraping
+
+❌ Auto Apply
+
+❌ Browser Automation
+
+❌ Selenium
+
+❌ Playwright
+
+❌ n8n
+
+❌ Telegram
+
+❌ WhatsApp
+
+❌ Email Automation
+
+❌ Calendar Sync
+
+❌ Push Notifications
+
+These belong to future phases.
+
+========================================================
+
+IMPLEMENTATION RULES
+
+• Do NOT ask for confirmation after every task.
+• Continue until all remaining Career OS work is completed.
+• Improve existing modules instead of recreating them.
+• Follow the existing project structure and coding style.
+• Reuse all existing services and AI pipeline components.
+• Keep Chat as the primary interface.
+• Ensure Voice uses the same AI pipeline.
+• Preserve backward compatibility with all existing features.
+
+========================================================
+
+FINAL REPORT
+
+When finished, provide:
+
+1. Career OS modules completed.
+2. Existing modules reused.
+3. Files created.
+4. Files modified.
+5. Database changes.
+6. AI tools added.
+7. Chat capabilities added.
+8. Voice capabilities added.
+9. Dashboard enhancements.
+10. Knowledge Graph enhancements.
+11. Remaining technical debt.
+12. Verification checklist.
+13. Any known limitations.
+
+Success Criteria:
+Career OS Version 1 is fully complete, deeply integrated with the existing AI Brain OS architecture, and all Career features work through both Chat and Voice while preserving all previously completed phases.

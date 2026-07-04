@@ -1,0 +1,784 @@
+You are continuing development of an existing project.
+
+You are NOT starting from scratch.
+
+You are acting simultaneously as:
+
+Principal Product Manager
+Principal Software Architect
+Principal AI Systems Architect
+Principal Backend Engineer
+Principal Frontend Engineer
+Principal Database Architect
+Principal AI Engineer
+Principal QA Engineer
+VERY IMPORTANT
+
+Before writing ANY code:
+
+Inspect the ENTIRE repository.
+
+Determine exactly:
+
+what already exists
+what is partially implemented
+what is fully completed
+what is missing
+what is broken
+what only needs integration
+
+DO NOT recreate already existing code.
+
+DO NOT duplicate services.
+
+DO NOT duplicate database models.
+
+DO NOT create parallel architectures.
+
+Reuse everything already built.
+
+CURRENT PROJECT STATUS
+
+The following phases are considered COMPLETE.
+
+Phase 1
+
+✓ AI-first architecture
+
+✓ Intent Engine
+
+✓ Context Engine
+
+✓ Action Engine
+
+✓ Decision Engine
+
+✓ Search Engine
+
+✓ Memory Engine
+
+✓ Knowledge Graph
+
+✓ Voice Input
+
+✓ Universal Search
+
+✓ Chat becomes primary interface
+
+✓ Shared Services
+
+✓ Logging
+
+✓ Dashboard
+
+✓ AI Pipeline
+
+Phase 2A
+
+Productivity OS
+
+Completed:
+
+Tasks
+
+Planner
+
+Goals
+
+Habits
+
+Focus Sessions
+
+Pomodoro
+
+Reviews
+
+Reminders
+
+Daily Planner
+
+Dashboard widgets
+
+AI tools
+
+Chat integration
+
+Voice integration
+
+Phase 2B
+
+Study OS
+
+Completed:
+
+Study Profile
+
+Subjects
+
+Topics
+
+Flashcards
+
+Spaced Repetition
+
+Quizzes
+
+Weak Topic Detection
+
+Revision Engine
+
+Study Analytics
+
+AI Teacher
+
+Knowledge Graph integration
+
+Voice integration
+
+Chat integration
+
+PHASE 3A STATUS
+
+Career OS has been started.
+
+Backend implementation is partially completed.
+
+Some schemas
+
+services
+
+routes
+
+AI tools
+
+already exist.
+
+Some frontend pages may also already exist.
+
+FIRST TASK
+
+Audit the Career OS implementation.
+
+Determine exactly:
+
+✓ completed
+
+✓ partially completed
+
+✓ missing
+
+Do NOT guess.
+
+Inspect the repository.
+
+Continue ONLY from the current state.
+
+GOAL
+
+Complete Career OS Version 1.
+
+MODULE 1
+
+Resume Manager
+
+Implement or finish:
+
+Resume upload
+
+Resume storage
+
+Resume version history
+
+Resume metadata
+
+Default resume
+
+Resume preview
+
+Resume delete
+
+Resume rename
+
+Resume duplicate
+
+Resume statistics
+
+AI should access resumes.
+
+MODULE 2
+
+Resume AI
+
+Given a resume
+
+AI can
+
+summarize it
+
+analyze strengths
+
+find weak points
+
+detect missing skills
+
+suggest improvements
+
+ATS compatibility score
+
+keyword suggestions
+
+technical skill analysis
+
+soft skill analysis
+
+project analysis
+
+education analysis
+
+experience analysis
+
+recommend improvements
+
+Everything should be available through Chat.
+
+Example
+
+Analyze my resume
+
+Improve my resume
+
+What skills am I missing?
+
+MODULE 3
+
+Job Description Analysis
+
+User pastes a JD.
+
+AI should
+
+summarize
+
+extract requirements
+
+extract skills
+
+extract technologies
+
+experience requirements
+
+responsibilities
+
+salary (if available)
+
+location
+
+employment type
+
+difficulty
+
+priority
+
+Then compare against resume.
+
+Return
+
+Resume Match %
+
+Missing Skills
+
+Strong Skills
+
+Recommendations
+
+Learning Path
+
+MODULE 4
+
+Skill Gap Engine
+
+Maintain user's skills.
+
+Compare
+
+resume
+
+projects
+
+study profile
+
+career goals
+
+against
+
+job descriptions.
+
+Generate
+
+Missing skills
+
+Priority order
+
+Difficulty
+
+Learning recommendations
+
+Estimated learning time
+
+Courses/resources suggestions
+
+MODULE 5
+
+Career Roadmap
+
+Generate roadmap.
+
+Example
+
+Frontend
+
+Backend
+
+Full Stack
+
+AI Engineer
+
+ML Engineer
+
+Cloud Engineer
+
+Cyber Security
+
+Roadmap should contain
+
+skills
+
+projects
+
+certifications
+
+timeline
+
+weekly goals
+
+monthly goals
+
+Resources
+
+AI updates roadmap automatically.
+
+MODULE 6
+
+Career Goals
+
+Implement
+
+Career goals
+
+Target companies
+
+Dream companies
+
+Target roles
+
+Target salary
+
+Target location
+
+Target graduation year
+
+Preferred stack
+
+Preferred technologies
+
+Progress tracking
+
+Milestones
+
+AI recommendations.
+
+MODULE 7
+
+Projects Portfolio
+
+Manage
+
+Projects
+
+Github
+
+Demo
+
+Technologies
+
+Screenshots
+
+Description
+
+Status
+
+Progress
+
+Learning
+
+AI suggestions
+
+Project improvements
+
+Portfolio scoring
+
+MODULE 8
+
+Interview Preparation
+
+Create
+
+Interview Questions
+
+Behavioral
+
+Technical
+
+System Design
+
+Coding
+
+Company specific
+
+Difficulty levels
+
+AI interviewer
+
+Answer evaluation
+
+Feedback
+
+Score
+
+Improvement suggestions
+
+Weak areas
+
+History
+
+MODULE 9
+
+Application Tracker
+
+DO NOT implement automatic job searching.
+
+DO NOT scrape websites.
+
+DO NOT automate applications.
+
+Instead build:
+
+Manual Application Tracker.
+
+Fields
+
+Company
+
+Role
+
+Date Applied
+
+Deadline
+
+Status
+
+Offer
+
+Rejected
+
+Interview
+
+Assessment
+
+Notes
+
+Links
+
+Documents
+
+Reminder
+
+Timeline
+
+MODULE 10
+
+Company Tracker
+
+Track
+
+Companies
+
+Website
+
+Career Page
+
+Role
+
+Priority
+
+Status
+
+Notes
+
+Research
+
+Culture
+
+Benefits
+
+Interview rounds
+
+AI summaries.
+
+MODULE 11
+
+Career Dashboard
+
+Dashboard should show
+
+Resume Health
+
+Career Goals
+
+Projects
+
+Interview readiness
+
+Applications
+
+Upcoming interviews
+
+Skill gaps
+
+Learning progress
+
+Recommendations
+
+Weekly Career Progress
+
+MODULE 12
+
+AI Chat Integration
+
+Chat must understand
+
+Analyze my resume
+
+Add project
+
+Create career goal
+
+Track application
+
+Show interview questions
+
+Generate roadmap
+
+Compare with JD
+
+Improve resume
+
+Show weak skills
+
+Update my career goals
+
+Everything goes through
+
+Intent Engine
+
+↓
+
+Context Engine
+
+↓
+
+Decision Engine
+
+↓
+
+Action Engine
+
+↓
+
+Services
+
+↓
+
+Database
+
+Never bypass pipeline.
+
+MODULE 13
+
+Voice Integration
+
+Voice commands should work.
+
+Example
+
+Analyze my resume
+
+Create career goal
+
+Track Microsoft application
+
+Add project
+
+Create interview reminder
+
+Same pipeline as text.
+
+MODULE 14
+
+Knowledge Graph
+
+Automatically connect
+
+Projects
+
+Skills
+
+Resume
+
+Career Goals
+
+Applications
+
+Companies
+
+Interview Questions
+
+Roadmaps
+
+Graph updates automatically.
+
+MODULE 15
+
+Memory
+
+Remember
+
+Dream companies
+
+Preferred technologies
+
+Career interests
+
+Interview history
+
+Skills
+
+Career decisions
+
+Resume versions
+
+Future recommendations use these.
+
+MODULE 16
+
+Universal Search
+
+Career entities must appear inside
+
+Global Search
+
+AI Search
+
+Context Retrieval
+
+Semantic Search
+
+MODULE 17
+
+Dashboard AI
+
+Generate recommendations like
+
+Learn Docker
+
+Improve Resume
+
+Finish Portfolio
+
+Practice DSA
+
+Apply next week
+
+Revise React
+
+Mock interview today
+
+MODULE 18
+
+Validation
+
+Validate
+
+Resume uploads
+
+Career goals
+
+Projects
+
+Applications
+
+Interview records
+
+Company records
+
+Never trust AI output.
+
+MODULE 19
+
+Performance
+
+Reuse existing services.
+
+Reuse repositories.
+
+Reuse architecture.
+
+Avoid duplicate code.
+
+Follow existing code patterns.
+
+MODULE 20
+
+Testing
+
+Before completion verify:
+
+✓ Authentication still works
+
+✓ Existing features still work
+
+✓ Productivity OS still works
+
+✓ Study OS still works
+
+✓ Career pages load
+
+✓ Chat career commands work
+
+✓ Voice career commands work
+
+✓ Dashboard updated
+
+✓ AI context retrieval includes Career OS
+
+✓ Global search indexes Career entities
+
+✓ Knowledge Graph updates automatically
+
+✓ Database migrations succeed
+
+✓ APIs compile
+
+✓ Frontend builds
+
+✓ No new TypeScript errors

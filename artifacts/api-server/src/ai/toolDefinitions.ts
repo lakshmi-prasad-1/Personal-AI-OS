@@ -678,4 +678,80 @@ export const chatTools: OpenAI.Chat.Completions.ChatCompletionTool[] = [
       },
     },
   },
+
+  // ─── Career OS extended tools ────────────────────────────────────────────
+  {
+    type: "function",
+    function: {
+      name: "analyze_job_description",
+      description: "Analyze a job description: extract role, company, required skills, technologies, and compare against the user's resume/skills to show a match score, missing skills, and learning priorities. Use when the user pastes a JD or asks to compare a job with their profile.",
+      parameters: {
+        type: "object",
+        properties: {
+          jobDescription: { type: "string", description: "The full job description text" },
+          company: { type: "string", description: "Company name if known" },
+          role: { type: "string", description: "Role/job title if known" },
+        },
+        required: ["jobDescription"],
+      },
+    },
+  },
+  {
+    type: "function",
+    function: {
+      name: "track_application",
+      description: "Add a job application to the Application Tracker. Use when the user says they applied to a company, or wants to track a job application.",
+      parameters: {
+        type: "object",
+        properties: {
+          company: { type: "string" },
+          role: { type: "string" },
+          status: { type: "string", enum: ["applied", "screening", "interview", "assessment", "offer", "rejected", "withdrawn"] },
+          appliedDate: { type: "string", description: "YYYY-MM-DD" },
+          deadline: { type: "string", description: "YYYY-MM-DD" },
+          jobUrl: { type: "string" },
+          notes: { type: "string" },
+          salary: { type: "string" },
+          location: { type: "string" },
+          workType: { type: "string", enum: ["remote", "hybrid", "onsite"] },
+        },
+        required: ["company", "role"],
+      },
+    },
+  },
+  {
+    type: "function",
+    function: {
+      name: "add_company",
+      description: "Add a company to the Company Tracker for research and monitoring. Use when the user mentions a target/dream company they want to track.",
+      parameters: {
+        type: "object",
+        properties: {
+          name: { type: "string" },
+          website: { type: "string" },
+          industry: { type: "string" },
+          priority: { type: "string", enum: ["low", "medium", "high", "dream"] },
+          notes: { type: "string" },
+          status: { type: "string", enum: ["researching", "applied", "interviewing", "offer", "rejected", "not_interested"] },
+        },
+        required: ["name"],
+      },
+    },
+  },
+  {
+    type: "function",
+    function: {
+      name: "generate_career_roadmap",
+      description: "Generate a personalized career roadmap for a target role (e.g. Frontend, Backend, Full Stack, AI Engineer, ML Engineer, Cloud, Cyber Security). Includes skills, projects, certifications, timeline, and weekly/monthly goals.",
+      parameters: {
+        type: "object",
+        properties: {
+          targetRole: { type: "string", description: "The role to generate a roadmap for, e.g. 'Full Stack Developer', 'AI Engineer'" },
+          currentLevel: { type: "string", enum: ["beginner", "intermediate", "advanced"], description: "User's current level" },
+          timelineMonths: { type: "integer", description: "Target timeline in months (default 6)" },
+        },
+        required: ["targetRole"],
+      },
+    },
+  },
 ];

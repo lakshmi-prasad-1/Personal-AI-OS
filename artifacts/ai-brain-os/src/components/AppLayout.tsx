@@ -22,6 +22,14 @@ import {
   Layers,
   HelpCircle,
   RefreshCcw,
+  Briefcase,
+  FileText,
+  Star,
+  FolderGit2,
+  Mic,
+  ClipboardList,
+  Building2,
+  Trophy,
 } from "lucide-react";
 import { useAuth } from "@/lib/auth";
 import { useGetCurrentUser, getGetCurrentUserQueryKey } from "@workspace/api-client-react";
@@ -63,6 +71,20 @@ const NAV_STRUCTURE: NavGroup[] = [
       { href: "/flashcards", label: "Flashcards", icon: Layers },
       { href: "/quizzes", label: "Quizzes", icon: HelpCircle },
       { href: "/revision", label: "Revision", icon: RefreshCcw },
+    ],
+  },
+  {
+    label: "Career OS",
+    defaultOpen: true,
+    items: [
+      { href: "/career", label: "Career Dashboard", icon: Briefcase },
+      { href: "/resumes", label: "Resumes", icon: FileText },
+      { href: "/skills", label: "Skills", icon: Star },
+      { href: "/career-projects", label: "Projects", icon: FolderGit2 },
+      { href: "/career-goals", label: "Career Goals", icon: Trophy },
+      { href: "/interview", label: "Interview Prep", icon: Mic },
+      { href: "/applications", label: "Applications", icon: ClipboardList },
+      { href: "/companies", label: "Companies", icon: Building2 },
     ],
   },
   {

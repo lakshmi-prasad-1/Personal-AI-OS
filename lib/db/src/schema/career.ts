@@ -148,3 +148,54 @@ export type InterviewTopic = typeof interviewTopicsTable.$inferSelect;
 export const insertInterviewSessionSchema = createInsertSchema(interviewSessionsTable).omit({ id: true, completedAt: true });
 export type InsertInterviewSession = z.infer<typeof insertInterviewSessionSchema>;
 export type InterviewSession = typeof interviewSessionsTable.$inferSelect;
+
+export const jobApplicationsTable = pgTable("job_applications", {
+  id: uuid("id").primaryKey().defaultRandom(),
+  userId: uuid("user_id").notNull().references(() => usersTable.id, { onDelete: "cascade" }),
+  company: text("company").notNull(),
+  role: text("role").notNull(),
+  appliedDate: text("applied_date").notNull().default(""),
+  deadline: text("deadline"),
+  status: text("status").notNull().default("applied"), // applied | screening | interview | assessment | offer | rejected | withdrawn
+  jobUrl: text("job_url"),
+  jobDescription: text("job_description").notNull().default(""),
+  notes: text("notes").notNull().default(""),
+  salary: text("salary"),
+  location: text("location"),
+  workType: text("work_type"), // remote | hybrid | onsite
+  contactName: text("contact_name"),
+  contactEmail: text("contact_email"),
+  reminderDate: text("reminder_date"),
+  timeline: jsonb("timeline").notNull().default([]), // [{date, event, notes}]
+  createdAt: timestamp("created_at", { withTimezone: true }).notNull().defaultNow(),
+  updatedAt: timestamp("updated_at", { withTimezone: true }).notNull().defaultNow().$onUpdate(() => new Date()),
+});
+
+export const companyTrackersTable = pgTable("company_trackers", {
+  id: uuid("id").primaryKey().defaultRandom(),
+  userId: uuid("user_id").notNull().references(() => usersTable.id, { onDelete: "cascade" }),
+  name: text("name").notNull(),
+  website: text("website"),
+  careerPage: text("career_page"),
+  industry: text("industry"),
+  size: text("size"),
+  location: text("location"),
+  priority: text("priority").notNull().default("medium"), // low | medium | high | dream
+  hiringProcess: text("hiring_process").notNull().default(""),
+  interviewRounds: integer("interview_rounds"),
+  culture: text("culture").notNull().default(""),
+  benefits: text("benefits").notNull().default(""),
+  notes: text("notes").notNull().default(""),
+  status: text("status").notNull().default("researching"), // researching | applied | interviewing | offer | rejected | not_interested
+  aiSummary: text("ai_summary"),
+  createdAt: timestamp("created_at", { withTimezone: true }).notNull().defaultNow(),
+  updatedAt: timestamp("updated_at", { withTimezone: true }).notNull().defaultNow().$onUpdate(() => new Date()),
+});
+
+export const insertJobApplicationSchema = createInsertSchema(jobApplicationsTable).omit({ id: true, createdAt: true, updatedAt: true });
+export type InsertJobApplication = z.infer<typeof insertJobApplicationSchema>;
+export type JobApplication = typeof jobApplicationsTable.$inferSelect;
+
+export const insertCompanyTrackerSchema = createInsertSchema(companyTrackersTable).omit({ id: true, createdAt: true, updatedAt: true });
+export type InsertCompanyTracker = z.infer<typeof insertCompanyTrackerSchema>;
+export type CompanyTracker = typeof companyTrackersTable.$inferSelect;

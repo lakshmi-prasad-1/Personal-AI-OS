@@ -1,2 +1,3 @@
 - [AI Brain OS Phase 1A architecture](ai-brain-os-architecture.md) — Intent/Context/Action/Decision engines, auto graph-linking, voice, and logging already exist; audit before assuming gaps.
 - [Phase 2A Productivity OS](phase2a-productivity.md) — Tasks/Goals/Habits/Focus/Reminders/Planner/Reviews fully implemented; security and type issues found and fixed.
+- [Career OS Phase 3A](phase3a-career-os.md) — Version 1 complete; new DB tables, services, routes, 4 AI tools, 8 frontend pages; OpenAPI spec still missing for career endpoints.

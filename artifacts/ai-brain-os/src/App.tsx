@@ -27,6 +27,14 @@ import Subjects from "@/pages/subjects";
 import Flashcards from "@/pages/flashcards";
 import Quizzes from "@/pages/quizzes";
 import Revision from "@/pages/revision";
+import CareerDashboard from "@/pages/career-dashboard";
+import Resumes from "@/pages/resumes";
+import Skills from "@/pages/skills";
+import CareerProjects from "@/pages/career-projects";
+import CareerGoalsPage from "@/pages/career-goals";
+import Interview from "@/pages/interview";
+import Applications from "@/pages/applications";
+import Companies from "@/pages/companies";
 
 const queryClient = new QueryClient();
 
@@ -69,6 +77,14 @@ function Router() {
         <ProtectedRoute path="/flashcards" component={Flashcards} />
         <ProtectedRoute path="/quizzes" component={Quizzes} />
         <ProtectedRoute path="/revision" component={Revision} />
+        <ProtectedRoute path="/career" component={CareerDashboard} />
+        <ProtectedRoute path="/resumes" component={Resumes} />
+        <ProtectedRoute path="/skills" component={Skills} />
+        <ProtectedRoute path="/career-projects" component={CareerProjects} />
+        <ProtectedRoute path="/career-goals" component={CareerGoalsPage} />
+        <ProtectedRoute path="/interview" component={Interview} />
+        <ProtectedRoute path="/applications" component={Applications} />
+        <ProtectedRoute path="/companies" component={Companies} />
         <Route component={NotFound} />
       </Switch>
     </AppLayout>

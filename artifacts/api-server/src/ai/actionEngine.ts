@@ -27,6 +27,9 @@ import { careerGoalService } from "../services/careerGoalService";
 import { resumeService } from "../services/resumeService";
 import { interviewService } from "../services/interviewService";
 import { careerAnalyticsService } from "../services/careerAnalyticsService";
+import { applicationService } from "../services/applicationService";
+import { companyService } from "../services/companyService";
+import { jobAnalysisService } from "../services/jobAnalysisService";
 import { logger } from "../lib/logger";
 
 // ─── Phase 1 arg schemas ────────────────────────────────────────────────────
@@ -164,6 +167,32 @@ const addCareerGoalArgs = z.object({
 });
 const analyzeResumeArgs = z.object({ resumeTitle: z.string().min(1) });
 const startMockInterviewArgs = z.object({ type: z.enum(["technical", "behavioral", "hr", "coding", "project_discussion", "resume_discussion"]) });
+const analyzeJobDescriptionArgs = z.object({ jobDescription: z.string().min(1), company: z.string().optional().default(""), role: z.string().optional().default("") });
+const trackApplicationArgs = z.object({
+  company: z.string().min(1),
+  role: z.string().min(1),
+  status: z.enum(["applied", "screening", "interview", "assessment", "offer", "rejected", "withdrawn"]).optional().default("applied"),
+  appliedDate: z.string().optional().default(""),
+  deadline: z.string().optional(),
+  jobUrl: z.string().optional(),
+  notes: z.string().optional().default(""),
+  salary: z.string().optional(),
+  location: z.string().optional(),
+  workType: z.enum(["remote", "hybrid", "onsite"]).optional(),
+});
+const addCompanyArgs = z.object({
+  name: z.string().min(1),
+  website: z.string().optional(),
+  industry: z.string().optional(),
+  priority: z.enum(["low", "medium", "high", "dream"]).optional().default("medium"),
+  notes: z.string().optional().default(""),
+  status: z.enum(["researching", "applied", "interviewing", "offer", "rejected", "not_interested"]).optional().default("researching"),
+});
+const generateCareerRoadmapArgs = z.object({
+  targetRole: z.string().min(1),
+  currentLevel: z.enum(["beginner", "intermediate", "advanced"]).optional().default("beginner"),
+  timelineMonths: z.number().int().min(1).max(24).optional().default(6),
+});
 
 export interface ActionResult {
   toolCallId: string;
@@ -553,6 +582,34 @@ export const actionEngine = {
           const question = await interviewService.generateQuestion(args.type);
           const logged = await agentActionsService.log({ userId, chatId, actionType: "start_mock_interview", summary: `Started a ${args.type} mock interview`, payload: { type: args.type, question } });
           return { toolCallId, toolName, ok: true, result: { type: args.type, question }, actionLogged: { actionType: logged.actionType, summary: logged.summary } };
+        }
+
+        // ─── Career OS extended (Phase 3A continued) ─────────────────────────
+        case "analyze_job_description": {
+          const args = analyzeJobDescriptionArgs.parse(parsedArgs);
+          const analysis = await jobAnalysisService.analyzeJobDescription(userId, args.jobDescription, args.company, args.role);
+          await agentActionsService.log({ userId, chatId, actionType: "analyze_job_description", summary: `Analyzed JD for "${analysis.role}" at "${analysis.company}" — ${analysis.matchPercent}% match`, payload: analysis });
+          return { toolCallId, toolName, ok: true, result: analysis };
+        }
+        case "track_application": {
+          const args = trackApplicationArgs.parse(parsedArgs);
+          const app = await applicationService.create(userId, { ...args, appliedDate: args.appliedDate || new Date().toISOString().slice(0, 10), timeline: [] });
+          const logged = await agentActionsService.log({ userId, chatId, actionType: "track_application", entityType: "job_application", entityId: app.id, summary: `Tracked application: ${args.role} at ${args.company}`, payload: app });
+          return { toolCallId, toolName, ok: true, result: app, actionLogged: { actionType: logged.actionType, summary: logged.summary } };
+        }
+        case "add_company": {
+          const args = addCompanyArgs.parse(parsedArgs);
+          const existing = await companyService.findByName(userId, args.name);
+          const company = existing ? await companyService.update(userId, existing.id, args) : await companyService.create(userId, args);
+          if (!company) return { toolCallId, toolName, ok: false, result: { error: "Failed to save company" } };
+          const logged = await agentActionsService.log({ userId, chatId, actionType: "add_company", entityType: "company", entityId: company.id, summary: `${existing ? "Updated" : "Added"} company "${company.name}"`, payload: company });
+          return { toolCallId, toolName, ok: true, result: company, actionLogged: { actionType: logged.actionType, summary: logged.summary } };
+        }
+        case "generate_career_roadmap": {
+          const args = generateCareerRoadmapArgs.parse(parsedArgs);
+          const roadmap = await jobAnalysisService.generateRoadmap(userId, args.targetRole, args.currentLevel, args.timelineMonths);
+          await agentActionsService.log({ userId, chatId, actionType: "generate_career_roadmap", summary: `Generated ${args.timelineMonths}-month roadmap for "${args.targetRole}"`, payload: roadmap });
+          return { toolCallId, toolName, ok: true, result: roadmap };
         }
 
         default:
