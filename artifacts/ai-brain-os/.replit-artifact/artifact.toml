@@ -1,0 +1,31 @@
+kind = "web"
+previewPath = "/"
+title = "AI Brain OS"
+version = "1.0.0"
+id = "artifacts/ai-brain-os"
+router = "path"
+
+[[integratedSkills]]
+name = "react-vite"
+version = "1.0.0"
+
+[[services]]
+name = "web"
+paths = [ "/" ]
+localPort = 19369
+
+[services.development]
+run = "pnpm --filter @workspace/ai-brain-os run dev"
+
+[services.production]
+build = [ "pnpm", "--filter", "@workspace/ai-brain-os", "run", "build" ]
+publicDir = "artifacts/ai-brain-os/dist/public"
+serve = "static"
+
+[[services.production.rewrites]]
+from = "/*"
+to = "/index.html"
+
+[services.env]
+PORT = "19369"
+BASE_PATH = "/"

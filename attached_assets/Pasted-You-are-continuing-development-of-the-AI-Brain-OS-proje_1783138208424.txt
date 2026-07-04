@@ -1,0 +1,519 @@
+You are continuing development of the AI Brain OS project.
+
+IMPORTANT
+
+This is NOT a fresh implementation.
+
+A significant portion of Phase 1A has already been completed.
+
+Your first responsibility is to determine exactly what has already been built before writing any new code.
+
+==========================================================
+
+ROLE
+
+Act simultaneously as:
+
+• Product Manager
+• Senior Software Architect
+• AI Systems Architect
+• Senior Backend Engineer
+• Senior Frontend Engineer
+• Senior Database Architect
+• Senior AI Engineer
+• Senior QA Engineer
+
+==========================================================
+
+OBJECTIVE
+
+Your job is NOT to rewrite Phase 1A.
+
+Your job is to perform a complete engineering audit of the repository, compare it against the original Phase 1A specification, determine completion status, identify missing work, and ONLY implement the remaining tasks.
+
+Avoid duplicate work.
+
+Avoid duplicate code.
+
+Avoid architectural regressions.
+
+==========================================================
+
+STEP 1 — FULL PROJECT AUDIT
+
+Inspect the ENTIRE repository.
+
+Understand everything that currently exists.
+
+Review:
+
+• Frontend
+• Backend
+• Database
+• Authentication
+• AI Chat
+• AI Services
+• Intent Engine
+• Context Engine
+• Decision Engine
+• Action Engine
+• Memory Engine
+• Search
+• Knowledge Graph
+• Shared Services
+• Dashboard
+• Voice
+• API routes
+• Models
+• Middleware
+• Existing CRUD pages
+• Repository structure
+
+Do NOT assume anything.
+
+Only use what actually exists in the repository.
+
+==========================================================
+
+STEP 2 — COMPARE AGAINST PHASE 1A
+
+Compare the current implementation against every requirement from the original Phase 1A specification.
+
+Evaluate each requirement individually.
+
+Classify every item as one of:
+
+✅ Completed
+
+🟡 Partially Completed
+
+❌ Missing
+
+Nothing should be skipped.
+
+==========================================================
+
+STEP 3 — CREATE A GAP REPORT
+
+Before implementing anything, generate an internal engineering report.
+
+For every major module include:
+
+• Current implementation
+• Missing functionality
+• Architectural problems
+• Code duplication
+• Missing APIs
+• Missing services
+• Missing frontend integration
+• Missing backend integration
+• Missing database support
+• Missing validation
+• Missing logging
+• Missing testing
+
+==========================================================
+
+Audit these modules individually
+
+1. Repository Architecture
+
+2. Shared Services
+
+3. AI Core Architecture
+
+4. Intent Engine
+
+5. Context Engine
+
+6. Decision Engine
+
+7. Action Engine
+
+8. Memory Engine
+
+9. Search Engine
+
+10. Knowledge Graph
+
+11. AI Chat
+
+12. Voice Architecture
+
+13. Dashboard
+
+14. Database
+
+15. API Layer
+
+16. Security
+
+17. Logging
+
+18. Error Handling
+
+19. Performance
+
+20. Code Quality
+
+21. Testing
+
+==========================================================
+
+STEP 4 — CREATE A PRIORITY PLAN
+
+After the audit,
+
+create an implementation priority.
+
+Only build what is still required.
+
+Priority order:
+
+Critical Missing
+
+↓
+
+Architecture Issues
+
+↓
+
+Backend
+
+↓
+
+Frontend
+
+↓
+
+Integration
+
+↓
+
+Testing
+
+==========================================================
+
+STEP 5 — IMPLEMENT ONLY THE REMAINING WORK
+
+Do NOT touch completed modules.
+
+If something is already correctly implemented,
+
+leave it untouched.
+
+Only improve when necessary.
+
+Never rewrite working code.
+
+Never change architecture without reason.
+
+Never duplicate services.
+
+==========================================================
+
+IMPLEMENTATION RULES
+
+Always reuse existing services.
+
+Never bypass the architecture.
+
+Every AI feature must follow
+
+User
+
+↓
+
+Chat / Voice
+
+↓
+
+Intent Engine
+
+↓
+
+Context Engine
+
+↓
+
+Decision Engine
+
+↓
+
+Action Engine
+
+↓
+
+Shared Services
+
+↓
+
+Database
+
+↓
+
+Dashboard
+
+↓
+
+Response
+
+==========================================================
+
+VOICE REQUIREMENT
+
+Voice support is mandatory in Phase 1A.
+
+Check whether microphone support already exists.
+
+If it exists,
+
+complete the remaining integration.
+
+If it does not,
+
+build the minimum architecture required.
+
+Voice and text MUST use the same AI pipeline.
+
+Never duplicate business logic.
+
+==========================================================
+
+KNOWLEDGE GRAPH
+
+Verify whether graph updates automatically.
+
+If not,
+
+implement automatic graph synchronization whenever
+
+Notes
+
+Ideas
+
+Memories
+
+Resources
+
+are created or updated.
+
+==========================================================
+
+SHARED SERVICES
+
+Verify that every route uses reusable services.
+
+Business logic must never remain inside route handlers.
+
+Move logic only where necessary.
+
+Avoid unnecessary refactoring.
+
+==========================================================
+
+AI CHAT
+
+Verify whether Chat is already capable of:
+
+• Context Retrieval
+
+• Intent Classification
+
+• Calling Action Engine
+
+• Updating Memory
+
+• Searching Knowledge
+
+• Calling Services
+
+If not,
+
+implement only the missing pieces.
+
+==========================================================
+
+SEARCH
+
+Verify Universal Search.
+
+Check whether it searches
+
+Notes
+
+Ideas
+
+Resources
+
+Memories
+
+Chat
+
+Knowledge Graph
+
+Improve only missing functionality.
+
+==========================================================
+
+MEMORY
+
+Verify long-term memory.
+
+Check whether AI remembers
+
+Goals
+
+Preferences
+
+Important facts
+
+Learning style
+
+Career interests
+
+Recent decisions
+
+If incomplete,
+
+finish implementation.
+
+==========================================================
+
+SECURITY
+
+Verify:
+
+Authentication
+
+Authorization
+
+Validation
+
+Ownership checks
+
+AI output validation
+
+Rate limiting (if applicable)
+
+Never weaken security.
+
+==========================================================
+
+LOGGING
+
+Verify audit logging.
+
+Every AI action should be logged.
+
+Examples
+
+Created Memory
+
+Created Resource
+
+Created Note
+
+Created Idea
+
+Search Executed
+
+Knowledge Updated
+
+Intent Executed
+
+==========================================================
+
+TESTING
+
+Before finishing,
+
+verify
+
+Authentication
+
+Chat
+
+Voice
+
+Search
+
+Intent Engine
+
+Context Engine
+
+Knowledge Graph
+
+Shared Services
+
+Logging
+
+Dashboard
+
+API Compatibility
+
+==========================================================
+
+DO NOT IMPLEMENT
+
+Task Manager
+
+Planner
+
+Goals
+
+Habits
+
+Study Module
+
+Career Module
+
+Resume AI
+
+ATS
+
+Job Automation
+
+Browser Automation
+
+n8n
+
+Telegram
+
+Calendar
+
+Email
+
+Notifications
+
+Those belong to later phases.
+
+==========================================================
+
+FINAL DELIVERABLE
+
+When Phase 1A is complete,
+
+provide a completion report containing:
+
+1. What was already completed before this session.
+
+2. What you implemented during this session.
+
+3. Files created.
+
+4. Files modified.
+
+5. Remaining Phase 1A items (if any).
+
+6. Confirmation that Phase 1A is fully complete.
+
+7. Any recommended improvements before starting Phase 1B.
+
+IMPORTANT
+
+Do NOT stop after the audit.
+
+Immediately continue implementing all remaining Phase 1A work until every missing requirement has been completed and verified.
+
+Only stop when Phase 1A is genuinely complete.
