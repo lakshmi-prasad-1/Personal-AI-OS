@@ -1,0 +1,1 @@
+- [AI Brain OS Phase 1A architecture](ai-brain-os-architecture.md) — Intent/Context/Action/Decision engines, auto graph-linking, voice, and logging already exist; audit before assuming gaps.

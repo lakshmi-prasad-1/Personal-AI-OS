@@ -1,0 +1,749 @@
+You are continuing development of AI Brain OS.
+
+IMPORTANT
+
+This is NOT a new implementation.
+
+This repository has already undergone a major migration and a significant portion of Phase 1A has already been completed.
+
+DO NOT restart Phase 1A.
+
+DO NOT recreate existing code.
+
+DO NOT rewrite working modules.
+
+DO NOT duplicate services.
+
+Your job is to COMPLETE Phase 1A by auditing the repository and implementing ONLY the remaining work.
+
+============================================================
+
+YOUR ROLE
+
+You are simultaneously acting as
+
+• Product Manager
+• Senior Software Architect
+• AI Systems Architect
+• Senior Backend Engineer
+• Senior Frontend Engineer
+• Senior Database Architect
+• Senior AI Engineer
+• Senior QA Engineer
+
+Think like an experienced engineering team, not a code generator.
+
+============================================================
+
+PROJECT VISION
+
+AI Brain OS is NOT a CRUD application.
+
+It is an AI Operating System.
+
+The AI Assistant must become the primary interface.
+
+The user should eventually interact mostly through Chat or Voice.
+
+Everything else (Notes, Ideas, Memories, Resources, Knowledge Graph, Dashboard) becomes an internal AI-powered system.
+
+The CRUD pages remain available as management/library pages, but they are no longer the primary workflow.
+
+============================================================
+
+CURRENT STATUS
+
+The project already contains a working foundation.
+
+The following are believed to already exist (verify before changing):
+
+• Authentication
+• JWT
+• CRUD APIs
+• Dashboard
+• Notes
+• Ideas
+• Memories
+• Resources
+• Knowledge Graph
+• Chat
+• Shared repository structure
+• Database schema
+• API server
+• Frontend
+
+Your first responsibility is to VERIFY these assumptions.
+
+Never assume something is missing.
+
+============================================================
+
+STEP 1 — FULL AUDIT
+
+Inspect the entire repository.
+
+Review
+
+Frontend
+
+Backend
+
+Database
+
+API
+
+Authentication
+
+Shared Services
+
+Chat
+
+AI
+
+Knowledge Graph
+
+Resources
+
+Ideas
+
+Memories
+
+Dashboard
+
+Voice
+
+Search
+
+Middleware
+
+Folder structure
+
+Existing integrations
+
+Do NOT modify anything during this step.
+
+============================================================
+
+STEP 2 — GAP ANALYSIS
+
+Compare the repository against the Phase 1A architecture.
+
+For every requirement classify it as
+
+✅ Complete
+
+🟡 Partial
+
+❌ Missing
+
+Do NOT skip anything.
+
+Focus on
+
+1. AI Core Architecture
+
+2. Intent Engine
+
+3. Context Engine
+
+4. Action Engine
+
+5. Memory Engine
+
+6. Universal Search
+
+7. Knowledge Graph Automation
+
+8. Voice Architecture
+
+9. Shared Services
+
+10. AI Chat Integration
+
+11. Dashboard Integration
+
+12. Logging
+
+13. Validation
+
+14. Error Handling
+
+15. Performance
+
+16. API Design
+
+17. Code Quality
+
+18. Testing
+
+============================================================
+
+STEP 3 — IMPLEMENT ONLY MISSING WORK
+
+After the audit,
+
+implement ONLY
+
+❌ Missing
+
+and
+
+🟡 Partial
+
+features.
+
+Never rewrite completed modules.
+
+Never break existing APIs.
+
+Always extend.
+
+============================================================
+
+CRITICAL REQUIREMENT 1
+
+INTENT ENGINE
+
+Implement a reusable Intent Engine if incomplete.
+
+The AI must understand user intentions.
+
+Examples
+
+"I have an assignment."
+
+↓
+
+Task Intent
+
+------------------------------------------------
+
+"I got an idea."
+
+↓
+
+Idea Intent
+
+------------------------------------------------
+
+"Remember this."
+
+↓
+
+Memory Intent
+
+------------------------------------------------
+
+"Save this article."
+
+↓
+
+Resource Intent
+
+------------------------------------------------
+
+"What did I decide yesterday?"
+
+↓
+
+Memory Retrieval
+
+------------------------------------------------
+
+"What React resources do I have?"
+
+↓
+
+Search Intent
+
+------------------------------------------------
+
+The architecture must be generic.
+
+Do NOT hardcode keywords.
+
+Future modules should plug into this engine.
+
+============================================================
+
+CRITICAL REQUIREMENT 2
+
+CONTEXT ENGINE
+
+Before every AI response
+
+retrieve relevant information.
+
+Possible context
+
+Recent Chats
+
+Memories
+
+Notes
+
+Ideas
+
+Resources
+
+Knowledge Graph
+
+Future Tasks
+
+Future Planner
+
+Future Study
+
+Future Career
+
+Only inject relevant context.
+
+Avoid huge prompts.
+
+============================================================
+
+CRITICAL REQUIREMENT 3
+
+ACTION ENGINE
+
+AI responses should not only answer.
+
+They should execute actions.
+
+Examples
+
+Create Memory
+
+Create Idea
+
+Create Resource
+
+Search Knowledge
+
+Retrieve Context
+
+Update Graph
+
+Every action must call reusable services.
+
+============================================================
+
+CRITICAL REQUIREMENT 4
+
+LONG TERM MEMORY
+
+Verify and complete persistent memory.
+
+The AI should remember
+
+Goals
+
+Preferences
+
+Learning style
+
+Career interests
+
+Projects
+
+Important facts
+
+Previous decisions
+
+This memory must influence future conversations.
+
+============================================================
+
+CRITICAL REQUIREMENT 5
+
+UNIVERSAL SEARCH
+
+One search system.
+
+Search across
+
+Notes
+
+Ideas
+
+Resources
+
+Memories
+
+Knowledge Graph
+
+Chat History
+
+Return ranked results.
+
+Design so semantic/vector search can be added later.
+
+============================================================
+
+CRITICAL REQUIREMENT 6
+
+KNOWLEDGE GRAPH AUTOMATION
+
+The graph must update automatically.
+
+Whenever AI creates
+
+Memory
+
+Idea
+
+Note
+
+Resource
+
+automatically
+
+Create Node
+
+Create Relationships
+
+Update Graph
+
+Do NOT require manual graph maintenance.
+
+============================================================
+
+CRITICAL REQUIREMENT 7
+
+VOICE PIPELINE
+
+Voice support belongs to Phase 1A.
+
+Check whether microphone support already exists.
+
+If yes
+
+complete integration.
+
+If no
+
+implement browser speech recognition.
+
+Voice flow
+
+Microphone
+
+↓
+
+Speech Recognition
+
+↓
+
+Transcript
+
+↓
+
+Intent Engine
+
+↓
+
+Context Engine
+
+↓
+
+Action Engine
+
+↓
+
+Response
+
+Voice and text MUST use the exact same pipeline.
+
+No duplicated logic.
+
+============================================================
+
+CRITICAL REQUIREMENT 8
+
+CHAT
+
+The Chat must become the AI hub.
+
+Verify that Chat can
+
+Read Memories
+
+Read Notes
+
+Read Ideas
+
+Read Resources
+
+Use Context
+
+Call Intent Engine
+
+Call Action Engine
+
+Call Search
+
+Update Memory
+
+Update Knowledge Graph
+
+If these are missing,
+
+implement them.
+
+============================================================
+
+CRITICAL REQUIREMENT 9
+
+SHARED SERVICES
+
+Every feature must use reusable services.
+
+Never access database directly from AI modules.
+
+Architecture
+
+Intent
+
+↓
+
+Action
+
+↓
+
+Service
+
+↓
+
+Repository
+
+↓
+
+Database
+
+This rule is mandatory.
+
+============================================================
+
+CRITICAL REQUIREMENT 10
+
+DASHBOARD
+
+Verify Dashboard.
+
+It should display AI-generated information such as
+
+Recent Activity
+
+Recent Memories
+
+Recent Resources
+
+Recent Ideas
+
+Knowledge Statistics
+
+AI Suggestions
+
+Recent AI Actions
+
+Do not redesign the dashboard.
+
+Only improve it.
+
+============================================================
+
+CRITICAL REQUIREMENT 11
+
+LOGGING
+
+Every AI action should be recorded.
+
+Examples
+
+Memory Created
+
+Idea Created
+
+Resource Saved
+
+Search Executed
+
+Intent Executed
+
+Knowledge Updated
+
+This becomes the Activity Timeline.
+
+============================================================
+
+CRITICAL REQUIREMENT 12
+
+SECURITY
+
+Verify
+
+Authentication
+
+Authorization
+
+Ownership validation
+
+Input validation
+
+AI output validation
+
+Never trust LLM output directly.
+
+============================================================
+
+CRITICAL REQUIREMENT 13
+
+ERROR HANDLING
+
+Never lose user data.
+
+Gracefully recover from failures.
+
+Retry AI requests where appropriate.
+
+Provide meaningful fallback messages.
+
+============================================================
+
+CRITICAL REQUIREMENT 14
+
+PERFORMANCE
+
+Avoid duplicate queries.
+
+Reuse services.
+
+Reuse context.
+
+Avoid unnecessary frontend re-renders.
+
+Prepare architecture for future scaling.
+
+============================================================
+
+CRITICAL REQUIREMENT 15
+
+CODE QUALITY
+
+Maintain current coding standards.
+
+Keep modules small.
+
+Follow SOLID principles.
+
+No duplicated logic.
+
+No unnecessary abstractions.
+
+============================================================
+
+DO NOT IMPLEMENT YET
+
+Task Manager
+
+Planner
+
+Goals
+
+Habits
+
+Study Module
+
+Career Module
+
+Resume AI
+
+ATS
+
+Job Tracking
+
+Job Scraping
+
+Auto Apply
+
+n8n
+
+Telegram
+
+Calendar Sync
+
+Email Automation
+
+Push Notifications
+
+Mobile App
+
+Voice Output
+
+Those belong to later phases.
+
+============================================================
+
+FINAL SELF-VERIFICATION
+
+Before stopping,
+
+perform a complete verification.
+
+Confirm
+
+✓ Authentication works
+
+✓ CRUD pages still work
+
+✓ Chat works
+
+✓ OpenAI integration works (if API key is valid)
+
+✓ Intent Engine works
+
+✓ Context Engine works
+
+✓ Action Engine works
+
+✓ Long-Term Memory works
+
+✓ Universal Search works
+
+✓ Knowledge Graph updates automatically
+
+✓ Voice input works
+
+✓ Dashboard reflects AI activity
+
+✓ Shared services are reusable
+
+✓ APIs remain compatible
+
+✓ Logging works
+
+✓ Validation works
+
+✓ Error handling works
+
+============================================================
+
+FINAL REPORT
+
+When finished, provide a detailed engineering report including
+
+1. Completed before this session
+
+2. Newly implemented in this session
+
+3. Files created
+
+4. Files modified
+
+5. Remaining Phase 1A work (if any)
+
+6. Technical debt
+
+7. Recommendations before starting Phase 1B
+
+Only stop after every remaining Phase 1A requirement has been completed and verified.

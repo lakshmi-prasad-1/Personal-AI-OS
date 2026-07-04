@@ -13,6 +13,7 @@ import { useAuth } from "@/lib/auth";
 import { useGetCurrentUser, getGetCurrentUserQueryKey } from "@workspace/api-client-react";
 import { useEffect } from "react";
 import { Button } from "@/components/ui/button";
+import { GlobalSearch } from "@/components/GlobalSearch";
 
 const NAV_ITEMS = [
   { href: "/", label: "Chat", icon: MessageSquare },
@@ -55,7 +56,10 @@ export function AppLayout({ children }: { children: React.ReactNode }) {
             <span className="font-semibold tracking-tight text-lg">Brain OS</span>
           </div>
         </div>
-        <div className="flex-1 py-6 px-3 flex flex-col gap-1 overflow-y-auto">
+        <div className="px-3 pt-4">
+          <GlobalSearch />
+        </div>
+        <div className="flex-1 py-4 px-3 flex flex-col gap-1 overflow-y-auto">
           {NAV_ITEMS.map((item) => {
             const active = location === item.href || (item.href !== "/" && location.startsWith(item.href));
             return (

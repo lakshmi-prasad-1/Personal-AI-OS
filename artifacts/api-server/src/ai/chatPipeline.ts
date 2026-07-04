@@ -32,6 +32,27 @@ export interface PipelineResult {
   actions: { actionType: string; summary: string }[];
 }
 
+/**
+ * Retries transient OpenAI failures (rate limits, timeouts, 5xx) with a short
+ * backoff. Non-retryable errors (auth, quota, bad request) fail immediately.
+ */
+async function withRetry<T>(fn: () => Promise<T>, attempts = 2): Promise<T> {
+  let lastErr: unknown;
+  for (let i = 0; i <= attempts; i++) {
+    try {
+      return await fn();
+    } catch (err) {
+      lastErr = err;
+      const status = (err as { status?: number })?.status;
+      const retryable = status === 429 || status === 500 || status === 502 || status === 503 || status === 504;
+      const isQuotaError = (err as { code?: string })?.code === "insufficient_quota";
+      if (!retryable || isQuotaError || i === attempts) break;
+      await new Promise((resolve) => setTimeout(resolve, 300 * (i + 1)));
+    }
+  }
+  throw lastErr;
+}
+
 interface HistoryMessage {
   role: "user" | "assistant";
   content: string;
@@ -72,12 +93,14 @@ export async function runChatPipeline(params: {
 
   try {
     // Step 1: non-streamed call so we can inspect for tool calls (Intent + Decision).
-    const first = await openai.chat.completions.create({
-      model: "gpt-4o-mini",
-      messages: baseMessages,
-      tools: chatTools,
-      tool_choice: "auto",
-    });
+    const first = await withRetry(() =>
+      openai!.chat.completions.create({
+        model: "gpt-4o-mini",
+        messages: baseMessages,
+        tools: chatTools,
+        tool_choice: "auto",
+      }),
+    );
 
     const choice = first.choices[0];
     const toolCalls = choice?.message.tool_calls ?? [];
@@ -139,11 +162,13 @@ async function streamFinal(
   if (!openai) return { reply: "", actions };
 
   let fullReply = "";
-  const stream = await openai.chat.completions.create({
-    model: "gpt-4o-mini",
-    stream: true,
-    messages,
-  });
+  const stream = await withRetry(() =>
+    openai!.chat.completions.create({
+      model: "gpt-4o-mini",
+      stream: true,
+      messages,
+    }),
+  );
 
   for await (const chunk of stream) {
     const token = chunk.choices[0]?.delta?.content ?? "";
