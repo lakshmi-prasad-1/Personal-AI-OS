@@ -401,7 +401,7 @@ function ChatThread({ chatId }: { chatId: string }) {
             <span className="relative inline-flex rounded-full h-2 w-2 bg-primary" />
           </span>
           <span className="italic text-muted-foreground">
-            {input ? `"${input}"` : "Listening…"}
+            {voice.transcript ? `"${voice.transcript}"` : "Listening…"}
           </span>
         </div>
       )}

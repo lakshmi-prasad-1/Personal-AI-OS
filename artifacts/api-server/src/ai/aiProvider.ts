@@ -32,22 +32,18 @@ class AIProviderService {
   private initialize(): void {
     const apiKey = process.env["OPENAI_API_KEY"];
     if (!apiKey) {
-      this.state = {
-        status: "missing_key",
-        message: "OpenAI API key is not configured. Add OPENAI_API_KEY to enable AI chat.",
-        lastChecked: new Date().toISOString(),
-      };
+      this.setState("missing_key", "OpenAI API key is not configured. Add OPENAI_API_KEY to enable AI chat.");
       logger.warn("AIProvider: OPENAI_API_KEY is not set — AI features disabled");
       return;
     }
 
     this.client = new OpenAI({ apiKey });
-    this.state = {
-      status: "connected",
-      message: "AI provider is ready.",
-      lastChecked: new Date().toISOString(),
-    };
+    this.setState("connected", "AI provider is ready.");
     logger.info("AIProvider: OpenAI client initialized");
+  }
+
+  private setState(status: ProviderStatus, message: string): void {
+    this.state = { status, message, lastChecked: new Date().toISOString() };
   }
 
   getClient(): OpenAI | null {
@@ -59,14 +55,24 @@ class AIProviderService {
   }
 
   /**
-   * Classify an OpenAI API error into a user-friendly status and message.
-   * Also updates the internal provider state for persistent tracking.
+   * Call after a successful OpenAI API response to restore "connected" status
+   * if a transient error had previously downgraded it.
+   */
+  markConnected(): void {
+    if (this.state.status !== "connected" && this.client) {
+      this.setState("connected", "AI provider is ready.");
+    }
+  }
+
+  /**
+   * Classify an OpenAI API error into a user-friendly status + message.
+   * Persists the new status so /api/ai-provider/status reflects reality.
    */
   classifyError(err: unknown): { status: ProviderStatus; userMessage: string } {
     const e = err as { status?: number; code?: string; message?: string };
 
     if (e.code === "insufficient_quota") {
-      this.state.status = "quota_exceeded";
+      this.setState("quota_exceeded", "API quota has been exceeded. Check your OpenAI billing.");
       return {
         status: "quota_exceeded",
         userMessage:
@@ -75,7 +81,7 @@ class AIProviderService {
     }
 
     if (e.status === 401) {
-      this.state = { ...this.state, status: "invalid_key", message: "API key is invalid or expired." };
+      this.setState("invalid_key", "API key is invalid or expired.");
       return {
         status: "invalid_key",
         userMessage:
@@ -84,7 +90,7 @@ class AIProviderService {
     }
 
     if (e.status === 429) {
-      this.state = { ...this.state, status: "rate_limited" };
+      this.setState("rate_limited", "OpenAI is rate-limiting requests. Try again in a moment.");
       return {
         status: "rate_limited",
         userMessage:
@@ -92,12 +98,8 @@ class AIProviderService {
       };
     }
 
-    if (
-      e.status === 500 ||
-      e.status === 502 ||
-      e.status === 503 ||
-      e.status === 504
-    ) {
+    if (e.status === 500 || e.status === 502 || e.status === 503 || e.status === 504) {
+      this.setState("provider_offline", "OpenAI is experiencing service issues.");
       return {
         status: "provider_offline",
         userMessage:
@@ -105,8 +107,8 @@ class AIProviderService {
       };
     }
 
-    // Generic network/fetch failure
-    if (e instanceof TypeError) {
+    if (err instanceof TypeError) {
+      this.setState("network_error", "Network error reaching AI provider.");
       return {
         status: "network_error",
         userMessage:
@@ -114,6 +116,10 @@ class AIProviderService {
       };
     }
 
+    // Unknown error — mark as offline but don't override key-level statuses
+    if (this.state.status === "connected") {
+      this.setState("provider_offline", "An unexpected error occurred.");
+    }
     return {
       status: "provider_offline",
       userMessage:

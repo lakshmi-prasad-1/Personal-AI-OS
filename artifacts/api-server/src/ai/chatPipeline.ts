@@ -159,6 +159,7 @@ export async function runChatPipeline(params: {
       // No action needed — stream the direct response.
       const content = choice?.message.content ?? "";
       if (content) {
+        aiProvider.markConnected();
         onToken?.(content);
         return { reply: content, actions: [] };
       }
