@@ -37,6 +37,7 @@ import lifeDecisionRouter from "./lifeDecision";
 import aiSettingsRouter from "./aiSettings";
 import automationRouter from "./automation";
 import systemHealthRouter from "./systemHealth";
+import aiProviderRouter from "./aiProvider";
 
 const router: IRouter = Router();
 
@@ -78,5 +79,6 @@ router.use(lifeDecisionRouter);
 router.use(aiSettingsRouter);
 router.use(automationRouter);
 router.use(systemHealthRouter);
+router.use(aiProviderRouter);
 
 export default router;

@@ -1,0 +1,645 @@
+You are continuing development of AI Brain OS.
+
+You are acting simultaneously as:
+
+• Product Manager
+• Principal AI Systems Architect
+• Principal Backend Engineer
+• Principal Frontend Engineer
+• Principal AI Engineer
+• Principal Database Architect
+• Principal DevOps Engineer
+• Principal QA Engineer
+
+===========================================================
+IMPORTANT
+===========================================================
+
+DO NOT rewrite the project.
+
+DO NOT replace frameworks.
+
+DO NOT change the existing architecture.
+
+DO NOT break authentication.
+
+DO NOT remove existing APIs.
+
+DO NOT remove existing UI.
+
+DO NOT duplicate business logic.
+
+DO NOT bypass the existing AI pipeline.
+
+Reuse every service already built.
+
+Follow SOLID principles.
+
+Maintain modular architecture.
+
+Everything must integrate with the existing codebase.
+
+===========================================================
+CURRENT PROJECT STATUS
+===========================================================
+
+Already implemented:
+
+✓ Authentication
+✓ AI Chat
+✓ Intent Engine
+✓ Context Engine
+✓ Decision Engine
+✓ Action Engine
+✓ Long-Term Memory
+✓ Universal Search
+✓ Knowledge Graph
+✓ Dashboard
+✓ Logging
+✓ Productivity OS
+✓ Study OS
+✓ Career OS
+✓ Shared Services Architecture
+✓ Voice Input (basic)
+
+These systems already exist.
+
+DO NOT rebuild them.
+
+Instead extend and improve them.
+
+===========================================================
+MISSION
+===========================================================
+
+Transform AI Brain OS into a true conversational AI Executive Assistant.
+
+The AI should become the primary interface.
+
+The user should mainly interact through:
+
+• Text Chat
+• Voice Chat
+
+Everything else should happen automatically.
+
+The assistant should understand natural language, identify intent, execute actions, update internal modules, remember context, and respond intelligently.
+
+===========================================================
+PART 1 — FIX AI CHAT & AI PROVIDER ARCHITECTURE
+===========================================================
+
+The current application displays:
+
+"AI chat is not configured on this server (missing OPENAI_API_KEY). Your message was saved."
+
+This is not acceptable for Version 1.
+
+Before writing any feature:
+
+Audit the complete AI provider implementation.
+
+Investigate:
+
+• OPENAI_API_KEY loading
+• environment configuration
+• backend initialization
+• API provider initialization
+• OpenAI client configuration
+• request flow
+• streaming responses
+• provider errors
+• quota handling
+• retry logic
+• configuration loading
+
+Do NOT assume the problem is only a missing key.
+
+Identify the real cause.
+
+Fix every issue.
+
+Implement a robust AI Provider Service.
+
+Create AI Provider Status.
+
+Possible states:
+
+✓ Connected
+
+✓ Missing API Key
+
+✓ Invalid API Key
+
+✓ API Quota Exceeded
+
+✓ Provider Offline
+
+✓ Rate Limited
+
+✓ Network Error
+
+✓ Loading
+
+Expose provider status to:
+
+• Chat UI
+
+• Dashboard Developer Mode
+
+• System Health
+
+Never crash because AI is unavailable.
+
+===========================================================
+PART 2 — AI FAILURE RECOVERY
+===========================================================
+
+If AI cannot answer:
+
+Never lose messages.
+
+Always save the conversation.
+
+Queue requests if appropriate.
+
+Return meaningful responses.
+
+Examples:
+
+"I couldn't contact the AI because your API quota has been exceeded."
+
+"I've safely saved your message."
+
+"I'll continue once AI becomes available."
+
+"I can still perform local actions."
+
+Never expose raw errors.
+
+Never expose stack traces.
+
+Never show HTTP errors directly.
+
+===========================================================
+PART 3 — TRUE VOICE ASSISTANT
+===========================================================
+
+Voice input already exists.
+
+Upgrade it into a real conversational Voice Assistant.
+
+The microphone becomes a first-class AI interface.
+
+Architecture MUST remain:
+
+Microphone
+
+↓
+
+Speech Recognition
+
+↓
+
+Transcript
+
+↓
+
+Intent Engine
+
+↓
+
+Context Engine
+
+↓
+
+Decision Engine
+
+↓
+
+Action Engine
+
+↓
+
+Shared Services
+
+↓
+
+Database
+
+↓
+
+Dashboard
+
+↓
+
+AI Response
+
+Voice MUST NEVER bypass the AI pipeline.
+
+Voice should only convert speech into text.
+
+Everything else is shared.
+
+===========================================================
+PART 4 — NATURAL LANGUAGE UNDERSTANDING
+===========================================================
+
+The assistant should understand natural conversations.
+
+Example:
+
+User:
+
+"Hi, I want to finish my project this evening."
+
+The AI should automatically:
+
+Detect:
+
+Intent:
+Create Task
+
+Task:
+Finish Project
+
+Due Time:
+Today Evening
+
+Priority:
+High
+
+Category:
+Project
+
+Automatically:
+
+✓ Create Task
+
+✓ Update Planner
+
+✓ Create Reminder
+
+✓ Update Dashboard
+
+✓ Update Timeline
+
+✓ Save Context
+
+✓ Store Memory
+
+✓ Link Knowledge Graph
+
+✓ Record Agent Action
+
+Finally respond:
+
+"I've created your task, scheduled it for this evening, added a reminder, updated today's planner, and logged the activity."
+
+No manual forms.
+
+No extra questions unless absolutely necessary.
+
+===========================================================
+PART 5 — ADDITIONAL NATURAL LANGUAGE EXAMPLES
+===========================================================
+
+Example:
+
+"I should practice Java every morning."
+
+Automatically:
+
+Create Habit
+
+Create Reminder
+
+Update Planner
+
+Store Learning Preference
+
+Update Dashboard
+
+Save Memory
+
+---------------------------------------
+
+Example:
+
+"I have an assignment due Friday."
+
+Automatically:
+
+Create Task
+
+Reminder
+
+Planner Entry
+
+Dashboard Update
+
+Timeline Entry
+
+Memory
+
+Knowledge Graph
+
+Agent Action
+
+---------------------------------------
+
+Example:
+
+"I studied DBMS today."
+
+Automatically:
+
+Log Study Session
+
+Update Analytics
+
+Update Revision Engine
+
+Update Dashboard
+
+Timeline
+
+---------------------------------------
+
+Example:
+
+"I solved five LeetCode problems."
+
+Automatically:
+
+Update Coding Progress
+
+Study Statistics
+
+Productivity Stats
+
+Weekly Review
+
+Dashboard
+
+Timeline
+
+---------------------------------------
+
+Example:
+
+"Remember I study better at night."
+
+Automatically:
+
+Store Long-Term Memory
+
+Learning Preference
+
+Planner Preference
+
+Future Recommendation Context
+
+===========================================================
+PART 6 — VOICE EXPERIENCE
+===========================================================
+
+Support:
+
+Tap microphone
+
+↓
+
+Speak naturally
+
+↓
+
+Stop recording
+
+↓
+
+Transcript appears
+
+↓
+
+Transcript enters AI pipeline
+
+↓
+
+AI executes actions
+
+↓
+
+Assistant responds
+
+Do NOT implement continuous listening.
+
+Privacy must be preserved.
+
+===========================================================
+PART 7 — VOICE SETTINGS
+===========================================================
+
+Create configurable voice settings.
+
+Examples:
+
+Recognition Language
+
+Preferred Language
+
+Noise Suppression
+
+Microphone Sensitivity
+
+Auto Punctuation
+
+Voice Enabled
+
+Future Voice Output Toggle
+
+Store these preferences as long-term settings.
+
+===========================================================
+PART 8 — TRANSCRIPT PREVIEW
+===========================================================
+
+After speech recognition:
+
+Display:
+
+Recognized Transcript
+
+Detected Intent
+
+Actions Executed
+
+AI Response
+
+Users should clearly see what the AI understood.
+
+===========================================================
+PART 9 — ERROR RECOVERY
+===========================================================
+
+If speech recognition fails:
+
+Never lose transcript.
+
+Allow manual editing.
+
+Retry recognition.
+
+Gracefully explain failures.
+
+If AI fails after transcript:
+
+Still process every local action possible.
+
+Examples:
+
+Task creation
+
+Reminder creation
+
+Memory creation
+
+Planner updates
+
+Dashboard updates
+
+Knowledge Graph updates
+
+Agent Logs
+
+Only skip LLM-generated text if the provider is unavailable.
+
+===========================================================
+PART 10 — PERFORMANCE
+===========================================================
+
+Reuse:
+
+Existing Chat Service
+
+Existing Intent Engine
+
+Existing Context Engine
+
+Existing Decision Engine
+
+Existing Action Engine
+
+Existing Services
+
+Never duplicate AI logic.
+
+Never duplicate voice logic.
+
+Optimize:
+
+Chat latency
+
+Voice latency
+
+Context retrieval
+
+Dashboard refresh
+
+Knowledge updates
+
+===========================================================
+PART 11 — TESTING
+===========================================================
+
+Before completion verify:
+
+✓ Authentication
+
+✓ AI Chat
+
+✓ AI Provider
+
+✓ Voice Recognition
+
+✓ Voice Pipeline
+
+✓ Intent Detection
+
+✓ Context Retrieval
+
+✓ Decision Engine
+
+✓ Action Engine
+
+✓ Memory Engine
+
+✓ Knowledge Graph
+
+✓ Dashboard
+
+✓ Planner Updates
+
+✓ Task Creation
+
+✓ Reminder Creation
+
+✓ Habit Creation
+
+✓ Study Logging
+
+✓ Career Logging
+
+✓ Timeline
+
+✓ Logging
+
+✓ Error Recovery
+
+✓ Provider Status
+
+✓ Retry Logic
+
+===========================================================
+SUCCESS CRITERIA
+===========================================================
+
+By the end of this implementation:
+
+• AI Chat generates real responses when a valid provider is configured.
+
+• AI Provider status is visible and robust.
+
+• Missing, invalid, offline, and quota errors are handled gracefully.
+
+• User messages are never lost.
+
+• Voice chat works exactly like text chat.
+
+• The microphone acts as a true conversational AI assistant.
+
+• Natural spoken language automatically creates tasks, reminders, planner entries, study logs, memories, habits, and dashboard updates.
+
+• Voice and text share one unified AI pipeline.
+
+• No duplicate business logic exists.
+
+• All changes are integrated into the existing architecture.
+
+Finally:
+
+1. Audit all modified modules.
+2. Fix compilation, runtime, lint, and TypeScript errors.
+3. Remove dead or duplicate code.
+4. Verify all routes, services, AI tools, voice pipeline, and UI work correctly.
+5. Produce a completion report including:
+   - New files
+   - Modified files
+   - New APIs
+   - New AI tools
+   - Database changes
+   - Voice architecture updates
+   - AI provider improvements
+   - Remaining Version 2 features only.
+
+Do not stop until every requirement in this prompt has been fully implemented, tested, verified, and integrated into AI Brain OS Version 1.

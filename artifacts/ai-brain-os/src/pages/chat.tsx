@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import { useQueryClient } from "@tanstack/react-query";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import {
   useListChats,
   useCreateChat,
@@ -8,17 +8,81 @@ import {
   getListChatsQueryKey,
   getGetChatQueryKey,
 } from "@workspace/api-client-react";
-import { MessageSquare, Plus, Trash2, Send, Bot, User, Mic, MicOff } from "lucide-react";
+import {
+  MessageSquare,
+  Plus,
+  Trash2,
+  Send,
+  Bot,
+  User,
+  Mic,
+  MicOff,
+  AlertCircle,
+  WifiOff,
+  KeyRound,
+  Gauge,
+} from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useAuth } from "@/lib/auth";
 import { useToast } from "@/hooks/use-toast";
+import { apiGet } from "@/lib/api";
+import { useVoiceInput, VOICE_ERROR_MESSAGES } from "@/hooks/use-voice-input";
+
+// ─── Types ──────────────────────────────────────────────────────────────────
 
 interface LocalMessage {
   id: string;
   role: "user" | "assistant";
   content: string;
 }
+
+interface AiSettings {
+  voiceModeEnabled: boolean;
+}
+
+interface ProviderState {
+  status: string;
+  message: string;
+  lastChecked: string | null;
+}
+
+// ─── Provider status helpers ─────────────────────────────────────────────────
+
+const STATUS_META: Record<string, { icon: typeof AlertCircle; color: string; label: string }> = {
+  missing_key: {
+    icon: KeyRound,
+    color: "text-amber-600 bg-amber-50 border-amber-200",
+    label: "AI not configured — add OPENAI_API_KEY to enable chat",
+  },
+  invalid_key: {
+    icon: KeyRound,
+    color: "text-red-600 bg-red-50 border-red-200",
+    label: "AI API key is invalid or expired",
+  },
+  quota_exceeded: {
+    icon: Gauge,
+    color: "text-orange-600 bg-orange-50 border-orange-200",
+    label: "OpenAI quota exceeded — check your billing",
+  },
+  rate_limited: {
+    icon: AlertCircle,
+    color: "text-yellow-600 bg-yellow-50 border-yellow-200",
+    label: "AI is rate-limited — messages will be saved, try again shortly",
+  },
+  provider_offline: {
+    icon: WifiOff,
+    color: "text-red-600 bg-red-50 border-red-200",
+    label: "AI provider is offline — messages are being saved",
+  },
+  network_error: {
+    icon: WifiOff,
+    color: "text-red-600 bg-red-50 border-red-200",
+    label: "Network error reaching AI provider",
+  },
+};
+
+// ─── Root component ──────────────────────────────────────────────────────────
 
 export default function Chat() {
   const { data: chats, isLoading } = useListChats();
@@ -66,13 +130,19 @@ export default function Chat() {
 
   return (
     <div className="h-full flex flex-col md:flex-row bg-background">
+      {/* Sidebar */}
       <div className="w-full md:w-72 border-r border-border h-full flex flex-col shrink-0">
         <div className="p-4 border-b border-border flex items-center justify-between bg-card/50">
           <h1 className="text-xl font-semibold flex items-center gap-2">
             <MessageSquare className="w-5 h-5 text-primary" />
             Chats
           </h1>
-          <Button size="sm" onClick={handleNewChat} disabled={createChat.isPending} data-testid="button-new-chat">
+          <Button
+            size="sm"
+            onClick={handleNewChat}
+            disabled={createChat.isPending}
+            data-testid="button-new-chat"
+          >
             <Plus className="w-4 h-4 mr-1" /> New
           </Button>
         </div>
@@ -88,7 +158,9 @@ export default function Chat() {
               <div
                 key={chat.id}
                 className={`group flex items-center justify-between gap-2 px-3 py-2 rounded-md cursor-pointer transition-colors animate-in fade-in slide-in-from-left-2 ${
-                  activeChatId === chat.id ? "bg-primary text-primary-foreground" : "hover:bg-sidebar-accent"
+                  activeChatId === chat.id
+                    ? "bg-primary text-primary-foreground"
+                    : "hover:bg-sidebar-accent"
                 }`}
                 style={{ animationDelay: `${i * 30}ms` }}
                 onClick={() => setActiveChatId(chat.id)}
@@ -111,6 +183,7 @@ export default function Chat() {
         </div>
       </div>
 
+      {/* Main area */}
       <div className="flex-1 h-full flex flex-col bg-muted/20">
         {activeChatId ? (
           <ChatThread key={activeChatId} chatId={activeChatId} />
@@ -126,6 +199,8 @@ export default function Chat() {
   );
 }
 
+// ─── Chat thread ─────────────────────────────────────────────────────────────
+
 function ChatThread({ chatId }: { chatId: string }) {
   const { data: chat, isLoading } = useGetChat(chatId);
   const { token } = useAuth();
@@ -136,67 +211,57 @@ function ChatThread({ chatId }: { chatId: string }) {
   const [isStreaming, setIsStreaming] = useState(false);
   const [streamingText, setStreamingText] = useState("");
   const [optimisticUserMessage, setOptimisticUserMessage] = useState<string | null>(null);
-  const [isListening, setIsListening] = useState(false);
-  const [voiceSupported, setVoiceSupported] = useState(true);
   const scrollRef = useRef<HTMLDivElement>(null);
-  const recognitionRef = useRef<any>(null);
 
-  useEffect(() => {
-    const SpeechRecognitionCtor =
-      (window as any).SpeechRecognition || (window as any).webkitSpeechRecognition;
+  // AI provider status (poll every 30 s; shows banner when not connected)
+  const { data: providerStatus } = useQuery<ProviderState>({
+    queryKey: ["ai-provider-status"],
+    queryFn: () => apiGet("/ai-provider/status"),
+    refetchInterval: 30_000,
+    retry: false,
+    staleTime: 20_000,
+  });
 
-    if (!SpeechRecognitionCtor) {
-      setVoiceSupported(false);
-      return;
-    }
+  // AI settings — respect voiceModeEnabled
+  const { data: aiSettings } = useQuery<AiSettings>({
+    queryKey: ["ai-settings"],
+    queryFn: () => apiGet("/ai-settings"),
+    staleTime: 60_000,
+    retry: false,
+  });
 
-    const recognition = new SpeechRecognitionCtor();
-    recognition.continuous = false;
-    recognition.interimResults = true;
-    recognition.lang = "en-US";
+  // Ref that always points to the latest handleSend (avoids stale closure in voice callback)
+  const handleSendRef = useRef<(() => Promise<void>) | undefined>(undefined);
 
-    recognition.onresult = (event: any) => {
-      let transcript = "";
-      for (let i = event.resultIndex; i < event.results.length; i++) {
-        transcript += event.results[i][0].transcript;
-      }
+  const voice = useVoiceInput({
+    onFinalTranscript: (transcript) => {
       setInput(transcript);
-    };
+      // Auto-send after React has committed the state update
+      setTimeout(() => {
+        handleSendRef.current?.();
+      }, 80);
+    },
+  });
 
-    recognition.onerror = () => {
-      setIsListening(false);
-    };
-
-    recognition.onend = () => {
-      setIsListening(false);
-    };
-
-    recognitionRef.current = recognition;
-
-    return () => {
-      recognition.onresult = null;
-      recognition.onerror = null;
-      recognition.onend = null;
-      recognition.abort();
-    };
-  }, []);
-
-  const toggleListening = () => {
-    if (!recognitionRef.current) return;
-
-    if (isListening) {
-      recognitionRef.current.stop();
-      setIsListening(false);
-    } else {
-      setInput("");
-      recognitionRef.current.start();
-      setIsListening(true);
+  // Show voice errors as toasts
+  useEffect(() => {
+    if (voice.error) {
+      const msg = VOICE_ERROR_MESSAGES[voice.error];
+      if (voice.error !== "aborted") {
+        toast({ title: "Voice input", description: msg, variant: "destructive" });
+      }
     }
-  };
+  }, [voice.error, toast]);
 
   const messages: LocalMessage[] = [
-    ...(chat?.messages.map((m) => ({ id: m.id, role: m.role as "user" | "assistant", content: m.content })) || []),
-    ...(optimisticUserMessage ? [{ id: "optimistic-user", role: "user" as const, content: optimisticUserMessage }] : []),
+    ...(chat?.messages.map((m) => ({
+      id: m.id,
+      role: m.role as "user" | "assistant",
+      content: m.content,
+    })) || []),
+    ...(optimisticUserMessage
+      ? [{ id: "optimistic-user", role: "user" as const, content: optimisticUserMessage }]
+      : []),
     ...(isStreaming ? [{ id: "streaming", role: "assistant" as const, content: streamingText }] : []),
   ];
 
@@ -208,12 +273,10 @@ function ChatThread({ chatId }: { chatId: string }) {
     const content = input.trim();
     if (!content || isStreaming) return;
 
-    if (isListening) {
-      recognitionRef.current?.stop();
-      setIsListening(false);
-    }
+    if (voice.isListening) voice.stopListening();
 
     setInput("");
+    voice.clearTranscript();
     setOptimisticUserMessage(content);
     setIsStreaming(true);
     setStreamingText("");
@@ -243,7 +306,7 @@ function ChatThread({ chatId }: { chatId: string }) {
         acc += decoder.decode(value, { stream: true });
         setStreamingText(acc);
       }
-    } catch (err) {
+    } catch {
       toast({ title: "Failed to send message", variant: "destructive" });
     } finally {
       setIsStreaming(false);
@@ -254,14 +317,47 @@ function ChatThread({ chatId }: { chatId: string }) {
     }
   };
 
+  // Keep ref in sync
+  handleSendRef.current = handleSend;
+
+  const toggleVoice = () => {
+    if (voice.isListening) {
+      voice.stopListening();
+    } else {
+      voice.startListening();
+    }
+  };
+
+  const showVoiceButton =
+    voice.voiceSupported && (aiSettings?.voiceModeEnabled ?? true);
+
+  const providerBanner = resolveProviderBanner(providerStatus);
+
   return (
-    <div className="flex-1 flex flex-col h-full">
+    <div className="flex-1 flex flex-col h-full overflow-hidden">
+      {/* Provider status banner */}
+      {providerBanner && (
+        <div
+          className={`flex items-center gap-2 px-4 py-2 text-xs border-b ${providerBanner.color}`}
+        >
+          <providerBanner.icon className="w-3.5 h-3.5 shrink-0" />
+          <span>{providerBanner.label}</span>
+        </div>
+      )}
+
+      {/* Message list */}
       <div ref={scrollRef} className="flex-1 overflow-y-auto p-6 space-y-4">
         {isLoading ? (
           <div className="text-center text-muted-foreground">Loading conversation...</div>
         ) : messages.length === 0 ? (
-          <div className="text-center text-muted-foreground py-12 animate-in fade-in duration-300">
-            Say hello to your assistant.
+          <div className="flex flex-col items-center justify-center h-full gap-3 text-muted-foreground animate-in fade-in duration-300">
+            <Bot className="w-12 h-12 text-muted-foreground/30" />
+            <p className="text-sm">Say hello to your assistant.</p>
+            {showVoiceButton && (
+              <p className="text-xs text-muted-foreground/60">
+                Tap the mic to speak, or type below.
+              </p>
+            )}
           </div>
         ) : (
           messages.map((message, i) => (
@@ -297,9 +393,23 @@ function ChatThread({ chatId }: { chatId: string }) {
         )}
       </div>
 
+      {/* Voice listening indicator */}
+      {voice.isListening && (
+        <div className="mx-4 mb-1 flex items-center gap-2 text-xs text-primary animate-in fade-in duration-200">
+          <span className="relative flex h-2 w-2">
+            <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-primary opacity-75" />
+            <span className="relative inline-flex rounded-full h-2 w-2 bg-primary" />
+          </span>
+          <span className="italic text-muted-foreground">
+            {input ? `"${input}"` : "Listening…"}
+          </span>
+        </div>
+      )}
+
+      {/* Input bar */}
       <div className="p-4 border-t border-border flex items-center gap-2 bg-card/50">
         <Input
-          placeholder={isListening ? "Listening..." : "Type a message..."}
+          placeholder={voice.isListening ? "Listening — speak now…" : "Type a message…"}
           value={input}
           onChange={(e) => setInput(e.target.value)}
           onKeyDown={(e) => {
@@ -309,25 +419,54 @@ function ChatThread({ chatId }: { chatId: string }) {
             }
           }}
           disabled={isStreaming}
+          className={voice.isListening ? "border-primary ring-1 ring-primary/30" : ""}
           data-testid="input-chat-message"
         />
-        {voiceSupported && (
+
+        {showVoiceButton && (
           <Button
             type="button"
-            variant={isListening ? "destructive" : "outline"}
+            variant={voice.isListening ? "destructive" : "outline"}
             size="icon"
-            onClick={toggleListening}
+            onClick={toggleVoice}
             disabled={isStreaming}
-            title={isListening ? "Stop voice input" : "Speak your message"}
+            title={voice.isListening ? "Stop voice input" : "Speak your message"}
+            className={
+              voice.isListening
+                ? "relative overflow-visible ring-2 ring-destructive/40"
+                : ""
+            }
             data-testid="button-voice-input"
           >
-            {isListening ? <MicOff className="w-4 h-4" /> : <Mic className="w-4 h-4" />}
+            {voice.isListening && (
+              <span className="absolute inset-0 rounded-md animate-ping bg-destructive/20 pointer-events-none" />
+            )}
+            {voice.isListening ? (
+              <MicOff className="w-4 h-4" />
+            ) : (
+              <Mic className="w-4 h-4" />
+            )}
           </Button>
         )}
-        <Button onClick={handleSend} disabled={isStreaming || !input.trim()} data-testid="button-send-message">
+
+        <Button
+          onClick={handleSend}
+          disabled={isStreaming || !input.trim()}
+          data-testid="button-send-message"
+        >
           <Send className="w-4 h-4" />
         </Button>
       </div>
     </div>
   );
+}
+
+// ─── Helpers ─────────────────────────────────────────────────────────────────
+
+function resolveProviderBanner(
+  status: ProviderState | undefined,
+): (typeof STATUS_META)[string] | null {
+  if (!status) return null;
+  if (status.status === "connected" || status.status === "loading") return null;
+  return STATUS_META[status.status] ?? null;
 }
