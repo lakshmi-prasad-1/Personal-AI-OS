@@ -1,4 +1,4 @@
-import { aiProvider } from "./aiProvider";
+import { aiProvider, type ProviderHandle, type ProviderName } from "./aiProvider";
 import { contextEngine } from "./contextEngine";
 import { actionEngine, type ActionResult } from "./actionEngine";
 import { chatTools } from "./toolDefinitions";
@@ -39,8 +39,8 @@ export interface PipelineResult {
 }
 
 /**
- * Retries transient OpenAI failures (rate limits, timeouts, 5xx) with a short
- * backoff. Non-retryable errors (auth, quota, bad request) fail immediately.
+ * Retries transient failures (rate limits, 5xx) with a short backoff.
+ * Non-retryable errors (auth, quota, bad request) fail immediately.
  */
 async function withRetry<T>(fn: () => Promise<T>, attempts = 2): Promise<T> {
   let lastErr: unknown;
@@ -71,11 +71,107 @@ interface HistoryMessage {
 }
 
 /**
+ * Run the intent + action + response steps against a single provider handle.
+ * Throws on any error so the caller can try the next provider.
+ */
+async function runWithProvider(
+  provider: ProviderHandle,
+  baseMessages: OpenAI.Chat.Completions.ChatCompletionMessageParam[],
+  userId: string,
+  chatId: string,
+  onToken?: (token: string) => void,
+  actionsAccumulated: { actionType: string; summary: string }[] = [],
+): Promise<PipelineResult> {
+  const { client, model, providerName } = provider;
+
+  logger.info(
+    { userId, chatId, providerName, model, stage: "intent_start" },
+    "Pipeline: calling intent engine",
+  );
+
+  // Step 1: non-streamed call so we can inspect for tool calls (Intent + Decision).
+  const first = await withRetry(() =>
+    client.chat.completions.create({
+      model,
+      messages: baseMessages,
+      tools: chatTools,
+      tool_choice: "auto",
+    }),
+  );
+
+  const choice = first.choices[0];
+  const toolCalls = choice?.message.tool_calls ?? [];
+  logger.info(
+    {
+      userId,
+      chatId,
+      providerName,
+      stage: "intent",
+      toolCalls: toolCalls.map((c) => (c.type === "function" ? c.function.name : c.type)),
+    },
+    "Pipeline: intent classified",
+  );
+
+  if (toolCalls.length === 0) {
+    // No action needed — return the direct response.
+    const content = choice?.message.content ?? "";
+    if (content) {
+      aiProvider.markConnected(providerName);
+      onToken?.(content);
+      return { reply: content, actions: actionsAccumulated };
+    }
+    // Defensive: streamed completion fallback.
+    return streamFinal(client, model, providerName, baseMessages, onToken, actionsAccumulated);
+  }
+
+  // Step 2: Action Engine executes every requested tool call (multi-intent).
+  const toolResults: ActionResult[] = [];
+  for (const call of toolCalls) {
+    if (call.type !== "function") continue;
+    logger.info(
+      { userId, chatId, providerName, stage: "action", tool: call.function.name },
+      "Pipeline: executing action",
+    );
+    const result = await actionEngine.execute({
+      userId,
+      chatId,
+      toolCallId: call.id,
+      toolName: call.function.name,
+      rawArgs: call.function.arguments,
+    });
+    logger.info(
+      { userId, chatId, stage: "action_result", tool: call.function.name, ok: result.ok },
+      "Pipeline: action executed",
+    );
+    toolResults.push(result);
+    if (result.actionLogged) actionsAccumulated.push(result.actionLogged);
+  }
+
+  // Step 3: feed tool outputs back to the model for a natural final response.
+  const followUpMessages: OpenAI.Chat.Completions.ChatCompletionMessageParam[] = [
+    ...baseMessages,
+    { role: "assistant", content: choice!.message.content, tool_calls: toolCalls },
+    ...toolResults.map(
+      (r): OpenAI.Chat.Completions.ChatCompletionMessageParam => ({
+        role: "tool",
+        tool_call_id: r.toolCallId,
+        content: JSON.stringify(r.ok ? r.result : { error: r.result }),
+      }),
+    ),
+  ];
+
+  return streamFinal(client, model, providerName, followUpMessages, onToken, actionsAccumulated);
+}
+
+/**
  * This is the AI-first pipeline described in the spec:
  *   Text/Voice input -> Intent Engine (tool-calling) -> Context Engine ->
  *   Action Engine (validated writes + graph auto-link + logging) -> Response.
  * Both keyboard and voice input hit this exact same function — there is no
  * separate voice code path.
+ *
+ * Providers are tried in order (Gemini → Groq → OpenAI) with automatic fallback
+ * on transient errors (rate limits, 5xx, network failures).
  */
 export async function runChatPipeline(params: {
   userId: string;
@@ -85,25 +181,21 @@ export async function runChatPipeline(params: {
 }): Promise<PipelineResult> {
   const { userId, chatId, history, onToken } = params;
 
-  const openai = aiProvider.getClient();
+  const primaryProvider = aiProvider.getPrimaryProvider();
 
-  if (!openai) {
-    const { userMessage } = aiProvider.classifyError(
-      new Error("no_client") as unknown as { status?: number; code?: string },
-    );
-    // classifyError won't match any case for a plain Error — fall back to status check
+  if (!primaryProvider) {
     const status = aiProvider.getStatus();
     const reply =
       status.status === "missing_key"
-        ? "AI chat is not configured on this server (missing OPENAI_API_KEY). Your message was saved."
-        : userMessage;
+        ? "AI chat is not configured on this server. Set GEMINI_API_KEY, GROQ_API_KEY, or OPENAI_API_KEY to enable AI features. Your message was saved."
+        : "AI is currently unavailable. Your message was saved.";
     onToken?.(reply);
     return { reply, actions: [] };
   }
 
   logger.info(
-    { userId, chatId, stage: "intent_input" },
-    "Pipeline: received message, gathering context",
+    { userId, chatId, stage: "context_gather" },
+    "Pipeline: gathering context",
   );
   const context = await contextEngine.gather(userId);
   logger.info(
@@ -118,6 +210,7 @@ export async function runChatPipeline(params: {
     },
     "Pipeline: context assembled",
   );
+
   const systemContent = context.summary
     ? `${SYSTEM_PROMPT}\n\nContext about this user:\n${context.summary}`
     : SYSTEM_PROMPT;
@@ -132,96 +225,70 @@ export async function runChatPipeline(params: {
 
   const actionsPerformed: { actionType: string; summary: string }[] = [];
 
-  try {
-    // Step 1: non-streamed call so we can inspect for tool calls (Intent + Decision).
-    const first = await withRetry(() =>
-      openai.chat.completions.create({
-        model: "gpt-4o-mini",
-        messages: baseMessages,
-        tools: chatTools,
-        tool_choice: "auto",
-      }),
-    );
+  // Try each provider in order, falling back on transient errors.
+  let currentProvider: ProviderHandle | null = primaryProvider;
 
-    const choice = first.choices[0];
-    const toolCalls = choice?.message.tool_calls ?? [];
-    logger.info(
-      {
+  while (currentProvider) {
+    const providerName: ProviderName = currentProvider.providerName;
+    try {
+      const result = await runWithProvider(
+        currentProvider,
+        baseMessages,
         userId,
         chatId,
-        stage: "intent",
-        toolCalls: toolCalls.map((c) => (c.type === "function" ? c.function.name : c.type)),
-      },
-      "Pipeline: intent classified",
-    );
+        onToken,
+        actionsPerformed,
+      );
+      aiProvider.markConnected(providerName);
+      return result;
+    } catch (err) {
+      const { userMessage, retryable } = aiProvider.classifyError(err, providerName);
+      logger.warn(
+        { err, providerName, retryable },
+        `Pipeline: ${providerName} failed${retryable ? ", trying next provider" : ""}`,
+      );
 
-    if (toolCalls.length === 0) {
-      // No action needed — stream the direct response.
-      const content = choice?.message.content ?? "";
-      if (content) {
-        aiProvider.markConnected();
-        onToken?.(content);
-        return { reply: content, actions: [] };
+      if (!retryable) {
+        onToken?.(userMessage);
+        return { reply: userMessage, actions: actionsPerformed };
       }
-      // Defensive: fall back to streamed completion.
-      return streamFinal(openai, baseMessages, onToken);
-    }
 
-    // Step 2: Action Engine executes every requested tool call (multi-intent).
-    const toolResults: ActionResult[] = [];
-    for (const call of toolCalls) {
-      if (call.type !== "function") continue;
+      // Try next provider.
+      const next = aiProvider.getFallbackProvider(providerName);
+      if (!next) {
+        // All providers exhausted.
+        const finalMsg =
+          "All AI providers are currently unavailable. Your message was saved — try again in a moment.";
+        onToken?.(finalMsg);
+        return { reply: finalMsg, actions: actionsPerformed };
+      }
+
       logger.info(
-        { userId, chatId, stage: "action", tool: call.function.name },
-        "Pipeline: executing action",
+        { from: providerName, to: next.providerName },
+        "Pipeline: falling back to next provider",
       );
-      const result = await actionEngine.execute({
-        userId,
-        chatId,
-        toolCallId: call.id,
-        toolName: call.function.name,
-        rawArgs: call.function.arguments,
-      });
-      logger.info(
-        { userId, chatId, stage: "action_result", tool: call.function.name, ok: result.ok },
-        "Pipeline: action executed",
-      );
-      toolResults.push(result);
-      if (result.actionLogged) actionsPerformed.push(result.actionLogged);
+      currentProvider = next;
     }
-
-    // Step 3: feed tool outputs back to the model for a natural final response.
-    const followUpMessages: OpenAI.Chat.Completions.ChatCompletionMessageParam[] = [
-      ...baseMessages,
-      { role: "assistant", content: choice!.message.content, tool_calls: toolCalls },
-      ...toolResults.map(
-        (r): OpenAI.Chat.Completions.ChatCompletionMessageParam => ({
-          role: "tool",
-          tool_call_id: r.toolCallId,
-          content: JSON.stringify(r.ok ? r.result : { error: r.result }),
-        }),
-      ),
-    ];
-
-    return streamFinal(openai, followUpMessages, onToken, actionsPerformed);
-  } catch (err) {
-    logger.error({ err }, "Chat pipeline failed");
-    const { userMessage } = aiProvider.classifyError(err);
-    onToken?.(userMessage);
-    return { reply: userMessage, actions: actionsPerformed };
   }
+
+  // Should never reach here, but TypeScript requires it.
+  const fallbackMsg = "AI is currently unavailable. Your message was saved.";
+  onToken?.(fallbackMsg);
+  return { reply: fallbackMsg, actions: actionsPerformed };
 }
 
 async function streamFinal(
-  openai: OpenAI,
+  client: OpenAI,
+  model: string,
+  providerName: ProviderName,
   messages: OpenAI.Chat.Completions.ChatCompletionMessageParam[],
   onToken?: (token: string) => void,
   actions: { actionType: string; summary: string }[] = [],
 ): Promise<PipelineResult> {
   let fullReply = "";
   const stream = await withRetry(() =>
-    openai.chat.completions.create({
-      model: "gpt-4o-mini",
+    client.chat.completions.create({
+      model,
       stream: true,
       messages,
     }),
@@ -235,5 +302,6 @@ async function streamFinal(
     }
   }
 
+  aiProvider.markConnected(providerName);
   return { reply: fullReply, actions };
 }
