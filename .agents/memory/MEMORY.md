@@ -2,3 +2,4 @@
 - [Phase 2A Productivity OS](phase2a-productivity.md) — Tasks/Goals/Habits/Focus/Reminders/Planner/Reviews fully implemented; security and type issues found and fixed.
 - [Career OS Phase 3A](phase3a-career-os.md) — Version 1 complete; new DB tables, services, routes, 4 AI tools, 8 frontend pages; OpenAPI spec still missing for career endpoints.
 - [Phase 4 Life OS expansion](phase4-life-os.md) — Life Profile/Timeline/Insights/Analytics/Decision Engine/AI Settings/Automation/System Health; skips OpenAPI codegen by established convention; automation is interfaces-only.
+- [Multi-provider AI setup](ai-provider-multi.md) — Gemini→Groq→OpenAI fallback; Phase B (DB writes) runs exactly once, never retried across providers.

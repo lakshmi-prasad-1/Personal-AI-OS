@@ -11,7 +11,10 @@ An AI-first "second brain" app: talk to an assistant (by text or voice), and it 
 - `pnpm --filter @workspace/api-spec run codegen` — regenerate API hooks and Zod schemas from the OpenAPI spec (run after editing `lib/api-spec/openapi.yaml`)
 - `pnpm --filter @workspace/db run push` — push DB schema changes (dev only)
 - Required env: `DATABASE_URL` — Replit built-in PostgreSQL (auto-provisioned)
-- Optional env: `OPENAI_API_KEY` — enables AI chat pipeline (tool-calling). Without it, chat degrades gracefully.
+- AI provider keys (at least one required for AI features — tried in this priority order):
+  - `GEMINI_API_KEY` — Google Gemini (primary, model: gemini-2.0-flash)
+  - `GROQ_API_KEY` — Groq (fallback, model: llama-3.3-70b-versatile)
+  - `OPENAI_API_KEY` — OpenAI (tertiary, model: gpt-4o-mini)
 - `SESSION_SECRET` — used for JWT signing
 
 ## Stack
@@ -47,6 +50,7 @@ An AI-first "second brain" app: talk to an assistant (by text or voice), and it 
 - **Knowledge graph is auto-maintained.** `knowledgeGraphService.autoLink` creates nodes and links via keyword-overlap scoring.
 - **Voice input reuses the text pipeline.** Mic button transcribes via browser Web Speech API and feeds the same `handleSend` pipeline.
 - **Every AI action is logged to `agent_actions`.** Powers the Activity Timeline and provides an audit trail.
+- **Multi-provider AI with automatic fallback.** `aiProvider.ts` tries Gemini → Groq → OpenAI in order. The pipeline (Phase A intent, Phase B actions, Phase C response) is structured so tool-call DB writes in Phase B execute exactly once and are never retried across providers.
 
 ## Product
 

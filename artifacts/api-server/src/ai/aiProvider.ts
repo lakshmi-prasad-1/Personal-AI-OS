@@ -26,13 +26,24 @@ export interface ProviderHandle {
   providerName: ProviderName;
 }
 
+/**
+ * Error classification result.
+ * `withinProviderRetryable`: whether withRetry() should re-attempt the *same* provider.
+ * Regardless of this flag, the pipeline will always try the next provider on failure.
+ */
+export interface ClassifiedError {
+  status: ProviderStatus;
+  /** Message only shown when ALL providers are exhausted. */
+  userMessage: string;
+  /** Whether to retry the same provider (e.g. transient 5xx, rate limit). */
+  withinProviderRetryable: boolean;
+}
+
 interface ProviderConfig {
   name: ProviderName;
   envKey: string;
   baseURL: string;
   model: string;
-  /** Model to use for streaming the final response (some providers differ) */
-  streamModel?: string;
 }
 
 const PROVIDER_CONFIGS: ProviderConfig[] = [
@@ -57,7 +68,7 @@ const PROVIDER_CONFIGS: ProviderConfig[] = [
 ];
 
 class AIProviderService {
-  /** Ordered list of ready provider handles, primary first */
+  /** Ordered list of ready provider handles, primary first. */
   private providers: ProviderHandle[] = [];
 
   private state: ProviderState = {
@@ -78,7 +89,6 @@ class AIProviderService {
         logger.debug(`AIProvider: ${cfg.name} skipped — ${cfg.envKey} not set`);
         continue;
       }
-
       const client = new OpenAI({ apiKey, baseURL: cfg.baseURL });
       this.providers.push({ client, model: cfg.model, providerName: cfg.name });
       logger.info(`AIProvider: ${cfg.name} registered (model: ${cfg.model})`);
@@ -106,111 +116,92 @@ class AIProviderService {
     this.state = { status, message, lastChecked: new Date().toISOString(), providerName };
   }
 
-  /**
-   * Returns the primary provider handle, or null if none are configured.
-   */
+  /** Primary provider, or null if none configured. */
   getClient(): OpenAI | null {
     return this.providers[0]?.client ?? null;
   }
 
-  /**
-   * Returns the full handle for the primary provider (client + model name).
-   */
-  getPrimaryProvider(): ProviderHandle | null {
-    return this.providers[0] ?? null;
-  }
-
-  /**
-   * Returns the next provider to try after `currentProviderName`, for fallback.
-   * Returns null if there is no further fallback.
-   */
-  getFallbackProvider(currentProviderName: ProviderName): ProviderHandle | null {
-    const idx = this.providers.findIndex((p) => p.providerName === currentProviderName);
-    if (idx === -1 || idx + 1 >= this.providers.length) return null;
-    return this.providers[idx + 1] ?? null;
+  /** All configured providers in priority order. */
+  getAllProviders(): ProviderHandle[] {
+    return [...this.providers];
   }
 
   getStatus(): ProviderState {
     return { ...this.state };
   }
 
+  /** Always updates provider identity so health routes reflect the active provider. */
   markConnected(providerName: ProviderName): void {
-    if (this.state.status !== "connected") {
-      const handle = this.providers.find((p) => p.providerName === providerName);
-      this.setState(
-        "connected",
-        `AI ready via ${providerName}${handle ? ` (model: ${handle.model})` : ""}.`,
-        providerName,
-      );
-    }
+    const handle = this.providers.find((p) => p.providerName === providerName);
+    this.setState(
+      "connected",
+      `AI ready via ${providerName}${handle ? ` (model: ${handle.model})` : ""}.`,
+      providerName,
+    );
   }
 
   /**
-   * Classify an API error into a user-friendly status + message.
-   * Returns `retryable: true` for transient errors so the pipeline can fall back.
+   * Classify an error from one provider.
+   *
+   * `withinProviderRetryable` controls whether withRetry() re-attempts the same provider.
+   * The pipeline ALWAYS tries the next provider on any failure — auth/quota errors on
+   * provider A should not prevent trying provider B.
    */
-  classifyError(
-    err: unknown,
-    providerName: ProviderName = "none",
-  ): { status: ProviderStatus; userMessage: string; retryable: boolean } {
+  classifyError(err: unknown, providerName: ProviderName = "none"): ClassifiedError {
     const e = err as { status?: number; code?: string; message?: string };
 
     if (e.code === "insufficient_quota") {
-      this.setState(
-        "quota_exceeded",
-        `${providerName} quota exceeded. Check your billing.`,
-        providerName,
-      );
+      logger.warn({ providerName }, "AIProvider: quota exceeded");
       return {
         status: "quota_exceeded",
         userMessage:
-          "I couldn't contact the AI because the API quota has been exceeded. Your message has been safely saved.",
-        retryable: false,
+          "All configured AI providers have exceeded their quotas. Your message was saved.",
+        withinProviderRetryable: false,
       };
     }
 
     if (e.status === 401) {
-      this.setState("invalid_key", `${providerName} API key is invalid or expired.`, providerName);
+      logger.warn({ providerName }, "AIProvider: invalid key");
       return {
         status: "invalid_key",
         userMessage:
-          "The AI API key appears to be invalid. Your message was saved. Please check your key configuration.",
-        retryable: false,
+          "All configured AI API keys are invalid. Your message was saved. Please check your key configuration.",
+        withinProviderRetryable: false,
       };
     }
 
     if (e.status === 429) {
       return {
         status: "rate_limited",
-        userMessage: "The AI is temporarily rate-limited. Trying next provider...",
-        retryable: true,
+        userMessage:
+          "All AI providers are currently rate-limited. Your message was saved — try again in a moment.",
+        withinProviderRetryable: true,
       };
     }
 
     if (e.status === 500 || e.status === 502 || e.status === 503 || e.status === 504) {
       return {
         status: "provider_offline",
-        userMessage: `${providerName} is experiencing issues. Trying next provider...`,
-        retryable: true,
+        userMessage:
+          "All AI providers are experiencing issues. Your message was saved — try again shortly.",
+        withinProviderRetryable: true,
       };
     }
 
     if (err instanceof TypeError) {
       return {
         status: "network_error",
-        userMessage: "Couldn't reach the AI due to a network error. Trying next provider...",
-        retryable: true,
+        userMessage:
+          "Couldn't reach any AI provider due to a network error. Your message was saved.",
+        withinProviderRetryable: false,
       };
     }
 
-    if (this.state.status === "connected") {
-      this.setState("provider_offline", "An unexpected error occurred.", providerName);
-    }
     return {
       status: "provider_offline",
       userMessage:
         "Sorry, something went wrong. Your message was saved — try again in a moment.",
-      retryable: false,
+      withinProviderRetryable: false,
     };
   }
 }
