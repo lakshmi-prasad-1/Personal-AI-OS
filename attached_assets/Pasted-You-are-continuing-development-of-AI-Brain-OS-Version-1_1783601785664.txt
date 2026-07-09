@@ -1,0 +1,818 @@
+You are continuing development of AI Brain OS Version 1.
+
+You are acting simultaneously as:
+
+• Principal Software Architect
+• Principal AI Systems Engineer
+• Principal Backend Engineer
+• Principal Frontend Engineer
+• Principal Database Architect
+• Principal DevOps Engineer
+• Principal QA Engineer
+• Principal UX Engineer
+• Product Manager
+
+==========================================================
+MISSION
+==========================================================
+
+Before writing ANY code:
+
+Perform a COMPLETE AUDIT of the repository.
+
+Understand EVERYTHING that has already been built.
+
+Do NOT assume anything.
+
+Inspect:
+
+✓ Authentication
+
+✓ Chat
+
+✓ Voice Assistant
+
+✓ Intent Engine
+
+✓ Context Engine
+
+✓ Decision Engine
+
+✓ Action Engine
+
+✓ Memory Engine
+
+✓ Knowledge Graph
+
+✓ Universal Search
+
+✓ Dashboard
+
+✓ Productivity OS
+
+✓ Study OS
+
+✓ Career OS
+
+✓ Shared Services
+
+✓ Database
+
+✓ APIs
+
+✓ React Components
+
+✓ Express Routes
+
+✓ Services
+
+✓ AI Pipeline
+
+✓ Current UI
+
+==========================================================
+IMPORTANT RULES
+==========================================================
+
+DO NOT rewrite the project.
+
+DO NOT replace frameworks.
+
+DO NOT change architecture.
+
+DO NOT duplicate business logic.
+
+Reuse every service.
+
+Reuse every API.
+
+Reuse every component possible.
+
+Only extend existing architecture.
+
+Maintain SOLID principles.
+
+Keep modular architecture.
+
+Every feature must use the existing AI Pipeline.
+
+==========================================================
+FIRST TASK
+==========================================================
+
+Audit the ENTIRE repository.
+
+Find
+
+• bugs
+
+• broken UI
+
+• broken APIs
+
+• stale state
+
+• duplicate code
+
+• missing integrations
+
+• inconsistent UX
+
+• missing realtime updates
+
+• missing dashboard synchronization
+
+• missing AI integrations
+
+• missing voice integrations
+
+• broken loading states
+
+• broken empty states
+
+• TypeScript errors
+
+• runtime errors
+
+• lint issues
+
+• dead code
+
+• unnecessary re-renders
+
+• performance bottlenecks
+
+Fix everything automatically.
+
+Do NOT ask for confirmation.
+
+==========================================================
+REALTIME DATA SYNCHRONIZATION
+==========================================================
+
+One of the biggest problems is that many modules are static.
+
+They must become REALTIME.
+
+Whenever any data changes,
+
+every dependent widget must immediately update.
+
+Examples:
+
+Create Task
+
+↓
+
+Tasks Database
+
+↓
+
+Today's Brain updates
+
+↓
+
+Dashboard updates
+
+↓
+
+Planner updates
+
+↓
+
+Timeline updates
+
+↓
+
+Recent Activity updates
+
+↓
+
+Analytics updates
+
+↓
+
+Knowledge Graph updates (if applicable)
+
+↓
+
+AI Context updates
+
+No manual refresh.
+
+No page reload.
+
+Everything must synchronize automatically.
+
+==========================================================
+TODAY'S BRAIN BUG
+==========================================================
+
+Current Bug:
+
+The assistant successfully creates today's task.
+
+The task exists.
+
+But
+
+Today's Brain
+
+shows
+
+Tasks Today
+
+0/0
+
+Today's Tasks
+
+No tasks due today
+
+This is WRONG.
+
+The dashboard is not using live data.
+
+Fix the complete synchronization.
+
+Today's Brain must always calculate:
+
+today's tasks
+
+today's habits
+
+today's reminders
+
+today's planner
+
+today's focus
+
+today's goals
+
+using REAL database data.
+
+Never use stale state.
+
+Never use placeholder data.
+
+==========================================================
+TODAY'S TASKS WIDGET
+==========================================================
+
+Current behavior:
+
+Clicking
+
+Today's Tasks
+
+navigates to
+
+Tasks Page.
+
+I DO NOT WANT THAT.
+
+Instead,
+
+Today's Brain should behave like a real productivity dashboard.
+
+The Today's Tasks widget should contain:
+
+Today's Tasks
+
+---------------------------------
+
+☐ Complete AI Project
+
+Today • 6 PM
+
+Priority High
+
+---------------------------------
+
+☐ Revise DSA
+
+Today • 8 PM
+
+Priority Medium
+
+---------------------------------
+
+☐ Complete Resume
+
+Today • 10 PM
+
+Priority High
+
+---------------------------------
+
+View All
+
+The user should complete tasks directly.
+
+Edit tasks directly.
+
+Delete tasks directly.
+
+Mark complete directly.
+
+No navigation required.
+
+==========================================================
+APPLY SAME LOGIC TO EVERY MODULE
+==========================================================
+
+Do NOT fix only tasks.
+
+Apply this architecture everywhere.
+
+Habits
+
+Goals
+
+Planner
+
+Focus
+
+Reminders
+
+Study
+
+Career
+
+Resources
+
+Ideas
+
+Notes
+
+Memories
+
+Knowledge Graph
+
+Everything should display LIVE DATA.
+
+==========================================================
+REALTIME DASHBOARD
+==========================================================
+
+Dashboard should become
+
+Today's Executive Dashboard.
+
+Every section should update automatically.
+
+Today's Tasks
+
+Today's Habits
+
+Today's Goals
+
+Today's Planner
+
+Today's Focus Session
+
+Today's Reminders
+
+Today's Study
+
+Today's Career Progress
+
+Today's AI Suggestions
+
+Today's Recent Activities
+
+Today's Knowledge Growth
+
+No refresh required.
+
+==========================================================
+TIME-BASED AUTOMATIC UPDATES
+==========================================================
+
+The application should understand time.
+
+Examples:
+
+11:59 PM
+
+↓
+
+12:00 AM
+
+↓
+
+Automatically
+
+Today's Tasks changes
+
+Today's Planner changes
+
+Today's Habits reset
+
+Today's Focus resets
+
+Today's Review becomes Yesterday
+
+New Daily Review starts
+
+Weekly review updates
+
+No refresh.
+
+No restart.
+
+Automatically.
+
+==========================================================
+REALTIME ARCHITECTURE
+==========================================================
+
+Implement proper realtime synchronization.
+
+You may use existing architecture.
+
+If necessary implement:
+
+React Query invalidation
+
+Optimistic updates
+
+Polling
+
+WebSockets
+
+SSE
+
+Shared global state
+
+Subscriptions
+
+Event Bus
+
+Observer Pattern
+
+Whichever integrates BEST with the existing architecture.
+
+Do NOT rewrite architecture.
+
+==========================================================
+AI PIPELINE SYNCHRONIZATION
+==========================================================
+
+Whenever AI creates something,
+
+Everything updates instantly.
+
+Example:
+
+User
+
+"Finish AI project today"
+
+↓
+
+Intent
+
+↓
+
+Task Created
+
+↓
+
+Reminder Created
+
+↓
+
+Planner Updated
+
+↓
+
+Today's Brain Updated
+
+↓
+
+Recent Activity Updated
+
+↓
+
+Timeline Updated
+
+↓
+
+Analytics Updated
+
+↓
+
+Knowledge Graph Updated
+
+↓
+
+AI Response
+
+Everything should happen automatically.
+
+==========================================================
+ALL DASHBOARD WIDGETS
+==========================================================
+
+Every widget should become interactive.
+
+Tasks
+
+Complete
+
+Edit
+
+Delete
+
+Prioritize
+
+Habits
+
+Mark Complete
+
+View Streak
+
+Edit
+
+Goals
+
+Update Progress
+
+Planner
+
+Move Task
+
+Edit Time
+
+Focus
+
+Start
+
+Pause
+
+Resume
+
+Stop
+
+Study
+
+Start Revision
+
+Career
+
+Resume Review
+
+Resources
+
+Open
+
+Ideas
+
+Convert to Task
+
+Memories
+
+View Related Context
+
+==========================================================
+SMART EXECUTIVE DASHBOARD
+==========================================================
+
+The dashboard should feel like Notion + Motion + ClickUp + ChatGPT.
+
+Show:
+
+Today's Focus
+
+Urgent Items
+
+Upcoming Deadlines
+
+Study Progress
+
+Career Progress
+
+Current Goals
+
+Focus Time
+
+Deep Work
+
+AI Suggestions
+
+Recent AI Actions
+
+Recent Memories
+
+Recent Ideas
+
+Recent Resources
+
+Planner
+
+Timeline
+
+Motivation
+
+Weekly Progress
+
+Monthly Progress
+
+==========================================================
+AI CONTEXT
+==========================================================
+
+Every dashboard change should immediately become available to AI.
+
+Example:
+
+Create Task
+
+↓
+
+Context updates
+
+↓
+
+AI immediately knows
+
+you have 4 tasks today.
+
+==========================================================
+BUG FIXES
+==========================================================
+
+Find and fix ALL remaining bugs.
+
+Examples:
+
+Broken navigation
+
+Broken cards
+
+Missing loading
+
+Empty UI
+
+Incorrect counters
+
+Incorrect statistics
+
+Wrong dates
+
+Timezone bugs
+
+Filtering bugs
+
+Sorting bugs
+
+Pagination bugs
+
+Dashboard inconsistencies
+
+Realtime inconsistencies
+
+Memory leaks
+
+Race conditions
+
+Duplicate requests
+
+Broken cache
+
+API mismatches
+
+Frontend/backend mismatch
+
+Service mismatch
+
+Everything.
+
+==========================================================
+PERFORMANCE
+==========================================================
+
+Optimize
+
+Dashboard
+
+Chat
+
+Knowledge Graph
+
+Realtime updates
+
+Planner
+
+Analytics
+
+Search
+
+Avoid duplicate API calls.
+
+Reuse services.
+
+Minimize re-renders.
+
+==========================================================
+TESTING
+==========================================================
+
+Verify
+
+✓ Authentication
+
+✓ AI Chat
+
+✓ Voice
+
+✓ Dashboard
+
+✓ Tasks
+
+✓ Habits
+
+✓ Goals
+
+✓ Planner
+
+✓ Focus
+
+✓ Study
+
+✓ Career
+
+✓ Memories
+
+✓ Notes
+
+✓ Ideas
+
+✓ Resources
+
+✓ Search
+
+✓ Knowledge Graph
+
+✓ Timeline
+
+✓ Analytics
+
+✓ Realtime synchronization
+
+✓ AI pipeline
+
+✓ Context updates
+
+✓ Decision engine
+
+✓ Action engine
+
+✓ Performance
+
+==========================================================
+SUCCESS CRITERIA
+==========================================================
+
+By the end of this implementation:
+
+AI Brain OS should feel like a real intelligent operating system.
+
+Every widget should use REAL DATABASE DATA.
+
+Every widget should update in REALTIME.
+
+Every action should instantly reflect across the entire application.
+
+No stale UI.
+
+No placeholder values.
+
+No manual refresh.
+
+No broken synchronization.
+
+No navigation where inline interaction is better.
+
+Everything should feel like a premium productivity platform.
+
+Finally:
+
+1. Audit every module.
+2. Fix every discovered bug.
+3. Remove dead code.
+4. Resolve TypeScript/runtime issues.
+5. Verify every feature.
+6. Produce a final report containing:
+
+• Bugs Found
+• Bugs Fixed
+• New Components
+• Modified Components
+• APIs Updated
+• Services Updated
+• Performance Improvements
+• Realtime Architecture Changes
+• Remaining Version 2 features only.
+
+Do NOT stop until AI Brain OS Version 1 is fully polished, synchronized, realtime, and production-ready.

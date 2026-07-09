@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { apiGet, apiPost, apiPatch, apiDelete } from "@/lib/api";
+import { getLocalDateString } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
@@ -122,7 +123,7 @@ export default function TasksPage() {
 
   const { data: tasks = [], isLoading } = useQuery<Task[]>({
     queryKey: ["tasks", filter],
-    queryFn: () => filter === "today" ? apiGet("/tasks/today") : filter === "upcoming" ? apiGet("/tasks/upcoming") : apiGet("/tasks"),
+    queryFn: () => filter === "today" ? apiGet(`/tasks/today?date=${getLocalDateString()}`) : filter === "upcoming" ? apiGet("/tasks/upcoming") : apiGet("/tasks"),
   });
 
   const complete = useMutation({

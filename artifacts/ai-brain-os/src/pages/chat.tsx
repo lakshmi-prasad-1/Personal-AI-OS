@@ -314,6 +314,14 @@ function ChatThread({ chatId }: { chatId: string }) {
       setOptimisticUserMessage(null);
       queryClient.invalidateQueries({ queryKey: getGetChatQueryKey(chatId) });
       queryClient.invalidateQueries({ queryKey: getListChatsQueryKey() });
+      // The AI pipeline can create/update tasks, habits, goals, reminders, planner
+      // events, or focus sessions as a side effect of the conversation. Invalidate
+      // every dashboard-relevant domain so widgets reflect it immediately instead
+      // of requiring a manual refresh.
+      for (const key of ["tasks", "habits", "goals", "reminders", "planner", "focus"]) {
+        queryClient.invalidateQueries({ queryKey: [key] });
+      }
+      queryClient.invalidateQueries({ queryKey: ["/api/brain/activity"] });
     }
   };
 

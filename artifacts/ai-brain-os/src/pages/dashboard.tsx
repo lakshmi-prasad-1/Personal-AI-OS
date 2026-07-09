@@ -1,7 +1,8 @@
 import { useEffect } from "react";
 import { Link } from "wouter";
-import { useQuery } from "@tanstack/react-query";
-import { apiGet } from "@/lib/api";
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import { apiGet, apiPost } from "@/lib/api";
+import { getLocalDateString } from "@/lib/utils";
 import { useBrainActivity, useListNotes, useListIdeas } from "@workspace/api-client-react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -39,10 +40,10 @@ function timeAgo(dateStr: string): string {
 }
 
 export default function Dashboard() {
-  const today = new Date().toISOString().slice(0, 10);
+  const today = getLocalDateString();
 
   const { data: todayTasks = [], isLoading: loadingTasks } = useQuery<Task[]>({
-    queryKey: ["tasks", "today"], queryFn: () => apiGet("/tasks/today"),
+    queryKey: ["tasks", "today", today], queryFn: () => apiGet(`/tasks/today?date=${today}`),
   });
   const { data: habitStatus = [] } = useQuery<HabitStatus[]>({
     queryKey: ["habits", "today"], queryFn: () => apiGet("/habits/today"),
@@ -65,6 +66,12 @@ export default function Dashboard() {
   const { data: activity } = useBrainActivity();
   const { data: notes } = useListNotes();
   const { data: ideas } = useListIdeas();
+
+  const qc = useQueryClient();
+  const completeTask = useMutation({
+    mutationFn: (id: string) => apiPost(`/tasks/${id}/complete`),
+    onSuccess: () => qc.invalidateQueries({ queryKey: ["tasks"] }),
+  });
 
   const pendingTasks = todayTasks.filter((t) => t.status !== "done");
   const doneTasks = todayTasks.filter((t) => t.status === "done");
@@ -163,7 +170,13 @@ export default function Dashboard() {
               <div className="space-y-2">
                 {[...pendingTasks, ...doneTasks].slice(0, 6).map((t) => (
                   <div key={t.id} className="flex items-center gap-2">
-                    {t.status === "done" ? <CheckCircle2 className="w-4 h-4 text-green-500 shrink-0" /> : <Circle className="w-4 h-4 text-gray-400 shrink-0" />}
+                    <button
+                      onClick={() => t.status !== "done" && completeTask.mutate(t.id)}
+                      disabled={t.status === "done" || completeTask.isPending}
+                      className="shrink-0"
+                    >
+                      {t.status === "done" ? <CheckCircle2 className="w-4 h-4 text-green-500" /> : <Circle className="w-4 h-4 text-gray-400 hover:text-green-500 transition-colors" />}
+                    </button>
                     <span className={`text-sm flex-1 truncate ${t.status === "done" ? "line-through text-muted-foreground" : ""}`}>{t.title}</span>
                     <Badge variant="outline" className={`text-xs shrink-0 ${PRIORITY_COLORS[t.priority]}`}>{t.priority}</Badge>
                   </div>

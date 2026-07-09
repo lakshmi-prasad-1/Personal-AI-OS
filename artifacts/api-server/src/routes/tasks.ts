@@ -41,9 +41,13 @@ router.get("/tasks", async (req, res): Promise<void> => {
 });
 
 router.get("/tasks/today", async (req, res): Promise<void> => {
-  // Return all tasks due today (all statuses) so frontend can compute done/pending counts
+  // Return all tasks due today (all statuses) so frontend can compute done/pending counts.
+  // Accept an optional ?date=YYYY-MM-DD (the client's local date) so "today" matches the
+  // user's timezone instead of the server's UTC date — otherwise tasks created near
+  // midnight can silently disappear from the dashboard.
   const all = await taskService.list(req.auth!.userId, {});
-  const today = new Date().toISOString().slice(0, 10);
+  const dateParam = typeof req.query.date === "string" ? req.query.date : undefined;
+  const today = dateParam && /^\d{4}-\d{2}-\d{2}$/.test(dateParam) ? dateParam : new Date().toISOString().slice(0, 10);
   const todayAll = all.filter((t) => t.dueDate === today);
   res.json(todayAll);
 });
